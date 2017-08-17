@@ -1,0 +1,102 @@
+/*============================================================================
+  #Mixins - Global & Requirements
+    - Hover Focus Active Class
+    - Screen Size
+      - Required for: G-Grid
+==============================================================================*/
+
+
+/*================ Hover Focus Active Class ================*/
+
+@mixin hover {
+  &:hover {
+    @content
+  }
+}
+
+@mixin hover-focus {
+  &:focus,
+  &:hover {
+    @content
+  }
+}
+
+@mixin hover-focus-class {
+  &:focus,
+  &:hover,
+  &.active {
+    @content
+  }
+}
+
+@mixin plain-hover-focus {
+  &,
+  &:focus,
+  &:hover {
+    @content
+  }
+}
+
+@mixin focus-active {
+  &:focus,
+  &:active {
+    @content
+  }
+}
+
+@mixin focus-active-class {
+  &:focus,
+  &:active,
+  &.active {
+    @content
+  }
+}
+
+@mixin hover-focus-active {
+  &:focus,
+  &:active,
+  &:hover {
+    @content
+  }
+}
+
+@mixin hover-focus-active-class {
+  &:focus,
+  &:active,
+  &:hover,
+  &.active {
+    @content
+  }
+}
+
+/*============================================================================
+  #Screen Size
+    - Required for: Grid
+==============================================================================*/
+
+
+@mixin screen-size($size) {
+  @if ($size == 'xs' or $size == 0) {
+    @content
+  } @else if ($size == 'sm') {
+    @media (min-width: $g-responsive-breakpoint-sm) {
+      @content;
+    }
+  } @else if ($size == 'md') {
+    @media (min-width: $g-responsive-breakpoint-md) {
+      @content;
+    }
+  } @else if ($size == 'lg') {
+    @media (min-width: $g-responsive-breakpoint-lg) {
+      @content;
+    }
+  } @else if ($size == 'xl') {
+    @media (min-width: $g-responsive-breakpoint-xl) {
+      @content;
+    }
+  } @else if (type_of($size) == 'number') {
+    @media (min-width: $size) {
+      @content;
+    }
+  }
+}

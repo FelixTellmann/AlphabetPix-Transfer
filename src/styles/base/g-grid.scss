@@ -1,0 +1,514 @@
+/*============================================================================
+  #g-grid
+    - Version 1.0.0
+    -
+==============================================================================*/
+
+//*-------------------------------------*
+//  #Grid Settings
+//\*-------------------------------------*/
+$g-columns: 12 !default;
+$g-gutter: 30px !default;
+$g-container: 1200px !default;
+$g-container-sm: 760px !default;
+$g-class-grid: true !default;
+$g-prefix: true !default;
+$g-remove-base-suffix: true !default;
+$g-responsive-breakpoints: (xs, sm, md, lg, xl);
+$g-responsive-breakpoint-xs: 0px !default;
+$g-responsive-breakpoint-sm: 640px !default;
+$g-responsive-breakpoint-md: 930px !default;
+$g-responsive-breakpoint-lg: 1200px !default;
+$g-responsive-breakpoint-xl: 1400px !default;
+
+$g-responsive-containers: (sm, md, lg);
+$g-responsive-container-sm: 720px;
+;
+$g-responsive-container-md: 930px;
+$g-responsive-container-lg: 1200px;
+//*-------------------------------------*
+//  #Grid - Default names
+//\*-------------------------------------*/
+$g-prefix-type: grid !default;
+$g-container-prefix: container !default;
+$g-row-prefix: row !default;
+$g-col-prefix: col !default;
+$g-row-utility-prefix: row !default;
+$g-item-prefix: item !default;
+$g-offset-prefix: offset !default;
+$g-no-padding: no-padding !default;
+$g-add-padding: add-padding !default;
+$g-no-wrap: no-wrap !default;
+$g-type: '.' !default;
+$g-empty: '';
+
+@mixin prefix-suffix-constructor($g-class, $size: "", $suffix:"") {
+  @if ($size != "") {
+    @if ($size == 'xs' and $g-remove-base-suffix and $g-prefix) {
+      
+      #{$g-type}#{$g-prefix-type}__#{$g-class}#{$suffix} {
+        @content
+      }
+    } @else if ($size == 'xs' and $g-remove-base-suffix and not $g-prefix) {
+      #{$g-type}#{$g-class}#{$suffix} {
+        @content
+      }
+    } @else if ($size == 'xs' and not $g-remove-base-suffix and $g-prefix) {
+      #{$g-type}#{$g-prefix-type}__#{$g-class}-#{$size}#{$suffix} {
+        @content
+      }
+    } @else if ($size == 'xs' and not $g-remove-base-suffix and not $g-prefix) {
+      #{$g-type}#{$g-class}-#{$size}#{$suffix} {
+        @content
+      }
+    } @else if ($size != 'xs' and $g-prefix) {
+      #{$g-type}#{$g-prefix-type}__#{$g-class}-#{$size}#{$suffix} {
+        @content
+      }
+    } @else if ($size != 'xs' and not $g-prefix) {
+      #{$g-type}#{$g-class}-#{$size}#{$suffix} {
+        @content
+      }
+    }
+  } @else if ($g-prefix) {
+    #{$g-type}#{$g-prefix-type}__#{$g-class}#{$suffix} {
+      @content
+    }
+  } @else {
+    #{$g-type}#{$g-class}#{$suffix} {
+      @content
+    }
+  }
+}
+
+/*-------------------------------------*
+  #Base HTML Requirements
+\*-------------------------------------*/
+
+html {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+.h100 {
+  height: 100%;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.mb100 {
+  margin-bottom: 100px
+}
+
+.mb50 {
+  margin-bottom: 50px
+}
+
+/*-------------------------------------*
+  #Grid Container
+\*-------------------------------------*/
+
+%grid-container {
+  margin-left: auto;
+  margin-right: auto;
+  width: $g-container;
+  max-width: 100%;
+  position: relative;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+%grid-container-fw {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+%grid-container-sm {
+  margin-left: auto;
+  margin-right: auto;
+  width: $g-container-sm;
+  max-width: 100%;
+  position: relative;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/// Fixed-width container
+@include prefix-suffix-constructor($g-container-prefix, '', $g-empty) {
+  @extend %grid-container;
+}
+
+@include prefix-suffix-constructor($g-container-prefix, '', --fw) {
+  @extend %grid-container-fw;
+}
+
+@include prefix-suffix-constructor($g-container-prefix, '', --r) {
+  @extend %grid-container-fw;
+  @include screen-size(sm) {
+    width: $g-responsive-container-sm;
+  }
+  @include screen-size(md) {
+    width: $g-responsive-container-md;
+  }
+  @include screen-size(lg) {
+    width: $g-responsive-container-lg;
+  }
+}
+
+@include prefix-suffix-constructor($g-container-prefix, '', --sm) {
+  @extend %grid-container-sm;
+}
+
+/*================ Grid Row Classes ================*/
+
+%grid-row {
+  position: relative;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  margin-left: -($g-gutter / 2);
+  margin-right: -($g-gutter / 2);
+}
+
+%grid-col {
+  position: relative;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: column nowrap;
+  flex-flow: column nowrap;
+}
+
+@if ($g-prefix) {
+  [class*=#{$g-prefix-type}__#{$g-row-prefix}] {
+    position: relative;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+    margin-left: -($g-gutter / 2);
+    margin-right: -($g-gutter / 2);
+  }
+} @else {
+  [class*=#{$g-row-prefix}] {
+    position: relative;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+    margin-left: -($g-gutter / 2);
+    margin-right: -($g-gutter / 2);
+  }
+}
+
+@if ($g-prefix) {
+  [class*=#{$g-prefix-type}__#{$g-col-prefix}] {
+    position: relative;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+  }
+} @else {
+  [class*=#{$g-col-prefix}] {
+    position: relative;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+  }
+}
+
+@each $size in $g-responsive-breakpoints {
+  @include screen-size($size) {
+    @include prefix-suffix-constructor($g-row-prefix, #{$size}, $g-empty) {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+    }
+    @include prefix-suffix-constructor($g-col-prefix, #{$size}, $g-empty) {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+    }
+  }
+}
+
+/*================ Grid Row Padding Classes ================*/
+
+@if ($g-prefix) {
+  .#{$g-prefix-type}--#{$g-no-padding} > [class*=#{$g-prefix-type}__#{$g-item-prefix}] {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  [class*=#{$g-prefix-type}__#{$g-row-prefix}].#{$g-prefix-type}--#{$g-no-padding} {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  [class*=#{$g-prefix-type}__#{$g-row-prefix}].#{$g-prefix-type}--#{$g-no-wrap} {
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+  }
+  [class*=#{$g-prefix-type}__#{$g-item-prefix}].#{$g-prefix-type}--#{$g-no-padding} {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  [class*=#{$g-prefix-type}__#{$g-item-prefix}].#{$g-prefix-type}--#{$g-add-padding} {
+    padding-left: ($g-gutter / 2);
+    padding-right: ($g-gutter / 2);
+  }
+} @else {
+  @include prefix-suffix-constructor($g-no-padding, '', $g-empty) {
+    > [class*=#{$g-item-prefix}] {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+  [class*=#{$g-row-prefix}]#{$g-type}#{$g-no-padding} {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  [class*=#{$g-item-prefix}]#{$g-type}#{$g-no-padding} {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  [class*=#{$g-item-prefix}]#{$g-type}#{$g-add-padding} {
+    padding-left: ($g-gutter / 2);
+    padding-right: ($g-gutter / 2);
+  }
+}
+
+/*================ Grid Row Positioning Classes ================*/
+
+@each $size in $g-responsive-breakpoints {
+  @include screen-size($size) {
+    @include prefix-suffix-constructor($g-row-utility-prefix, #{$size}, --xy-center) {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+    }
+    @include prefix-suffix-constructor($g-row-utility-prefix, #{$size}, --x-fs) {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+    }
+    @include prefix-suffix-constructor($g-row-utility-prefix, #{$size}, --x-fe) {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: end;
+      -ms-flex-pack: end;
+      justify-content: flex-end;
+    }
+    @include prefix-suffix-constructor($g-row-utility-prefix, #{$size}, --x-center) {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+    }
+    @include prefix-suffix-constructor($g-row-utility-prefix, #{$size}, --x-sa) {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: distribute;
+      justify-content: space-around;
+    }
+    @include prefix-suffix-constructor($g-row-utility-prefix, #{$size}, --x-sb) {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+    }
+    @include prefix-suffix-constructor($g-row-utility-prefix, #{$size}, --y-fs) {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: start;
+      -ms-flex-align: start;
+      align-items: flex-start;
+    }
+    @include prefix-suffix-constructor($g-row-utility-prefix, #{$size}, --y-fe) {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: end;
+      -ms-flex-align: end;
+      align-items: flex-end;
+    }
+    @include prefix-suffix-constructor($g-row-utility-prefix, #{$size}, --y-center) {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+    }
+    @include prefix-suffix-constructor($g-row-utility-prefix, #{$size}, --y-bl) {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: baseline;
+      -ms-flex-align: baseline;
+      align-items: baseline;
+    }
+    @include prefix-suffix-constructor($g-row-utility-prefix, #{$size}, --y-st) {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+      align-items: stretch;
+    }
+  }
+}
+
+/*-------------------------------------*
+  #Grid Items
+\*-------------------------------------*/
+
+@if ($g-prefix) {
+  [class*=#{$g-prefix-type}__#{$g-item-prefix}] {
+    position: relative;
+    min-height: 1px;
+    padding-right: ($g-gutter / 2);
+    padding-left: ($g-gutter / 2);
+    margin-top: ($g-gutter / 2);
+    margin-bottom: ($g-gutter / 2);
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+} @else {
+  [class*=#{$g-item-prefix}] {
+    position: relative;
+    min-height: 1px;
+    padding-right: ($g-gutter / 2);
+    padding-left: ($g-gutter / 2);
+    margin-top: ($g-gutter / 2);
+    margin-bottom: ($g-gutter / 2);
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+  }
+}
+
+@each $size in $g-responsive-breakpoints {
+  @include prefix-suffix-constructor($g-item-prefix, $size, $g-empty) {
+    @include screen-size($size) {
+      -webkit-box-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
+    }
+  }
+}
+
+@each $size in $g-responsive-breakpoints {
+  @include prefix-suffix-constructor($g-item-prefix, $size, -auto) {
+    @include screen-size($size) {
+      -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+      flex: 1 1 auto;
+    }
+  }
+}
+
+@each $size in $g-responsive-breakpoints {
+  @include prefix-suffix-constructor($g-item-prefix, $size, -small) {
+    @include screen-size($size) {
+      -webkit-box-flex: 0;
+      -ms-flex: none;
+      flex: none;
+    }
+  }
+}
+
+@each $size in $g-responsive-breakpoints {
+  @include prefix-suffix-constructor($g-item-prefix, $size, -auto) {
+    @include screen-size($size) {
+      -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+      flex: 1 1 auto;
+    }
+  }
+}
+
+@each $size in $g-responsive-breakpoints {
+  @include screen-size($size) {
+    @for $i from 1 through $g-columns {
+      @include prefix-suffix-constructor($g-item-prefix, $size, -#{$i}) {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 percentage($i / $g-columns);
+        flex: 0 0 percentage($i / $g-columns);
+      }
+    }
+  }
+}
+
+/*-------------------------------------*
+  #Grid Item Utility Classes
+\*-------------------------------------*/
+
+@each $size in $g-responsive-breakpoints {
+  @include screen-size($size) {
+    @include prefix-suffix-constructor($g-item-prefix, #{$size}, --fs) {
+      -ms-flex-item-align: start;
+      align-self: flex-start
+    }
+    @include prefix-suffix-constructor($g-item-prefix, #{$size}, --fe) {
+      -ms-flex-item-align: end;
+      align-self: flex-end;
+    }
+    @include prefix-suffix-constructor($g-item-prefix, #{$size}, --center) {
+      -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+    }
+    @include prefix-suffix-constructor($g-item-prefix, #{$size}, --bl) {
+      -ms-flex-item-align: baseline;
+      align-self: baseline;
+    }
+    @include prefix-suffix-constructor($g-item-prefix, #{$size}, --st) {
+      -ms-flex-item-align: stretch;
+      -ms-grid-row-align: stretch;
+      align-self: stretch;
+    }
+  }
+}
+
+/*------------------------------------------------------------------------------*
+  #FLEX-GRID - END
+\*------------------------------------------------------------------------------*/

@@ -1,0 +1,76 @@
+/*============================================================================
+  #Variables
+    - This is the only place where settings should be linked from the theme into scss variables.
+    
+==============================================================================*/
+
+/*================ Color Variables ================*/
+// Theme colors
+
+/*
+$color__primary: {{ settings.color_primary }};
+$color__primary--alt: {{ settings.color__primary--alt }};
+$color__secondary: {{ settings.color__secondary }};
+*/
+
+// Text colors
+$color__text: {{ settings.color_primary_body_text }};
+
+/*
+$color__text--light: {{ settings.color__text--light }};
+$color__text--accent: {{ settings.color__text--accent }};
+*/
+
+// Backgrounds
+$color__background: {{ settings.color_main_bg }};
+
+/*
+$color__background--light: {{ settings.color__background--light }};
+*/
+
+
+
+// Effects
+$color__border: {{ settings.color_footer_text }};
+
+
+// Helper colors for form error states
+$color-disabled: #000;
+$color-disabled-border: #000;
+$color-error: #000;
+$color-error-bg: #000;
+$color-success: #000;
+$color-success-bg: #000;
+
+/*================ Typography Variables ================*/
+$font-weight-normal: 300;
+$font-weight-bold: 700;
+
+/*============================================================================
+  Grid Breakpoints and Class Names
+    - Do not change the variable names
+==============================================================================*/
+$g-columns: 12;
+$g-gutter: 30px;
+$g-container: 1200px;
+$g-responsive-breakpoints: (xs, sm, md, lg, xl);
+$g-responsive-breakpoint-xs: 0px;
+$g-responsive-breakpoint-sm: 640px;
+$g-responsive-breakpoint-md: 930px;
+$g-responsive-breakpoint-lg: 1200px;
+$g-responsive-breakpoint-xl: 1400px;
+
+/*================ Section Spacing ================*/
+
+$section__padding: 40px;
+$header-height: 100px;  /*TODO: Settings - header height - Link to body margin - top*/
+
+/*================ Z-Index ================*/
+
+$z-index__base: 0;
+$z-index__section__heading: 1;
+$z-index__background: -1;
+
+$z-index-dropdown: 2;
+$z-index-skip-to-content: 10000; // really high to be safe of app markup
+$z-index-header: 1000;
