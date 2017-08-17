@@ -27,7 +27,7 @@
       {% if mobileColumns == '2' %}small--one-half {% endif %}
     {%- endcapture -%}
 
-    <div class="card-list grid" data-desktop-columns="{{ desktopColumns }}" data-mobile-columns="{{ mobileColumns }}">
+    <div class="card-list grid grid__row" data-desktop-columns="{{ desktopColumns }}" data-mobile-columns="{{ mobileColumns }}">
       <div class="card-list__column grid__item {% if search.results.size == 1 %} card-list__column--center{% endif %} {{ gridClasses }}">
         {% for item in search.results %}
           {% if item.object_type == 'article' %}
@@ -55,6 +55,7 @@
 
 {% endpaginate %}
 
+{% comment %}{#<!--@formatter:off-->#}{% endcomment %}
 {% schema %}
 {
   "name": "Search",
@@ -106,3 +107,4 @@
   ]
 }
 {% endschema %}
+{% comment %}{#<!--@formatter:on-->#}{% endcomment %}

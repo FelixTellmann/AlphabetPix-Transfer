@@ -66,11 +66,11 @@
   {% include 'no-blocks' %}
 {% endif %}
 
+{% comment %}{#<!--@formatter:off-->#}{% endcomment %}
 {% schema %}
 {
   "name": "Gallery",
   "class": "index-section index-section--gallery",
-  "max_blocks": 3,
   "settings": [
     {
       "type": "select",
@@ -354,3 +354,4 @@
   ]
 }
 {% endschema %}
+{% comment %}{#<!--@formatter:on-->#}{% endcomment %}

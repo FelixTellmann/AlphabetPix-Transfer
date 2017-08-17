@@ -157,7 +157,7 @@
     </table>
 
     <footer class="cart-footer">
-      <div class="grid">
+      <div class="grid grid__row">
         {% if section.settings.cart_notes_enable %}
           <div class="grid__item medium-up--one-half cart-note">
             <label for="CartSpecialInstructions" class="cart-footer__note-label small--text-center">{{ 'cart.general.note' | t }}</label>
@@ -187,6 +187,7 @@
   </form>
 </div>
 
+{% comment %}{#<!--@formatter:off-->#}{% endcomment %}
 {% schema %}
 {
   "name": "Cart page",
@@ -200,3 +201,4 @@
   ]
 }
 {% endschema %}
+{% comment %}{#<!--@formatter:on-->#}{% endcomment %}

@@ -1,6 +1,6 @@
 <div class="list-collections-template" data-section-id="{{ section.id }}" data-section-type="list-collections-template">
   <div class="page-width">
-    <div class="grid text-center">
+    <div class="grid grid__row text-center">
       <div class="grid__item medium-up--ten-twelfths medium-up--push-one-twelfth">
         <header class="section-header">
           <h1 class="section-header__title h2">{{ 'collections.general.all' | t }}</h1>
@@ -16,7 +16,7 @@
       {% if mobileColumns == '2' %}small--one-half {% endif %}
     {%- endcapture -%}
 
-    <div class="card-list grid" data-desktop-columns="{{ desktopColumns }}" data-mobile-columns="{{ mobileColumns }}">
+    <div class="card-list grid grid__row" data-desktop-columns="{{ desktopColumns }}" data-mobile-columns="{{ mobileColumns }}">
       <div class="card-list__column grid grid__item {{ gridClasses }}">
         {% if section.settings.display_type == 'all' %}
           {% case section.settings.sort %}
@@ -49,6 +49,7 @@
   </div>
 </div>
 
+{% comment %}{#<!--@formatter:off-->#}{% endcomment %}
 {% schema %}
 {
   "name": "Collection list",
@@ -149,3 +150,4 @@
   ]
 }
 {% endschema %}
+{% comment %}{#<!--@formatter:on-->#}{% endcomment %}

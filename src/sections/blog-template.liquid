@@ -16,7 +16,7 @@
         {% if mobileColumns == '2' %}small--one-half {% endif %}
       {%- endcapture -%}
 
-      <div class="card-list grid" data-desktop-columns="{{ desktopColumns }}" data-mobile-columns="{{ mobileColumns }}">
+      <div class="card-list grid grid__row" data-desktop-columns="{{ desktopColumns }}" data-mobile-columns="{{ mobileColumns }}">
         <div class="card-list__column grid__item {% if blog.articles.size == 1 %}card-list__column--center{% endif %} {{ gridClasses }}">
           {% for article in blog.articles %}
             {% include 'article-card', article: article %}
@@ -38,6 +38,7 @@
   {% endpaginate %}
 </div>
 
+{% comment %}{#<!--@formatter:off-->#}{% endcomment %}
 {% schema %}
 {
   "name": "Blog",
@@ -95,3 +96,4 @@
   ]
 }
 {% endschema %}
+{% comment %}{#<!--@formatter:on-->#}{% endcomment %}

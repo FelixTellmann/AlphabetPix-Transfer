@@ -22,7 +22,7 @@
   {% if blog.comments_enabled? and number_of_comments > 0 %}
     <div class="comments-wrapper">
       <div class="page-width">
-        <div class="grid">
+        <div class="grid grid__row">
           <div class="grid__item medium-up--push-one-twelfth">
             <h3 class="h4">{{ 'blogs.comments.with_count' | t: count: number_of_comments }}</h3>
           </div>
@@ -33,7 +33,7 @@
           {% comment %}
             If a comment was just submitted, show it with the appropriate success message.
           {% endcomment %}
-          <div id="comments" class="grid">
+          <div id="comments" class="grid grid__row">
 
             {% if comment and comment.status and paginate.current_page == 1 %}
               <div class="grid__item medium-up--ten-twelfths medium-up--push-one-twelfth">
@@ -71,7 +71,7 @@
   {% if blog.comments_enabled? %}
     <div class="comments-form-wrapper">
       <div class="page-width">
-        <div class="grid">
+        <div class="grid grid__row">
           <div class="grid__item medium-up--push-one-twelfth">
             <h3 class="comments-form__title h4">{{ 'blogs.comments.title' | t }}</h3>
           </div>

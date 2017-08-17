@@ -2,7 +2,7 @@
   <header class="section-header text-center">
     <h1 class="section-header__title h2">{{ page_title }}</h1>
   </header>
-  <div class="grid">
+  <div class="grid grid__row">
     <div class="grid__item medium-up--four-fifths medium-up--push-one-tenth">
       {% if page.content != blank %}
         <div class="rte rte--contact">
@@ -19,7 +19,7 @@
 
         {{ form.errors | default_errors }}
 
-        <div class="grid">
+        <div class="grid grid__row">
           <div class="grid__item medium-up--one-half">
             <label for="ContactFormName" class="label--hidden">{{ 'contact.form.name' | t }}</label>
             <input type="text" id="ContactFormName" name="contact[name]" placeholder="{{ 'contact.form.name' | t }}" autocapitalize="words" value="{% if form[name] %}{{ form[name] }}{% elsif customer %}{{ customer.name }}{% endif %}">

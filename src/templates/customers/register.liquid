@@ -1,6 +1,6 @@
 <!-- /templates/customers/register.liquid -->
 <div class="page-width customers-register">
-  <div class="grid">
+  <div class="grid grid__row">
     <div class="grid__item medium-up--four-fifths medium-up--push-one-tenth">
       <div class="customers-register__container">
         <h1 class="customer-form__title h2">{{ 'customer.register.title' | t }}</h1>
@@ -8,7 +8,7 @@
         {% form 'create_customer' %}
         {{ form.errors | default_errors }}
 
-        <div class="grid">
+        <div class="grid grid__row">
           <div class="grid__item medium-up--one-half">
             <label for="FirstName" class="label--hidden">{{ 'customer.register.first_name' | t }}</label>
             <input type="text" name="customer[first_name]" id="FirstName" placeholder="{{ 'customer.register.first_name' | t }}" {% if form.first_name %}value="{{ form.first_name }}"{% endif %} autocapitalize="words" autofocus>

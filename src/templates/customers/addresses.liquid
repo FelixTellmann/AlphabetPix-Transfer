@@ -9,7 +9,7 @@ Template note:
 {% assign addressesCount = customer.addresses | size %}
 
 <div class="page-width new-address{% if addressesCount != 0 %} new-address--hidden{% endif %}">
-  <div class="grid">
+  <div class="grid grid__row">
     <div class="grid__item medium-up--four-fifths medium-up--push-one-tenth">
       <header class="section-header section-header--small text-center">
         <h1 class="section-header__title h2">{{ 'customer.account.title' | t }}</h1>
@@ -27,7 +27,7 @@ Template note:
         {% form 'customer_address', customer.new_address %}
         <h2 class="h4">{{ 'customer.addresses.add_new' | t }}</h2>
 
-        <div class="grid">
+        <div class="grid grid__row">
           <div class="grid__item medium-up--one-half">
             <label for="AddressFirstNameNew" class="label--hidden">{{ 'customer.addresses.first_name' | t }}</label>
             <input type="text" id="AddressFirstNameNew" name="address[first_name]" placeholder="{{ 'customer.addresses.first_name' | t }}" value="{{ form.first_name }}" autocapitalize="words">
@@ -48,7 +48,7 @@ Template note:
         <label for="AddressAddress2New" class="label--hidden">{{ 'customer.addresses.address2' | t }}</label>
         <input type="text" id="AddressAddress2New" name="address[address2]" placeholder="{{ 'customer.addresses.address2' | t }}" value="{{ form.address2 }}" autocapitalize="words">
 
-        <div class="grid">
+        <div class="grid grid__row">
           <div class="grid__item medium-up--one-half">
             <label for="AddressCityNew" class="label--hidden">{{ 'customer.addresses.city' | t }}</label>
             <input type="text" id="AddressCityNew" name="address[city]" placeholder="{{ 'customer.addresses.city' | t }}" value="{{ form.city }}" autocapitalize="words">
@@ -65,7 +65,7 @@ Template note:
           <select id="AddressProvinceNew" name="address[province]" placeholder="{{ 'customer.addresses.province' | t }}" data-default="{{ form.province }}"></select>
         </div>
 
-        <div class="grid">
+        <div class="grid grid__row">
           <div class="grid__item medium-up--one-half">
             <label for="AddressZipNew" class="label--hidden">{{ 'customer.addresses.zip' | t }}</label>
             <input type="text" id="AddressZipNew" name="address[zip]" placeholder="{{ 'customer.addresses.zip' | t }}" value="{{ form.zip }}" autocapitalize="characters">
@@ -94,7 +94,7 @@ Template note:
 
 {% if addressesCount > 0 %}
   <div class="page-width current-addresses">
-    <div class="grid">
+    <div class="grid grid__row">
       <div class="grid__item medium-up--four-fifths medium-up--push-one-tenth">
         <h2 class="h4">{{ 'customer.addresses.title' | t }}</h2>
 
@@ -122,7 +122,7 @@ Template note:
 
               <h4>{{ 'customer.addresses.edit_address' | t }}</h4>
 
-              <div class="grid">
+              <div class="grid grid__row">
                 <div class="grid__item medium-up--one-half">
                   <label for="AddressFirstName_{{ form.id }}" class="label--hidden">{{ 'customer.addresses.first_name' | t }}</label>
                   <input type="text" id="AddressFirstName_{{ form.id }}" name="address[first_name]" placeholder="{{ 'customer.addresses.first_name' | t }}" value="{{ form.first_name }}" autocapitalize="words">
@@ -143,7 +143,7 @@ Template note:
               <label for="AddressAddress2_{{ form.id }}" class="label--hidden">{{ 'customer.addresses.address2' | t }}</label>
               <input type="text" id="AddressAddress2_{{ form.id }}" name="address[address2]" placeholder="{{ 'customer.addresses.address2' | t }}" value="{{ form.address2 }}" autocapitalize="words">
 
-              <div class="grid">
+              <div class="grid grid__row">
                 <div class="grid__item medium-up--one-half">
                   <label for="AddressCity_{{ form.id }}" class="label--hidden">{{ 'customer.addresses.city' | t }}</label>
                   <input type="text" id="AddressCity_{{ form.id }}" name="address[city]" placeholder="{{ 'customer.addresses.city' | t }}" value="{{ form.city }}" autocapitalize="words">
@@ -160,7 +160,7 @@ Template note:
                 <select id="AddressProvince_{{ form.id }}" name="address[province]" placeholder="{{ 'customer.addresses.province' | t }}" data-default="{{ form.province }}"></select>
               </div>
 
-              <div class="grid">
+              <div class="grid grid__row">
                 <div class="grid__item medium-up--one-half">
                   <label for="AddressZip_{{ form.id }}" class="label--hidden">{{ 'customer.addresses.zip' | t }}</label>
                   <input type="text" id="AddressZip_{{ form.id }}" name="address[zip]" placeholder="{{ 'customer.addresses.zip' | t }}" value="{{ form.zip }}" autocapitalize="characters">

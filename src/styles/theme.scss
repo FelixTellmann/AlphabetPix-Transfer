@@ -5,12 +5,14 @@
 
 
 ///*================  ABSTRACT ================*/
+
+@import url('abstract/theme.scss.liquid');
 @import url('abstract/mixins.scss');
 @import url('abstract/variables.scss.liquid');
 
 ///*================  BASE ================*/
-@import url('base/normalize.scss');
-@import url('base/slate-reset.scss');
+/*@import url('base/normalize.scss');
+@import url('base/slate-reset.scss');*/
 @import url('base/rte-typography.scss');
 @import url('base/g-grid.scss');
 @import url('base/typography-fonts.scss');
