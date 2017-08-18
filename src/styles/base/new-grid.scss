@@ -308,6 +308,14 @@ html {
   }
 }
 
+@for $i from 1 through $columns {
+  .grid__item--#{$i} {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 percentage($i / $columns);
+    flex: 0 0 percentage($i / $columns);
+  }
+}
+
 @each $size in $g-responsive-breakpoints {
   @include screen-size($size) {
     @for $i from 1 through $columns {

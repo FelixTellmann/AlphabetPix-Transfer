@@ -55,8 +55,8 @@
     {% endif %}
     
     <div class="site-header-sections page-width grid__container">
-      <div class="site-header__section grid__item--4--md grid__row">
-        <h1 class="grid__content site-header__logo-wrapper h4" itemscope itemtype="http://schema.org/Organization">
+      <div class="site-header__section grid__item--5--md grid__row">
+        <h1 class="grid__item--md grid__content site-header__logo-wrapper h4" itemscope itemtype="http://schema.org/Organization">
           <a href="/" itemprop="url" class="site-header__logo">
             {%- capture image_size %}x{{ section.settings.logo_max_height }}{% endcapture -%}
             
@@ -77,6 +77,9 @@
             {% endif %}
           </a>
         </h1>
+        <div class="grid__item--5 grid__content grid__col justify--center header__logo-text">
+          {{ section.settings.logo_text }}
+        </div>
       </div>
       
       
@@ -340,6 +343,15 @@
       "id": "announcement_color_text",
       "label": "Text",
       "default": "#fff"
+    },
+    {
+      "type": "header",
+      "content": "Logo Text"
+    },
+    {
+      "type": "richtext",
+      "id": "logo_text",
+      "label": "Logo headline"
     }
   ]
 }

@@ -740,6 +740,78 @@ html {
   }
 }
 
+.grid__item--1 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 8.33333%;
+  flex: 0 0 8.33333%
+}
+
+.grid__item--2 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 16.66667%;
+  flex: 0 0 16.66667%
+}
+
+.grid__item--3 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 25%;
+  flex: 0 0 25%
+}
+
+.grid__item--4 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 33.33333%;
+  flex: 0 0 33.33333%
+}
+
+.grid__item--5 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 41.66667%;
+  flex: 0 0 41.66667%
+}
+
+.grid__item--6 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 50%;
+  flex: 0 0 50%
+}
+
+.grid__item--7 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 58.33333%;
+  flex: 0 0 58.33333%
+}
+
+.grid__item--8 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 66.66667%;
+  flex: 0 0 66.66667%
+}
+
+.grid__item--9 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 75%;
+  flex: 0 0 75%
+}
+
+.grid__item--10 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 83.33333%;
+  flex: 0 0 83.33333%
+}
+
+.grid__item--11 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 91.66667%;
+  flex: 0 0 91.66667%
+}
+
+.grid__item--12 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 100%;
+  flex: 0 0 100%
+}
+
 .grid__item--1--xs {
   -webkit-box-flex: 0;
   -ms-flex: 0 0 8.33333%;
@@ -1111,14 +1183,26 @@ html {
   width: auto
 }
 
-@media (min-width: 640px) {
+.header__logo-text p {
+  margin: 0
+}
+
+@media (max-width: 930px) {
+  .header__logo-text {
+    display: none
+  }
+}
+
+@media (min-width: 930px) {
   .nav--mobile {
     display: none
   }
 }
 
-.nav {
-  margin-top: 15px
+@media (min-width: 930px) {
+  .nav {
+    margin-top: 15px
+  }
 }
 
 .nav__list {
@@ -1150,6 +1234,24 @@ html {
   color: #fff
 }
 
+@media (max-width: 640px) {
+  .nav__link--text {
+    display: none
+  }
+}
+
+@media (max-width: 640px) {
+  .nav__link--bubble {
+    padding: 0
+  }
+}
+
+@media (max-width: 640px) {
+  .nav__link--burger {
+    padding-left: 0
+  }
+}
+
 .cart__count {
   position: relative;
   display: -webkit-box;
@@ -1173,6 +1275,17 @@ html {
   background: #000;
   color: #fff;
   font-family: Arial, "Helvetica Neue", sans-serif
+}
+
+@media (max-width: 640px) {
+  .cart__count {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    line-height: 15px;
+    top: 9px;
+    right: 71px
+  }
 }
 
 .slick-slider {

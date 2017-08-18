@@ -29,6 +29,16 @@
   width: auto;
 }
 
+.header__logo-text {
+  p {
+    margin: 0;
+    white-space: nowrap;
+  }
+  @include max-size(md) {
+    display: none;
+  }
+}
+
 .nav--mobile {
   @include screen-size(md) {
     display: none;
