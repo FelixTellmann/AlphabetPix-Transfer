@@ -100,3 +100,55 @@
     }
   }
 }
+
+@mixin max-size($size) {
+  @if ($size == 'xs' or $size == 0) {
+    @content
+  } @else if ($size == 'sm') {
+    @media (max-width: $g-responsive-breakpoint-sm) {
+      @content;
+    }
+  } @else if ($size == 'md') {
+    @media (max-width: $g-responsive-breakpoint-md) {
+      @content;
+    }
+  } @else if ($size == 'lg') {
+    @media (max-width: $g-responsive-breakpoint-lg) {
+      @content;
+    }
+  } @else if ($size == 'xl') {
+    @media (max-width: $g-responsive-breakpoint-xl) {
+      @content;
+    }
+  } @else if (type_of($size) == 'number') {
+    @media (max-width: $size) {
+      @content;
+    }
+  }
+}
+
+@mixin min-size($size) {
+  @if ($size == 'xs' or $size == 0) {
+    @content
+  } @else if ($size == 'sm') {
+    @media (min-width: $g-responsive-breakpoint-sm) {
+      @content;
+    }
+  } @else if ($size == 'md') {
+    @media (min-width: $g-responsive-breakpoint-md) {
+      @content;
+    }
+  } @else if ($size == 'lg') {
+    @media (min-width: $g-responsive-breakpoint-lg) {
+      @content;
+    }
+  } @else if ($size == 'xl') {
+    @media (min-width: $g-responsive-breakpoint-xl) {
+      @content;
+    }
+  } @else if (type_of($size) == 'number') {
+    @media (min-width: $size) {
+      @content;
+    }
+  }
+}

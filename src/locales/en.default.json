@@ -58,7 +58,7 @@
     },
     "header": {
       "expand_navigation": "Expand navigation",
-      "view_cart": "View cart"
+      "view_cart": "My Cart"
     },
     "navigation": {
       "toggle_sublinks": "Toggle {{ link_title }} sublinks"
@@ -276,7 +276,7 @@
       "from_text_html": "From {{ price }}",
       "add_to_cart": "Add to Cart",
       "item_added_to_cart": "Item added to cart!",
-      "view_cart": "View cart",
+      "view_cart": "My Cart",
       "quantity": "Quantity"
     }
   },

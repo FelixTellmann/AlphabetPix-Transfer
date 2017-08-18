@@ -1,0 +1,325 @@
+/*============================================================================
+  #grid
+    - Version 1.0.0
+    -
+==============================================================================*/
+
+//*-------------------------------------*
+//  #Grid Settings
+//\*-------------------------------------*/
+$columns: 12 !default;
+$gutter: 30px !default;
+$container: 1200px !default;
+
+$responsive-containers: (sm, md, lg);
+$responsive-container-sm: 720px;
+$responsive-container-md: 930px;
+$responsive-container-lg: 1200px;
+
+/*-------------------------------------*
+  #Base HTML Requirements
+\*-------------------------------------*/
+
+html {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+/*-------------------------------------*
+  #Grid Content
+\*-------------------------------------*/
+
+.grid__content {
+  padding-right: ($g-gutter / 2);
+  padding-left: ($g-gutter / 2);
+}
+
+/*-------------------------------------*
+  #Grid Container
+\*-------------------------------------*/
+
+.grid__container {
+  margin-left: auto;
+  margin-right: auto;
+  width: $container;
+  max-width: 100%;
+  position: relative;
+}
+
+.grid__container--fw {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+}
+
+/*================ Grid Row Classes ================*/
+
+[class*=grid__row] {
+  position: relative;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  width: 100%
+}
+
+[class*=grid__col] {
+  position: relative;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: column nowrap;
+  flex-flow: column nowrap;
+  width: 100%
+}
+
+.grid__row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex
+}
+
+.grid__col {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex
+}
+
+@each $size in $g-responsive-breakpoints {
+  @include screen-size($size) {
+    .grid__row--#{$size} {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+    }
+    .grid__col--#{$size} {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+    }
+  }
+}
+
+/*================ Grid Positioning Classes ================*/
+
+.justify--fs {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start
+}
+
+.justify--fe {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end
+}
+
+.justify--center {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center
+}
+
+.justify--sa {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+  justify-content: space-around
+}
+
+.justify--sb {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between
+}
+
+.align--fs {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start
+}
+
+.align--fe {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: end;
+  -ms-flex-align: end;
+  align-items: flex-end
+}
+
+.align--center {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center
+}
+
+.align--bl {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: baseline;
+  -ms-flex-align: baseline;
+  align-items: baseline
+}
+
+.align--st {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch
+}
+
+@each $size in $g-responsive-breakpoints {
+  @include screen-size($size) {
+    .justify--fs--#{$size} {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start
+    }
+    .justify--fe--#{$size} {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: end;
+      -ms-flex-pack: end;
+      justify-content: flex-end
+    }
+    .justify--center--#{$size} {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center
+    }
+    .justify--sa--#{$size} {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: distribute;
+      justify-content: space-around
+    }
+    .justify--sb--#{$size} {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between
+    }
+    .align--fs--#{$size} {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: start;
+      -ms-flex-align: start;
+      align-items: flex-start
+    }
+    .align--fe--#{$size} {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: end;
+      -ms-flex-align: end;
+      align-items: flex-end
+    }
+    .align--center--#{$size} {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center
+    }
+    .align--bl--#{$size} {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: baseline;
+      -ms-flex-align: baseline;
+      align-items: baseline
+    }
+    .align--st--#{$size} {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+      align-items: stretch
+    }
+  }
+}
+
+/*-------------------------------------*
+  #Grid Items
+\*-------------------------------------*/
+
+[class*=grid__item] {
+  position: relative;
+  min-height: 1px;
+}
+
+.grid__item {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1
+}
+
+@each $size in $g-responsive-breakpoints {
+  .grid__item--#{$size} {
+    @include screen-size($size) {
+      -webkit-box-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
+    }
+  }
+}
+
+@each $size in $g-responsive-breakpoints {
+  @include screen-size($size) {
+    @for $i from 1 through $columns {
+      .grid__item--#{$i}--#{$size} {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 percentage($i / $columns);
+        flex: 0 0 percentage($i / $columns);
+      }
+    }
+  }
+}
+
+/*------------------------------------------------------------------------------*
+  #FLEX-GRID - END
+\*------------------------------------------------------------------------------*/

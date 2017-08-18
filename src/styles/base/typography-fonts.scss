@@ -1,8 +1,20 @@
 @font-face {
-  font-family: "Proxima Nova";
-  src: url("Proxima Nova Light.otf");
-  src: url("Proxima Nova Light.otf") format('embedded-opentype'),
-  url("Proxima Nova Light.woff") format('woff');
+  font-family: "Caviar Dreams";
+  src: url("CaviarDreams.ttf");
   font-weight: 300;
   font-style: normal;
+}
+
+@font-face {
+  font-family: "Caviar Dreams";
+  src: url("Caviar_Dreams_Bold.ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Caviar Dreams";
+  src: url("CaviarDreams_Italic.ttf");
+  font-weight: 300;
+  font-style: italic;
 }

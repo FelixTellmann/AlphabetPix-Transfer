@@ -190,6 +190,11 @@
             "group": "Sans-serif"
           },
           {
+            "value": "'Caviar Dreams', 'HelveticaNeue', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "label": "Caviar Dreams",
+            "group": "Sans-serif"
+          },
+          {
             "value": "'HelveticaNeue', 'Helvetica Neue', Helvetica, Arial, sans-serif",
             "label": "Helvetica Neue",
             "group": "Sans-serif"
@@ -359,6 +364,11 @@
           {
             "value": "'Avenir', 'HelveticaNeue', 'Helvetica Neue', Helvetica, Arial, sans-serif",
             "label": "Avenir",
+            "group": "Sans-serif"
+          },
+          {
+            "value": "'Caviar Dreams', 'HelveticaNeue', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+            "label": "Caviar Dreams",
             "group": "Sans-serif"
           },
           {
