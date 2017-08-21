@@ -1,0 +1,23 @@
+.button {
+  background-color: $color__primary;
+  padding: 11px 40px;
+  border-radius: 18px;
+  border: 2px solid transparent;
+  color: $color__button;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: all 0.1s;
+  @include hover-focus-active-class {
+    border: 2px solid $color__primary;
+    background-color: $color__button;
+    color: $color__primary;
+  }
+  
+  @include max-size(md) {
+    font-size: 13px;
+    padding: 9px 29px;
+  }
+}

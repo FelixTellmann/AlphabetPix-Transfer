@@ -1,0 +1,359 @@
+{% if section.settings.enable_transparent and template.name == 'index' %}
+  <style>
+    html:not(.supports-no-js) body:not(.navigation-open) .site-header--transparent:not(.site-header--fixed) .burger-icon {
+      background-color: {{ section.settings.transparent_text_color }};
+    }
+    
+    html:not(.supports-no-js) body:not(.navigation-open) .site-header--transparent:not(.site-header--fixed) .site-header__cart .icon,
+    html:not(.supports-no-js) body:not(.navigation-open) .site-header--transparent:not(.site-header--fixed) .site-header__bag .icon {
+      fill: {{ section.settings.transparent_text_color }};
+    }
+    
+    html:not(.supports-no-js) body:not(.navigation-open) .site-header--transparent:not(.site-header--fixed) a.site-header__logo {
+      color: {{ section.settings.transparent_text_color }};
+    }
+    
+    html:not(.supports-no-js) body:not(.navigation-open) .site-header--transparent:not(.site-header--fixed) .site-header__navigation::after,
+    html:not(.supports-no-js) body:not(.navigation-open) .site-header--transparent:not(.site-header--fixed) .site-header__cart::after {
+      border-color: {{ section.settings.transparent_text_color }};
+    }
+  </style>
+{% endif %}
+<div class="header site-header{% if section.settings.enable_transparent and template.name == 'index' %} site-header--transparent{% endif %}{% if template.name == 'index' %} site-header--homepage{% endif %}" data-section-id="{{ section.id }}" data-section-type="header-section" data-drawer-push>
+  <header class="site-header__wrapper">
+    
+    {% if section.settings.show_announcement %}
+      {% if section.settings.home_page_only == false or template.name == 'index' %}
+        <style>
+          .announcement-bar {
+            background-color: {{ section.settings.announcement_color_bg }};
+          }
+          
+          .announcement-bar--link:hover {
+          {% assign brightness = section.settings.announcement_color_bg | color_brightness %}{% if brightness <= 192 %}{% assign lightenAmount = 255 | minus: brightness | divided_by: 255 | times: 16 %} background-color: {{ section.settings.announcement_color_bg | color_lighten: lightenAmount }};
+          {% else %}{% assign darkenAmount = 255 | divided_by: brightness | times: 8 %} background-color: {{ section.settings.announcement_color_bg | color_darken: darkenAmount }};
+          {% endif %}
+          }
+          
+          .announcement-bar__message,
+          .announcement-bar__close {
+            color: {{ section.settings.announcement_color_text }};
+          }
+        </style>
+        <a href="{{ section.settings.announcement_link }}" class="announcement-bar announcement-bar--link">
+          
+          <p class="announcement-bar__message page-width">
+            {% if section.settings.announcement_icon != 'none' %}
+              {%- assign icon = 'icon-' | append: section.settings.announcement_icon -%}
+              {% include icon %}
+            {% endif %}
+            {{ section.settings.announcement_text | escape }}
+          </p>
+          <button class="announcement-bar__close btn btn--clear" aria-expanded="true">{% include 'icon-close' %}</button>
+        </a>
+      {% endif %}
+    {% endif %}
+    
+    <div class="site-header-sections page-width grid__container">
+      <div class="site-header__section grid__item--5--md grid__row">
+        <h1 class="grid__item--md grid__content site-header__logo-wrapper h4" itemscope itemtype="http://schema.org/Organization">
+          <a href="/" itemprop="url" class="site-header__logo">
+            {%- capture image_size %}x{{ section.settings.logo_max_height }}{% endcapture -%}
+            
+            {% if section.settings.logo %}
+              <img class="header__logo site-header__logo-image" src="{{ section.settings.logo | img_url: 'master' }}" alt="{{ section.settings.logo.alt | default: shop.name }}" itemprop="logo">
+              {% if template.name == 'index' and section.settings.enable_transparent %}
+                {% if section.settings.transparent_logo == blank %}
+                  {%- assign transparent_logo = section.settings.logo -%}
+                {% else %}
+                  {%- assign transparent_logo = section.settings.transparent_logo -%}
+                {% endif %}
+                
+                <img class="header__logo site-header__logo-image site-header__logo-image--transparent" src="{{ transparent_logo | img_url: 'master' }}" alt="{{ section.settings.logo.alt | default: shop.name }}"
+                     itemprop="logo">
+              {% endif %}
+            {% else %}
+              {{ shop.name }}
+            {% endif %}
+          </a>
+        </h1>
+        <div class="grid__item--5 grid__content grid__col justify--center header__logo-text">
+          {{ section.settings.logo_text }}
+        </div>
+      </div>
+      
+      
+      <nav class="nav grid__col">
+        <div class="nav__list grid__row justify--fe">
+          {% for link in linklists[section.settings.primary_navigation].links %}
+            <a class="nav__link grid__content{% if link.active %} active{% endif %}" href="{{ link.url }}" tabindex="-1">{{ link.title }}</a>
+          {% endfor %}
+        </div>
+        
+        <div class="nav__cart grid__row justify--fe align--center">
+          <a href="/cart" class="nav__link ajax-cart__toggle" aria-expanded="false">
+            <span class="btn btn--clear btn--square btn--hover-scale site-header__cart">
+              {%- assign icon = 'icon-header-' | append: section.settings.icon %}
+              {% include icon %}
+            </span>
+          </a>
+          <a href="/cart" class="grid__content nav__link nav__link--text ajax-cart__toggle" aria-expanded="false">
+            <span class="">{{ 'general.header.view_cart' | t }}</span>
+          </a>
+          <a href="/cart" class="grid__content nav__link nav__link--bubble ajax-cart__toggle" aria-expanded="false">
+            <span class="cart__count site-header__cart-bubble{% if cart.item_count > 0 %} site-header__cart-bubble--visible{% endif %}">1</span>
+          </a>
+          <div class="grid__content nav__link nav__link--burger site-header__section site-header__section--button nav--mobile">
+            <button class="site-header__navigation btn btn--clear btn--square" aria-expanded="false" role="navigation">
+              <span class="burger-icon burger-icon--top"></span>
+              <span class="burger-icon burger-icon--mid"></span>
+              <span class="burger-icon burger-icon--bottom"></span>
+              <span class="icon__fallback-text">{{ 'general.header.expand_navigation' | t }}</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </div>
+  
+  </header>
+  
+  <nav class="navigation supports-no-js critical-hide" data-section-id="{{ section.id }}" data-section-type="navigation" role="navigation" aria-hidden=true>
+    <div class="navigation__container page-width">
+      <ul class="navigation__links">
+        {% for link in linklists[section.settings.primary_navigation].links %}
+          <li class="navigation__link navigation__entrance-animation{% if link.active %} navigation__link--active{% endif %}">
+            <a class="navigation__link-anchor nav__link" href="{{ link.url }}" tabindex="-1">{{ link.title }}</a>
+          </li>
+        
+        {% endfor %}
+      </ul>
+      
+      <ul class="navigation__links">
+        {% if shop.customer_accounts_enabled %}
+          {% if customer %}
+            <li class="navigation__link navigation__link--secondary navigation__entrance-animation">
+              {% if customer.first_name != blank %}
+                {% capture first_name %}{{ customer.first_name }}{% endcapture %}
+                <a href="/account" tabindex="-1">{{ 'layout.customer.logged_in_as_html' | t: first_name: first_name }}</a>
+              {% else %}
+                <a href="/account" tabindex="-1">{{ 'layout.customer.account' | t }}</a>
+              {% endif %}
+            </li>
+            <li class="navigation__link navigation__link--secondary navigation__entrance-animation">
+              <a href="/account/logout" tabindex="-1">{{ 'layout.customer.log_out' | t }}</a>
+            </li>
+          {% else %}
+            <li class="navigation__link navigation__link--secondary navigation__entrance-animation">
+              <a href="/account/login" tabindex="-1">{{ 'layout.customer.log_in' | t }}</a>
+            </li>
+            <li class="navigation__link navigation__link--secondary navigation__entrance-animation">
+              <a href="/account/register" tabindex="-1">{{ 'layout.customer.create_account' | t }}</a>
+            </li>
+          {% endif %}
+        {% endif %}
+      </ul>
+      
+      {% if section.settings.show_social_icons %}
+        <div class="navigation__social-sharing navigation__entrance-animation">
+          {% include 'social-links', disableTab: true, largeIcons: true %}
+        </div>
+      {% endif %}
+      
+      {% comment %}{# {% include 'search-bar', animate: true, disableTab: true %}#}{% endcomment %}
+    </div>
+  </nav>
+</div>
+
+{% comment %}{#<!--@formatter:off-->#}{% endcomment %}
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Shopping cart icon",
+      "default": "bag",
+      "options": [
+        {
+          "label": "Bag",
+          "value": "bag"
+        },
+        {
+          "label": "Cart",
+          "value": "cart"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "id": "logo_max_height",
+      "type": "text",
+      "label": "Custom logo height (in pixels)",
+      "default": "60"
+    },
+    {
+      "type": "header",
+      "content": "Transparent header"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_transparent",
+      "label": "Enable transparent header on the home page",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "transparent_logo",
+      "label": "Tranparent logo image",
+      "info": "This logo will be used on the home page if the transparent header setting is selected"
+    },
+    {
+      "type": "color",
+      "id": "transparent_text_color",
+      "label": "Transparent header icons color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "primary_navigation",
+      "label": "Primary navigation",
+      "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "secondary_navigation",
+      "label": "Secondary navigation",
+      "default": "footer"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_icons",
+      "label": "Show social icons",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Announcement"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Show announcement",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "home_page_only",
+      "label": "Home page only",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "Announce something here"
+    },
+    {
+      "type": "url",
+      "id": "announcement_link",
+      "label": "Announcement link",
+      "info": "Optional"
+    },
+    {
+      "type": "select",
+      "id": "announcement_icon",
+      "label": "Icon",
+      "default": "checkmark",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "Box",
+          "value": "box"
+        },
+        {
+          "label": "Card",
+          "value": "card"
+        },
+        {
+          "label": "Cart",
+          "value": "cart"
+        },
+        {
+          "label": "Checkmark",
+          "value": "checkmark"
+        },
+        {
+          "label": "Clock",
+          "value": "clock"
+        },
+        {
+          "label": "Envelope",
+          "value": "envelope"
+        },
+        {
+          "label": "Globe",
+          "value": "globe"
+        },
+        {
+          "label": "Leaf",
+          "value": "leaf"
+        },
+        {
+          "label": "Padlock",
+          "value": "padlock"
+        },
+        {
+          "label": "Price Tag",
+          "value": "pricetag"
+        },
+        {
+          "label": "Silhouette",
+          "value": "silhouette"
+        },
+        {
+          "label": "Trophy",
+          "value": "trophy"
+        },
+        {
+          "label": "Truck",
+          "value": "truck"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "announcement_color_bg",
+      "label": "Bar",
+      "default": "#7796A8"
+    },
+    {
+      "type": "color",
+      "id": "announcement_color_text",
+      "label": "Text",
+      "default": "#fff"
+    },
+    {
+      "type": "header",
+      "content": "Logo Text"
+    },
+    {
+      "type": "richtext",
+      "id": "logo_text",
+      "label": "Logo headline"
+    }
+  ]
+}
+{% endschema %}
+{% comment %}{#<!--@formatter:on-->#}{% endcomment %}

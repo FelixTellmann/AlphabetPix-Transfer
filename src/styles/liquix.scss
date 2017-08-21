@@ -23,6 +23,8 @@
 
 ///*================  Modules ================*/
 
+@import url('modules/section--create.scss');
+@import url('modules/button.scss');
 
 ///*================  LAYOUT ================*/
 
@@ -35,5 +37,5 @@
 ///*================  VENDOR ================*/
 
 @import url('vendor/slick.scss');
-@import url('vendor/animate.css');
+@import url('vendor/animate.scss');
 
