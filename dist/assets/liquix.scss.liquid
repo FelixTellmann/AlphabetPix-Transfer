@@ -677,12 +677,90 @@ html {
   font-style: italic;
 }
 
+@font-face {
+  font-family: "Great Vibes";
+  src: url("GreatVibes-Regular.otf");
+  font-weight: 300;
+  font-style: normal;
+}
 
+h3, .h3 {
+  font-family: 'Caviar Dreams', "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+h4, .h4 {
+  font-family: 'Caviar Dreams', "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+}
 
 
 
 ///*================  Modules ================*/
 
+/*============================================================================
+  #Slideshow heading
+    -
+==============================================================================*/
+
+.section__heading-top, .section__heading-bottom {
+  opacity: 0.75;
+  color: #b40937;
+  letter-spacing: 0.02em;
+  padding: 0 5px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.section__heading {
+  font-family: "Great Vibes", serif;
+  font-size: 14rem;
+  font-weight: 300;
+  margin-top: 40px;
+}
+
+.section__heading-seperator {
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 30px;
+  overflow: hidden;
+  svg {
+    height: 20px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+  }
+}
+
+.section__heading-wrapper {
+  z-index: -1;
+  flex: 0 50 auto;
+  position: relative;
+  min-width: 125px;
+}
+
+.section__heading-clip {
+  flex: 50 0 auto;
+  background: #fff;
+  z-index: 1;
+}
+
+.section__subheading {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+
+.section__heading-star {
+  display: inline-block;
+  width: 30px;
+  margin: 0 10px;
+}
 /*============================================================================
   #Create Section
     - frame
