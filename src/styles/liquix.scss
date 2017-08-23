@@ -25,6 +25,7 @@
 
 @import url('modules/section--create.scss');
 @import url('modules/button.scss');
+@import url('modules/section--slideshow.scss');
 
 ///*================  LAYOUT ================*/
 
@@ -39,3 +40,10 @@
 @import url('vendor/slick.scss');
 @import url('vendor/animate.scss');
 
+
+
+/* TEMPORARY FIX FOR DEVELOPMENT */
+
+.slideshow {
+  height: 800px !important;
+}

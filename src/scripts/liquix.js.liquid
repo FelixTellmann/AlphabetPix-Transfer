@@ -15,20 +15,21 @@ window.theme = window.theme || {};
 // =require sections/product.js
 // =require sections/portfolio.js
 // =require sections/process.js
+// =require sections/image-slideshow.js
 
 /*================ Templates ================*/
-{% comment %}{#// =require templates/customers-addresses.js
-// =require templates/customers-login.js#}{% endcomment %}
+// =require templates/customers-addresses.js
+// =require templates/customers-login.js
 
 /*================ Modules ================*/
-// =require modules/smooth-scroll.js
+{% comment %}{#// =require modules/smooth-scroll.js#}{% endcomment %}
 // =require modules/scroll-animations.js
 
 
 $(document).ready(function() {
   var sections = new slate.Sections();
-  {% comment %}{#sections.register('section--process', theme.ProcessSlider);#}{% endcomment %}
-
+  sections.register('slider-section', theme.Slider);
+  console.log(sections);
   // Common a11y fixes
   slate.a11y.pageLinkFocus($(window.location.hash));
 

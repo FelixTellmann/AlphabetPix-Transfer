@@ -9,6 +9,7 @@
   font-weight: 700;
   font-size: 14px;
   white-space: nowrap;
+  -webkit-transition: all 0.1s;
   transition: all 0.1s;
   @include hover-focus-active-class {
     border: 2px solid $color__primary;

@@ -1,6 +1,7 @@
 /*============================================================================
-  #Header Global
-    -
+  #Create Section
+    - frame
+    - create (form)
 ==============================================================================*/
 
 .frame {
@@ -41,7 +42,8 @@
   position: absolute;
   bottom: -90px;
   left: 50%;
-  transform: translate(-50%,0);
+  -webkit-transform: translate(-50%,0);
+          transform: translate(-50%,0);
 }
 
 .create__label {
@@ -66,7 +68,7 @@ input[type='text'].create__input {
   
   font-size: 6.6vw;
   text-transform: uppercase;
-  padding: 9%;
+  padding: 12% 9% 9% 9%;
   letter-spacing: 20px;
   font-weight: 700;
   @include min-size(md) {
@@ -74,6 +76,7 @@ input[type='text'].create__input {
   }
   &::-webkit-input-placeholder {
     color: $color__primary;
+    vertical-align: middle;
     opacity: 1;
     text-transform: uppercase;
     text-align: center;
@@ -82,6 +85,7 @@ input[type='text'].create__input {
   }
   &:-ms-input-placeholder {
     color: $color__primary;
+    vertical-align: middle;
     opacity: 1;
     text-transform: uppercase;
     text-align: center;
@@ -90,6 +94,7 @@ input[type='text'].create__input {
   }
   &::placeholder {
     color: $color__primary;
+    vertical-align: middle;
     opacity: 1;
     text-transform: uppercase;
     text-align: center;

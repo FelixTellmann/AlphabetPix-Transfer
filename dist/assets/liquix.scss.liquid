@@ -684,8 +684,9 @@ html {
 ///*================  Modules ================*/
 
 /*============================================================================
-  #Header Global
-    -
+  #Create Section
+    - frame
+    - create (form)
 ==============================================================================*/
 
 .frame {
@@ -726,7 +727,8 @@ html {
   position: absolute;
   bottom: -90px;
   left: 50%;
-  transform: translate(-50%,0);
+  -webkit-transform: translate(-50%,0);
+          transform: translate(-50%,0);
 }
 
 .create__label {
@@ -751,7 +753,7 @@ input[type='text'].create__input {
   
   font-size: 6.6vw;
   text-transform: uppercase;
-  padding: 9%;
+  padding: 12% 9% 9% 9%;
   letter-spacing: 20px;
   font-weight: 700;
   @include min-size(md) {
@@ -759,6 +761,7 @@ input[type='text'].create__input {
   }
   &::-webkit-input-placeholder {
     color: $color__primary;
+    vertical-align: middle;
     opacity: 1;
     text-transform: uppercase;
     text-align: center;
@@ -767,6 +770,7 @@ input[type='text'].create__input {
   }
   &:-ms-input-placeholder {
     color: $color__primary;
+    vertical-align: middle;
     opacity: 1;
     text-transform: uppercase;
     text-align: center;
@@ -775,6 +779,7 @@ input[type='text'].create__input {
   }
   &::placeholder {
     color: $color__primary;
+    vertical-align: middle;
     opacity: 1;
     text-transform: uppercase;
     text-align: center;
@@ -795,6 +800,7 @@ input[type='text'].create__input {
   font-weight: 700;
   font-size: 14px;
   white-space: nowrap;
+  -webkit-transition: all 0.1s;
   transition: all 0.1s;
   @include hover-focus-active-class {
     border: 2px solid $color__primary;
@@ -805,6 +811,127 @@ input[type='text'].create__input {
   @include max-size(md) {
     font-size: 13px;
     padding: 9px 29px;
+  }
+}
+/*============================================================================
+  #Slideshow Section
+    -
+==============================================================================*/
+
+.slider__slide-wrapper, .slider-wrapper {
+  position: relative;
+}
+
+.slider {
+  /*height: 800px;*/
+  margin: 45px 0;
+}
+
+.slider__slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+}
+
+.slider__background-img {
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.slider__image-wrapper {
+  overflow: hidden;
+  margin: 0;
+}
+
+.slider__image {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.slider__image--frame {
+  -webkit-box-shadow: 10px 10px 20px rgba(0,0,0,0.6);
+          box-shadow: 10px 10px 20px rgba(0,0,0,0.6);
+}
+
+.slider__frame {
+  position: absolute;
+  z-index: 30;
+  width: 600px;
+  max-width: 60%;
+  height: auto;
+  max-height: 100%;
+  bottom: 60px;
+  margin: 0;
+  padding: 15px;
+  left: calc((100vw - 1100px) / 2);
+  
+  @include max-size(lg) {
+    bottom: 20px;
+    left: 60px;
+  }
+  @include max-size(sm) {
+    bottom: 0;
+    left: 0;
+    max-width: 70%;
+  }
+  
+}
+
+.slick-dots {
+  position: absolute;
+  bottom: -45px;
+  display: block;
+  width: 100%;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+  
+  li {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: 0 5px;
+    padding: 0;
+    cursor: pointer;
+    transition: 0.1s all;
+    
+    &.slick-active button:before {
+      opacity: 0.85;
+      color: black;
+    }
+    
+    button {
+      font-size: 0;
+      line-height: 0;
+      display: block;
+      width: 20px;
+      height: 20px;
+      padding: 5px;
+      cursor: pointer;
+      color: transparent;
+      border: 0;
+      outline: none;
+      background: transparent;
+      position: relative;
+      
+      &:before {
+        content: '';
+        position: absolute;
+        width: 7px;
+        height: 7px;
+        background-color: black;
+        border-radius: 50%;
+        opacity: 0.4;
+      }
+    }
   }
 }
 
@@ -4452,3 +4579,10 @@ input[type='text'].create__input {
 }
 
 
+
+
+/* TEMPORARY FIX FOR DEVELOPMENT */
+
+.slideshow {
+  height: 800px !important;
+}
