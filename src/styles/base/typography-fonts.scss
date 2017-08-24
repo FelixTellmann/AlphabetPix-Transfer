@@ -25,3 +25,58 @@
   font-weight: 300;
   font-style: normal;
 }
+
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("HelveticaNeueLTStd-Roman.otf");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("HelveticaNeueLTStd-Bd.otf");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("HelveticaNeueLTStd-Blk.otf");
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("HelveticaNeueLTStd-It.otf");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("HelveticaNeueLTStd-BdIt.otf");
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("HelveticaNeueLTStd-BlkIt.otf");
+  font-weight: 900;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("HelveticaNeueLTStd-BlkEx.otf");
+  font-weight: 900;
+  font-style: normal;
+  font-stretch: expanded;
+}
+
+@font-face {
+  font-family: "Playfair Display";
+  src: url("PlayfairDisplay-Italic.otf");
+  font-weight: 400;
+  font-style: italic;
+}

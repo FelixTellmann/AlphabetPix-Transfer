@@ -29,6 +29,7 @@ window.theme = window.theme || {};
 $(document).ready(function() {
   var sections = new slate.Sections();
   sections.register('slider-section', theme.Slider);
+  sections.register('theme-collection-section');
   console.log(sections);
   // Common a11y fixes
   slate.a11y.pageLinkFocus($(window.location.hash));
