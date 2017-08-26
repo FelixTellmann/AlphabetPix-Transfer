@@ -1,0 +1,109 @@
+/*============================================================================
+  #Section - Grid Images
+    -
+==============================================================================*/
+.grid-images__item {
+  height: 290px;
+}
+
+.grid-images__wrapper {
+  position: relative;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  
+  &::before {
+    position: absolute;
+    content: '';
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+  }
+  
+  .placeholder-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+}
+
+.grid-images__content {
+  position: relative;
+  padding: 15px;
+  height: 100%;
+  
+  @include max-size(sm) {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  p {
+    font-family: 'Caviar Dreams', "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+  }
+  p strong {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 900;
+    font-size: 3rem;
+    line-height: 1.2;
+    text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7);
+  }
+  p em {
+    display: inline-block;
+    font-family: "Great Vibes", serif;
+    font-weight: 300;
+    font-size: 4.7rem;
+    letter-spacing: 0.04em;
+    font-style: normal;
+    text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.6);
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+}
+
+.grid-images__icon-small {
+  height: 35px;
+  margin-bottom: 25px;
+  opacity: 0.5;
+  svg {
+    height: 100%;
+    .st0 {
+      fill: #fff
+    }
+  }
+}
+
+.grid-images__icon-large {
+  @include max-size(sm) {
+    position: absolute;
+    width: 40%;
+  }
+  svg {
+    height: 100%;
+    max-width: 100%;
+  }
+}
+
+.icon-best-of-the-best {
+  padding: 0 25px 50px 50px;
+  opacity: 0.9;
+}
+
+.grid-images__highlight {
+  display: inline-block;
+  padding: 4px 20px;
+  background-color: #fff;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  opacity: 0.75;
+  font-weight: 700;
+  color: $color__primary;
+  font-size: 1.3rem;
+  -webkit-box-shadow: 5px 6px 20px rgba(0,0,0,0.6);
+          box-shadow: 5px 6px 20px rgba(0,0,0,0.6);
+}

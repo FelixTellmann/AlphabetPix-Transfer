@@ -1,0 +1,186 @@
+{
+  "name": "Grid Images - Single Row",
+  "class": "index-section index-section--theme-collection",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title",
+      "default": "Grid Images"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "grid_item",
+      "name": "Grid Block",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Grid Settings"
+        },
+        {
+          "type": "select",
+          "id": "grid",
+          "label": "Block Size",
+          "default": "3",
+          "options": [
+            {
+              "label": "1/4th Block",
+              "value": "3"
+            },
+            {
+              "label": "1/3rd Block",
+              "value": "4"
+            },
+            {
+              "label": "1/2th Block",
+              "value": "6"
+            },
+            {
+              "label": "1 Block",
+              "value": "12"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Background"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "checkbox",
+          "id": "overlay",
+          "label": "Image Overlay",
+          "default": false
+        },
+        {
+          "type": "color",
+          "id": "overlay_color",
+          "label": "Overlay Color",
+          "default": "#333234"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Opacity overlay effect",
+          "default": 90
+        },
+        {
+          "type": "checkbox",
+          "id": "overlay_effect",
+          "label": "Overlay Effect",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Icon"
+        },
+        {
+          "type": "select",
+          "id": "icon_large",
+          "label": "Large Icon",
+          "default": "none",
+          "options": [
+            {
+              "label": "None",
+              "value": "none"
+            },
+            {
+              "label": "icon-best-of-the-best",
+              "value": "icon-best-of-the-best"
+            }
+          ]
+        },
+        {
+          "type": "textarea",
+          "id": "icon_css",
+          "label": "Custom CSS",
+          "info": "Add custom css to the Large Icon"
+        },
+        {
+          "type": "header",
+          "content": "Text"
+        },
+        {
+          "type": "select",
+          "id": "icon_small",
+          "label": "Icon Positiion/Size",
+          "default": "none",
+          "options": [
+            {
+              "label": "None",
+              "value": "none"
+            },
+            {
+              "label": "icon-star",
+              "value": "icon-star"
+            }
+          ]
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "info": "Use Bold/Italics for different Styles"
+        },
+        {
+          "type": "select",
+          "id": "text_position",
+          "label": "Text Position",
+          "default": "12",
+          "options": [
+            {
+              "label": "center",
+              "value": "12"
+            },
+            {
+              "label": "left",
+              "value": "6"
+            },
+            {
+              "label": "right",
+              "value": "6 grid__offset--6"
+            }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "text_p_color",
+          "label": "Normal Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "text_strong_color",
+          "label": "Bold Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "text_em_color",
+          "label": "Italics Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "text",
+          "id": "highlight",
+          "label": "Highlight"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Grid Images - Single Row",
+      "category": "Section"
+    }
+  ]
+}

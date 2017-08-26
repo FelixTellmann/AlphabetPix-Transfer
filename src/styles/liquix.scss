@@ -28,6 +28,7 @@
 @import url('modules/button.scss');
 @import url('modules/section--slideshow.scss');
 @import url('modules/section--theme-collections.scss');
+@import url('modules/section--grid-images.scss');
 
 ///*================  LAYOUT ================*/
 
@@ -48,4 +49,9 @@
 
 .slideshow {
   height: 800px !important;
+}
+
+.testing {
+  height: 200px;
+  border: 1px dashed darkred;
 }
