@@ -1,0 +1,370 @@
+<div data-section-id="{{ section.id }}" data-section-type="grid-images-section">
+  <div class="page-width">
+    <div class="grid__row--sm grid-images">
+      {% for block in section.blocks %}
+          <style>
+            {% unless block.settings.image_disabled %}
+            {% if block.settings.image != blank %}
+            {% if block.settings.grid == '6' or block.settings.grid == '12' %}
+            .grid-images__background--{{ block.id }} {
+              background-image: url('{{ block.settings.image | img_url: "600x" }}');
+            }
+        
+            {% else %}
+            .grid-images__background--{{ block.id }} {
+              background-image: url('{{ block.settings.image | img_url: "300x" }}');
+            }
+        
+            {% endif %}
+            {% endif %}
+            {% endunless %}
+        
+            {% if block.settings.overlay == true %}
+            .grid-images__background--{{ block.id }}::before {
+              background-color: {{ block.settings.overlay_color }};
+              opacity: calc({{ block.settings.overlay_opacity }} / 100);
+            }
+        
+            {% endif %}
+        
+            .grid-images__text--{{ block.id }} p {
+              color: {{ block.settings.text_p_color }};
+        
+            {% if block.settings.text_shadow == false %} text-shadow: none;
+            {% endif %}
+            }
+        
+            .grid-images__text--{{ block.id }} p strong {
+              color: {{ block.settings.text_strong_color }};
+            {% if block.settings.text_shadow == false %} text-shadow: none;
+            {% endif %}
+            }
+        
+            .grid-images__text--{{ block.id }} p em {
+              color: {{ block.settings.text_em_color }};
+            {% if block.settings.text_shadow == false %} text-shadow: none;
+            {% endif %}
+            }
+        
+            {% if block.settings.icon_large != 'none' %}
+            .{{ block.settings.icon_large }}--{{ block.id }} {
+            {{ block.settings.icon_css }}
+            }
+        
+            {% endif %}
+        
+            .grid-images__item--{{ block.id }} {
+              height: {{ block.settings.grid_height }}px;
+              transition: 0.2s all;
+            }
+      
+          </style>
+      
+          <div class="grid__item--{{ block.settings.grid }}--md grid__item--{{ block.settings.grid | times: 2 }}--sm grid-images__item--{{ block.id }}"
+               data-block-id="{{ block.id }}" {{ block.shopify_attributes }}{% if block.settings.grid_height_full %}style="height: 100%" {% endif %}>
+            <div class="grid-images__wrapper grid-images__background--{{ block.id }} grid__row">
+              {% unless block.settings.image_disabled %}
+                {% if block.settings.image == blank %}
+                  {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+                {% endif %}
+              {% endunless %}
+              {% if block.settings.icon_large != 'none' %}
+                <div class="grid-images__icon-large grid__item {{ block.settings.icon_large }}--{{ block.id }}">
+                  {% include block.settings.icon_large %}
+                </div>
+              {% endif %}
+              <div class="grid-images__content text-center grid-images__text--{{ block.id }} grid__item--{{ block.settings.text_position }} grid__col justify--center align--center">
+                {% if block.settings.icon_small != 'none' %}
+                  <div class="grid-images__icon-small grid__row justify--center {{ block.settings.icon_small }}">
+                    {% include block.settings.icon_small %}
+                  </div>
+                {% endif %}
+                {{ block.settings.text }}
+                {% if block.settings.highlight != blank %}
+                  <span class="grid-images__highlight">
+                    {{ block.settings.highlight }}
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+{% comment %}{#<!--@formatter:off-->#}{% endcomment %}
+{% schema %}
+{
+  "name": "Grid Images - Double Row",
+  "class": "index-section index-section--theme-collection",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title",
+      "default": "Grid Images - Double Row"
+    },
+    {
+      "type": "select",
+      "id": "grid",
+      "label": "Block Size",
+      "default": "3",
+      "options": [
+        {
+          "label": "1/4th Block",
+          "value": "3"
+        },
+        {
+          "label": "1/3rd Block",
+          "value": "4"
+        },
+        {
+          "label": "1/2th Block",
+          "value": "6"
+        },
+        {
+          "label": "3/4th Block",
+          "value": "9"
+        },
+        {
+          "label": "1 Block",
+          "value": "12"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "grid_item",
+      "name": "Grid Block",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Grid Settings"
+        },
+        {
+          "type": "select",
+          "id": "grid_position",
+          "label": "Grid Item Position",
+          "default": "left",
+          "options": [
+            {
+              "label": "Left",
+              "value": "left"
+            },
+            {
+              "label": "Right",
+              "value": "right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "grid",
+          "label": "Block Size",
+          "default": "3",
+          "options": [
+            {
+              "label": "1/6th Block",
+              "value": "2"
+            },
+            {
+              "label": "1/4th Block",
+              "value": "3"
+            },
+            {
+              "label": "1/3rd Block",
+              "value": "4"
+            },
+            {
+              "label": "1/2th Block",
+              "value": "6"
+            },
+            {
+              "label": "1 Block",
+              "value": "12"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "grid_height_full",
+          "label": "Use 100% as Grid height",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "grid_height",
+          "min": 0,
+          "max": 800,
+          "step": 10,
+          "unit": "px",
+          "label": "Block height",
+          "default": 290
+        },
+        {
+          "type": "header",
+          "content": "Background"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "checkbox",
+          "id": "image_disabled",
+          "label": "No Image",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "overlay",
+          "label": "Image Overlay",
+          "default": false
+        },
+        {
+          "type": "color",
+          "id": "overlay_color",
+          "label": "Overlay Color",
+          "default": "#333234"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Opacity overlay effect",
+          "default": 90
+        },
+        {
+          "type": "checkbox",
+          "id": "overlay_effect",
+          "label": "Overlay Effect",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Icon"
+        },
+        {
+          "type": "select",
+          "id": "icon_large",
+          "label": "Large Icon",
+          "default": "none",
+          "options": [
+            {
+              "label": "None",
+              "value": "none"
+            },
+            {
+              "label": "icon-best-of-the-best",
+              "value": "icon-best-of-the-best"
+            }
+          ]
+        },
+        {
+          "type": "textarea",
+          "id": "icon_css",
+          "label": "Custom CSS",
+          "info": "Add custom css to the Large Icon"
+        },
+        {
+          "type": "header",
+          "content": "Text"
+        },
+        {
+          "type": "select",
+          "id": "icon_small",
+          "label": "Icon Positiion/Size",
+          "default": "none",
+          "options": [
+            {
+              "label": "None",
+              "value": "none"
+            },
+            {
+              "label": "icon-star",
+              "value": "icon-star"
+            },
+            {
+              "label": "icon-camera",
+              "value": "icon-camera"
+            },
+            {
+              "label": "icon-planet",
+              "value": "icon-planet"
+            }
+          ]
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "info": "Use Bold/Italics for different Styles"
+        },
+        {
+          "type": "select",
+          "id": "text_position",
+          "label": "Text Position",
+          "default": "12",
+          "options": [
+            {
+              "label": "center",
+              "value": "12"
+            },
+            {
+              "label": "left",
+              "value": "6"
+            },
+            {
+              "label": "right",
+              "value": "6 grid__offset--6"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "text_shadow",
+          "label": "Use Text Shadow",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "text_p_color",
+          "label": "Normal Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "text_strong_color",
+          "label": "Bold Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "text_em_color",
+          "label": "Italics Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "text",
+          "id": "highlight",
+          "label": "Highlight"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Grid Images - Double Row",
+      "category": "Section"
+    }
+  ]
+}
+{% endschema %}
+{% comment %}{#<!--@formatter:on-->#}{% endcomment %}

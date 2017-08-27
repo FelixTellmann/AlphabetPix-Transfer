@@ -1,0 +1,1675 @@
+window.slate = window.slate || {};
+window.theme = window.theme || {};
+
+/*================ Slate ================*/
+/**
+ * A11y Helpers
+ * -----------------------------------------------------------------------------
+ * A collection of useful functions that help make your theme more accessible
+ * to users with visual impairments.
+ *
+ *
+ * @namespace a11y
+ */
+
+slate.a11y = {
+
+  /**
+   * For use when focus shifts to a container rather than a link
+   * eg for In-page links, after scroll, focus shifts to content area so that
+   * next `tab` is where user expects if focusing a link, just $link.focus();
+   *
+   * @param {JQuery} $element - The element to be acted upon
+   */
+  pageLinkFocus: function($element) {
+    var focusClass = 'js-focus-hidden';
+
+    $element.first()
+      .attr('tabIndex', '-1')
+      .focus()
+      .addClass(focusClass)
+      .one('blur', callback);
+
+    function callback() {
+      $element.first()
+        .removeClass(focusClass)
+        .removeAttr('tabindex');
+    }
+  },
+
+  /**
+   * If there's a hash in the url, focus the appropriate element
+   */
+  focusHash: function() {
+    var hash = window.location.hash;
+
+    // is there a hash in the url? is it an element on the page?
+    if (hash && document.getElementById(hash.slice(1))) {
+      this.pageLinkFocus($(hash));
+    }
+  },
+
+  /**
+   * When an in-page (url w/hash) link is clicked, focus the appropriate element
+   */
+  bindInPageLinks: function() {
+    $('a[href*=#]').on('click', function(evt) {
+      this.pageLinkFocus($(evt.currentTarget.hash));
+    }.bind(this));
+  },
+
+  /**
+   * Traps the focus in a particular container
+   *
+   * @param {object} options - Options to be used
+   * @param {jQuery} options.$container - Container to trap focus within
+   * @param {jQuery} options.$elementToFocus - Element to be focused when focus leaves container
+   * @param {string} options.namespace - Namespace used for new focus event handler
+   */
+  trapFocus: function(options) {
+    var eventName = options.eventNamespace
+      ? 'focusin.' + options.eventNamespace
+      : 'focusin';
+
+    if (!options.$elementToFocus) {
+      options.$elementToFocus = options.$container;
+    }
+
+    options.$container.attr('tabindex', '-1');
+    options.$elementToFocus.focus();
+
+    $(document).on(eventName, function(evt) {
+      if (options.$container[0] !== evt.target && !options.$container.has(evt.target).length) {
+        options.$container.focus();
+      }
+    });
+  },
+
+  /**
+   * Removes the trap of focus in a particular container
+   *
+   * @param {object} options - Options to be used
+   * @param {jQuery} options.$container - Container to trap focus within
+   * @param {string} options.namespace - Namespace used for new focus event handler
+   */
+  removeTrapFocus: function(options) {
+    var eventName = options.namespace
+      ? 'focusin.' + options.namespace
+      : 'focusin';
+
+    if (options.$container && options.$container.length) {
+      options.$container.removeAttr('tabindex');
+    }
+
+    $(document).off(eventName);
+  }
+};
+
+/**
+ * Cart Template Script
+ * ------------------------------------------------------------------------------
+ * A file that contains scripts highly couple code to the Cart template.
+ *
+ * @namespace cart
+ */
+
+slate.cart = {
+  
+  /**
+   * Browser cookies are required to use the cart. This function checks if
+   * cookies are enabled in the browser.
+   */
+  cookiesEnabled: function() {
+    var cookieEnabled = navigator.cookieEnabled;
+
+    if (!cookieEnabled){
+      document.cookie = 'testcookie';
+      cookieEnabled = (document.cookie.indexOf('testcookie') !== -1);
+    }
+    return cookieEnabled;
+  }
+};
+
+/**
+ * Utility helpers
+ * -----------------------------------------------------------------------------
+ * A collection of useful functions for dealing with arrays and objects
+ *
+ * @namespace utils
+ */
+
+slate.utils = {
+
+  /**
+   * Return an object from an array of objects that matches the provided key and value
+   *
+   * @param {array} array - Array of objects
+   * @param {string} key - Key to match the value against
+   * @param {string} value - Value to get match of
+   */
+  findInstance: function(array, key, value) {
+    for (var i = 0; i < array.length; i++) {
+      if (array[i][key] === value) {
+        return array[i];
+      }
+    }
+  },
+
+  /**
+   * Remove an object from an array of objects by matching the provided key and value
+   *
+   * @param {array} array - Array of objects
+   * @param {string} key - Key to match the value against
+   * @param {string} value - Value to get match of
+   */
+  removeInstance: function(array, key, value) {
+    var i = array.length;
+    while(i--) {
+      if (array[i][key] === value) {
+        array.splice(i, 1);
+        break;
+      }
+    }
+
+    return array;
+  },
+
+  /**
+   * _.compact from lodash
+   * Remove empty/false items from array
+   * Source: https://github.com/lodash/lodash/blob/master/compact.js
+   *
+   * @param {array} array
+   */
+  compact: function(array) {
+    var index = -1;
+    var length = array == null ? 0 : array.length;
+    var resIndex = 0;
+    var result = [];
+
+    while (++index < length) {
+      var value = array[index];
+      if (value) {
+        result[resIndex++] = value;
+      }
+    }
+    return result;
+  },
+
+  /**
+   * _.defaultTo from lodash
+   * Checks `value` to determine whether a default value should be returned in
+   * its place. The `defaultValue` is returned if `value` is `NaN`, `null`,
+   * or `undefined`.
+   * Source: https://github.com/lodash/lodash/blob/master/defaultTo.js
+   *
+   * @param {*} value - Value to check
+   * @param {*} defaultValue - Default value
+   * @returns {*} - Returns the resolved value
+   */
+  defaultTo: function(value, defaultValue) {
+    return (value == null || value !== value) ? defaultValue : value
+  }
+};
+
+/**
+ * Rich Text Editor
+ * -----------------------------------------------------------------------------
+ * Wrap videos in div to force responsive layout.
+ *
+ * @namespace rte
+ */
+
+slate.rte = {
+
+  wrapTable: function() {
+    $('.rte table').wrap('<div class="rte__table-wrapper"></div>');
+  },
+
+  iframeReset: function() {
+    var $iframeVideo = $('.rte iframe[src*="youtube.com/embed"], .rte iframe[src*="player.vimeo"]');
+    var $iframeReset = $iframeVideo.add('.rte iframe#admin_bar_iframe');
+
+    $iframeVideo.each(function() {
+      // Add wrapper to make video responsive
+      $(this).wrap('<div class="rte__video-wrapper"></div>');
+    });
+
+    $iframeReset.each(function() {
+      // Re-set the src attribute on each iframe after page load
+      // for Chrome's "incorrect iFrame content on 'back'" bug.
+      // https://code.google.com/p/chromium/issues/detail?id=395791
+      // Need to specifically target video and admin bar
+      this.src = this.src;
+    });
+  }
+};
+
+slate.Sections = function Sections() {
+  this.constructors = {};
+  this.instances = [];
+
+  $(document)
+    .on('shopify:section:load', this._onSectionLoad.bind(this))
+    .on('shopify:section:unload', this._onSectionUnload.bind(this))
+    .on('shopify:section:select', this._onSelect.bind(this))
+    .on('shopify:section:deselect', this._onDeselect.bind(this))
+    .on('shopify:section:reorder', this._onReorder.bind(this))
+    .on('shopify:block:select', this._onBlockSelect.bind(this))
+    .on('shopify:block:deselect', this._onBlockDeselect.bind(this));
+};
+
+slate.Sections.prototype = $.extend({}, slate.Sections.prototype, {
+  _createInstance: function(container, constructor) {
+    var $container = $(container);
+    var id = $container.attr('data-section-id');
+    var type = $container.attr('data-section-type');
+
+    constructor = constructor || this.constructors[type];
+
+    if (typeof constructor === 'undefined') {
+      return;
+    }
+
+    var instance = $.extend(new constructor(container), {
+      id: id,
+      type: type,
+      container: container
+    });
+
+    this.instances.push(instance);
+  },
+
+  _onSectionLoad: function(evt) {
+    var container = $('[data-section-id]', evt.target)[0];
+    if (container) {
+      this._createInstance(container);
+    }
+  },
+
+  _onSectionUnload: function(evt) {
+    var instance = slate.utils.findInstance(this.instances, 'id', evt.detail.sectionId);
+
+    if (!instance) {
+      return;
+    }
+
+    if (typeof instance.onUnload === 'function') {
+      instance.onUnload(evt);
+    }
+
+    this.instances = slate.utils.removeInstance(this.instances, 'id', evt.detail.sectionId);
+  },
+
+  _onSelect: function(evt) {
+    var instance = slate.utils.findInstance(this.instances, 'id', evt.detail.sectionId);
+
+    if (instance && typeof instance.onSelect === 'function') {
+      instance.onSelect(evt);
+    }
+  },
+
+  _onDeselect: function(evt) {
+    var instance = slate.utils.findInstance(this.instances, 'id', evt.detail.sectionId);
+
+    if (instance && typeof instance.onDeselect === 'function') {
+      instance.onDeselect(evt);
+    }
+  },
+
+  _onReorder: function(evt) {
+    var instance = slate.utils.findInstance(this.instances, 'id', evt.detail.sectionId);
+
+    if (instance && typeof instance.onReorder === 'function') {
+      instance.onReorder(evt);
+    }
+  },
+
+  _onBlockSelect: function(evt) {
+    var instance = slate.utils.findInstance(this.instances, 'id', evt.detail.sectionId);
+
+    if (instance && typeof instance.onBlockSelect === 'function') {
+      instance.onBlockSelect(evt);
+    }
+  },
+
+  _onBlockDeselect: function(evt) {
+    var instance = slate.utils.findInstance(this.instances, 'id', evt.detail.sectionId);
+
+    if (instance && typeof instance.onBlockDeselect === 'function') {
+      instance.onBlockDeselect(evt);
+    }
+  },
+
+  register: function(type, constructor) {
+    this.constructors[type] = constructor;
+
+    $('[data-section-type=' + type + ']').each(function(index, container) {
+      this._createInstance(container, constructor);
+    }.bind(this));
+  }
+});
+
+/**
+ * Currency Helpers
+ * -----------------------------------------------------------------------------
+ * A collection of useful functions that help with currency formatting
+ *
+ * Current contents
+ * - formatMoney - Takes an amount in cents and returns it as a formatted dollar value.
+ *
+ */
+
+slate.Currency = (function() {
+  var moneyFormat = '${{amount}}';
+
+  /**
+   * Format money values based on your shop currency settings
+   * @param  {Number|string} cents - value in cents or dollar amount e.g. 300 cents
+   * or 3.00 dollars
+   * @param  {String} format - shop money_format setting
+   * @return {String} value - formatted value
+   */
+  function formatMoney(cents, format) {
+    if (typeof cents === 'string') {
+      cents = cents.replace('.', '');
+    }
+    var value = '';
+    var placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
+    var formatString = (format || moneyFormat);
+
+    function formatWithDelimiters(number, precision, thousands, decimal) {
+      precision = slate.utils.defaultTo(precision, 2);
+      thousands = slate.utils.defaultTo(thousands, ',');
+      decimal = slate.utils.defaultTo(decimal, '.');
+
+      if (isNaN(number) || number == null) {
+        return 0;
+      }
+
+      number = (number / 100.0).toFixed(precision);
+
+      var parts = number.split('.');
+      var dollarsAmount = parts[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1' + thousands);
+      var centsAmount = parts[1] ? (decimal + parts[1]) : '';
+
+      return dollarsAmount + centsAmount;
+    }
+
+    switch (formatString.match(placeholderRegex)[1]) {
+      case 'amount':
+        value = formatWithDelimiters(cents, 2);
+        break;
+      case 'amount_no_decimals':
+        value = formatWithDelimiters(cents, 0);
+        break;
+      case 'amount_with_comma_separator':
+        value = formatWithDelimiters(cents, 2, '.', ',');
+        break;
+      case 'amount_no_decimals_with_comma_separator':
+        value = formatWithDelimiters(cents, 0, '.', ',');
+        break;
+      case 'amount_no_decimals_with_space_separator':
+        value = formatWithDelimiters(cents, 0, ' ');
+        break;
+    }
+
+    return formatString.replace(placeholderRegex, value);
+  }
+
+  return {
+    formatMoney: formatMoney
+  };
+})();
+
+/**
+ * Image Helper Functions
+ * -----------------------------------------------------------------------------
+ * A collection of functions that help with basic image operations.
+ *
+ */
+
+slate.Image = (function() {
+
+  /**
+   * Preloads an image in memory and uses the browsers cache to store it until needed.
+   *
+   * @param {Array} images - A list of image urls
+   * @param {String} size - A shopify image size attribute
+   */
+
+  function preload(images, size) {
+    if (typeof images === 'string') {
+      images = [images];
+    }
+
+    for (var i = 0; i < images.length; i++) {
+      var image = images[i];
+      this.loadImage(this.getSizedImageUrl(image, size));
+    }
+  }
+
+  /**
+   * Loads and caches an image in the browsers cache.
+   * @param {string} path - An image url
+   */
+  function loadImage(path) {
+    new Image().src = path;
+  }
+
+  /**
+   * Find the Shopify image attribute size
+   *
+   * @param {string} src
+   * @returns {null}
+   */
+  function imageSize(src) {
+    var match = src.match(/.+_((?:pico|icon|thumb|small|compact|medium|large|grande)|\d{1,4}x\d{0,4}|x\d{1,4})[_\.@]/);
+
+    if (match) {
+      return match[1];
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Adds a Shopify size attribute to a URL
+   *
+   * @param src
+   * @param size
+   * @returns {*}
+   */
+  function getSizedImageUrl(src, size) {
+    if (size === null) {
+      return src;
+    }
+
+    if (size === 'master') {
+      return this.removeProtocol(src);
+    }
+
+    var match = src.match(/\.(jpg|jpeg|gif|png|bmp|bitmap|tiff|tif)(\?v=\d+)?$/i);
+
+    if (match) {
+      var prefix = src.split(match[0]);
+      var suffix = match[0];
+
+      return this.removeProtocol(prefix[0] + '_' + size + suffix);
+    } else {
+      return null;
+    }
+  }
+
+  function removeProtocol(path) {
+    return path.replace(/http(s)?:/, '');
+  }
+
+  return {
+    preload: preload,
+    loadImage: loadImage,
+    imageSize: imageSize,
+    getSizedImageUrl: getSizedImageUrl,
+    removeProtocol: removeProtocol
+  };
+})();
+
+/**
+ * Variant Selection scripts
+ * ------------------------------------------------------------------------------
+ *
+ * Handles change events from the variant inputs in any `cart/add` forms that may
+ * exist. Also updates the master select and triggers updates when the variants
+ * price or image changes.
+ *
+ * @namespace variants
+ */
+
+slate.Variants = (function() {
+
+  /**
+   * Variant constructor
+   *
+   * @param {object} options - Settings from `product.js`
+   */
+  function Variants(options) {
+    this.$container = options.$container;
+    this.product = options.product;
+    this.singleOptionSelector = options.singleOptionSelector;
+    this.originalSelectorId = options.originalSelectorId;
+    this.enableHistoryState = options.enableHistoryState;
+    this.currentVariant = this._getVariantFromOptions();
+
+    $(this.singleOptionSelector, this.$container).on('change', this._onSelectChange.bind(this));
+  }
+
+  Variants.prototype = $.extend({}, Variants.prototype, {
+
+    /**
+     * Get the currently selected options from add-to-cart form. Works with all
+     * form input elements.
+     *
+     * @return {array} options - Values of currently selected variants
+     */
+    _getCurrentOptions: function() {
+      var currentOptions = $.map($(this.singleOptionSelector, this.$container), function(element) {
+        var $element = $(element);
+        var type = $element.attr('type');
+        var currentOption = {};
+
+        if (type === 'radio' || type === 'checkbox') {
+          if ($element[0].checked) {
+            currentOption.value = $element.val();
+            currentOption.index = $element.data('index');
+
+            return currentOption;
+          } else {
+            return false;
+          }
+        } else {
+          currentOption.value = $element.val();
+          currentOption.index = $element.data('index');
+
+          return currentOption;
+        }
+      });
+
+      // remove any unchecked input values if using radio buttons or checkboxes
+      currentOptions = slate.utils.compact(currentOptions);
+
+      return currentOptions;
+    },
+
+    /**
+     * Find variant based on selected values.
+     *
+     * @param  {array} selectedValues - Values of variant inputs
+     * @return {object || undefined} found - Variant object from product.variants
+     */
+    _getVariantFromOptions: function() {
+      var selectedValues = this._getCurrentOptions();
+      var variants = this.product.variants;
+      var found = false;
+
+      variants.forEach(function(variant) {
+        var satisfied = true;
+
+        selectedValues.forEach(function(option) {
+          if (satisfied) {
+            satisfied = (option.value === variant[option.index]);
+          }
+        });
+
+        if (satisfied) {
+          found = variant;
+        }
+      });
+
+      return found || null;
+    },
+
+    /**
+     * Event handler for when a variant input changes.
+     */
+    _onSelectChange: function() {
+      var variant = this._getVariantFromOptions();
+
+      this.$container.trigger({
+        type: 'variantChange',
+        variant: variant
+      });
+
+      if (!variant) {
+        return;
+      }
+
+      this._updateMasterSelect(variant);
+      this._updateImages(variant);
+      this._updatePrice(variant);
+      this.currentVariant = variant;
+
+      if (this.enableHistoryState) {
+        this._updateHistoryState(variant);
+      }
+    },
+
+    /**
+     * Trigger event when variant image changes
+     *
+     * @param  {object} variant - Currently selected variant
+     * @return {event}  variantImageChange
+     */
+    _updateImages: function(variant) {
+      var variantImage = variant.featured_image || {};
+      var currentVariantImage = this.currentVariant.featured_image || {};
+
+      if (!variant.featured_image || variantImage.src === currentVariantImage.src) {
+        return;
+      }
+
+      this.$container.trigger({
+        type: 'variantImageChange',
+        variant: variant
+      });
+    },
+
+    /**
+     * Trigger event when variant price changes.
+     *
+     * @param  {object} variant - Currently selected variant
+     * @return {event} variantPriceChange
+     */
+    _updatePrice: function(variant) {
+      if (variant.price === this.currentVariant.price && variant.compare_at_price === this.currentVariant.compare_at_price) {
+        return;
+      }
+
+      this.$container.trigger({
+        type: 'variantPriceChange',
+        variant: variant
+      });
+    },
+
+    /**
+     * Update history state for product deeplinking
+     *
+     * @param  {variant} variant - Currently selected variant
+     * @return {k}         [description]
+     */
+    _updateHistoryState: function(variant) {
+      if (!history.replaceState || !variant) {
+        return;
+      }
+
+      var newurl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?variant=' + variant.id;
+      window.history.replaceState({path: newurl}, '', newurl);
+    },
+
+    /**
+     * Update hidden master select of variant change
+     *
+     * @param  {variant} variant - Currently selected variant
+     */
+    _updateMasterSelect: function(variant) {
+      $(this.originalSelectorId, this.$container)[0].value = variant.id;
+    }
+  });
+
+  return Variants;
+})();
+
+
+/*================ Sections ================*/
+/**
+ * Product Template Script
+ * ------------------------------------------------------------------------------
+ * A file that contains scripts highly couple code to the Product template.
+ *
+   * @namespace product
+ */
+
+theme.Product = (function() {
+
+  var selectors = {
+    addToCart: '[data-add-to-cart]',
+    addToCartText: '[data-add-to-cart-text]',
+    comparePrice: '[data-compare-price]',
+    comparePriceText: '[data-compare-text]',
+    originalSelectorId: '[data-product-select]',
+    priceWrapper: '[data-price-wrapper]',
+    productFeaturedImage: '[data-product-featured-image]',
+    productJson: '[data-product-json]',
+    productPrice: '[data-product-price]',
+    productThumbs: '[data-product-single-thumbnail]',
+    singleOptionSelector: '[data-single-option-selector]'
+  };
+
+  /**
+   * Product section constructor. Runs on page load as well as Theme Editor
+   * `section:load` events.
+   * @param {string} container - selector for the section container DOM element
+   */
+  function Product(container) {
+    this.$container = $(container);
+    var sectionId = this.$container.attr('data-section-id');
+
+    this.settings = {};
+    this.namespace = '.product';
+
+    // Stop parsing if we don't have the product json script tag when loading
+    // section in the Theme Editor
+    if (!$(selectors.productJson, this.$container).html()) {
+      return;
+    }
+
+    this.productSingleObject = JSON.parse($(selectors.productJson, this.$container).html());
+    this.settings.imageSize = slate.Image.imageSize($(selectors.productFeaturedImage, this.$container).attr('src'));
+
+    slate.Image.preload(this.productSingleObject.images, this.settings.imageSize);
+
+    this.initVariants();
+  }
+
+  Product.prototype = $.extend({}, Product.prototype, {
+
+    /**
+     * Handles change events from the variant inputs
+     */
+    initVariants: function() {
+      var options = {
+        $container: this.$container,
+        enableHistoryState: this.$container.data('enable-history-state') || false,
+        singleOptionSelector: selectors.singleOptionSelector,
+        originalSelectorId: selectors.originalSelectorId,
+        product: this.productSingleObject
+      };
+
+      this.variants = new slate.Variants(options);
+
+      this.$container.on('variantChange' + this.namespace, this.updateAddToCartState.bind(this));
+      this.$container.on('variantImageChange' + this.namespace, this.updateProductImage.bind(this));
+      this.$container.on('variantPriceChange' + this.namespace, this.updateProductPrices.bind(this));
+    },
+
+    /**
+     * Updates the DOM state of the add to cart button
+     *
+     * @param {boolean} enabled - Decides whether cart is enabled or disabled
+     * @param {string} text - Updates the text notification content of the cart
+     */
+    updateAddToCartState: function(evt) {
+      var variant = evt.variant;
+
+      if (variant) {
+        $(selectors.priceWrapper, this.$container).removeClass('hide');
+      } else {
+        $(selectors.addToCart, this.$container).prop('disabled', true);
+        $(selectors.addToCartText, this.$container).html(theme.strings.unavailable);
+        $(selectors.priceWrapper, this.$container).addClass('hide');
+        return;
+      }
+
+      if (variant.available) {
+        $(selectors.addToCart, this.$container).prop('disabled', false);
+        $(selectors.addToCartText, this.$container).html(theme.strings.addToCart);
+      } else {
+        $(selectors.addToCart, this.$container).prop('disabled', true);
+        $(selectors.addToCartText, this.$container).html(theme.strings.soldOut);
+      }
+    },
+
+    /**
+     * Updates the DOM with specified prices
+     *
+     * @param {string} productPrice - The current price of the product
+     * @param {string} comparePrice - The original price of the product
+     */
+    updateProductPrices: function(evt) {
+      var variant = evt.variant;
+      var $comparePrice = $(selectors.comparePrice, this.$container);
+      var $compareEls = $comparePrice.add(selectors.comparePriceText, this.$container);
+
+      $(selectors.productPrice, this.$container)
+        .html(slate.Currency.formatMoney(variant.price, theme.moneyFormat));
+
+      if (variant.compare_at_price > variant.price) {
+        $comparePrice.html(slate.Currency.formatMoney(variant.compare_at_price, theme.moneyFormat));
+        $compareEls.removeClass('hide');
+      } else {
+        $comparePrice.html('');
+        $compareEls.addClass('hide');
+      }
+    },
+
+    /**
+     * Updates the DOM with the specified image URL
+     *
+     * @param {string} src - Image src URL
+     */
+    updateProductImage: function(evt) {
+      var variant = evt.variant;
+      var sizedImgUrl = slate.Image.getSizedImageUrl(variant.featured_image.src, this.settings.imageSize);
+
+      $(selectors.productFeaturedImage, this.$container).attr('src', sizedImgUrl);
+    },
+
+    /**
+     * Event callback for Theme Editor `section:unload` event
+     */
+    onUnload: function() {
+      this.$container.off(this.namespace);
+    }
+  });
+
+  return Product;
+})();
+
+/**
+ * Product Template Script
+ * ------------------------------------------------------------------------------
+ * A file that contains scripts highly couple code to the Product template.
+ *
+ * @namespace product
+ */
+
+theme.PortfolioSlider = (function () {
+
+  /*var selectors = {
+   addToCart: '[data-add-to-cart]',
+   addToCartText: '[data-add-to-cart-text]',
+   comparePrice: '[data-compare-price]',
+   comparePriceText: '[data-compare-text]',
+   originalSelectorId: '[data-product-select]',
+   priceWrapper: '[data-price-wrapper]',
+   productFeaturedImage: '[data-product-featured-image]',
+   productJson: '[data-product-json]',
+   productPrice: '[data-product-price]',
+   productThumbs: '[data-product-single-thumbnail]',
+   singleOptionSelector: '[data-single-option-selector]'
+   };*/
+
+
+  /**
+   * Product section constructor. Runs on page load as well as Theme Editor
+   * `section:load` events.
+   * @param {string} container - selector for the section container DOM element
+   */
+  function PortfolioSlider(container) {
+    this.$container = $(container);
+
+    this.settings = {};
+    this.namespace = '.portfolio';
+
+    var sectionId = this.$container.attr('data-section-id');
+
+    var portfolioSelectors = {
+      sliderContainer: $('.portfolio').attr('data-section-id', sectionId),
+      sliderPrevArrow: $('.slick-prev').attr('data-section-id', sectionId),
+      sliderNextArrow: $('.slick-next').attr('data-section-id', sectionId)
+    };
+
+
+    this.initSlider(portfolioSelectors);
+  }
+
+  PortfolioSlider.prototype = $.extend({}, PortfolioSlider.prototype, {
+
+    initSlider: function (sliderContainer) {
+      sliderContainer.sliderContainer.slick({
+        dots: true,
+        infinite: true,
+        speed: 500,
+        prevArrow: sliderContainer.sliderPrevArrow,
+        nextArrow: sliderContainer.sliderNextArrow
+      });
+
+    },
+
+
+    onBlockSelect: function (evt) {
+      this.$container.off(this.namespace);
+
+      var slideIndex = $('.slick-slide[data-block-id="' + evt.detail.blockId + '"]:not(.slick-cloned)').attr('data-slick-index');
+      $('.portfolio').attr('data-section-id', evt.detail.sectionId).slick('slickGoTo', slideIndex)
+
+    }
+
+  });
+
+  return PortfolioSlider;
+})();
+
+{% comment %}{#// =require sections/process.js#}{% endcomment %}
+
+/*================ Templates ================*/
+/**
+ * Customer Addresses Script
+ * ------------------------------------------------------------------------------
+ * A file that contains scripts highly couple code to the Customer Addresses
+ * template.
+ *
+ * @namespace customerAddresses
+ */
+
+theme.customerAddresses = (function() {
+  var $newAddressForm = $('#AddressNewForm');
+
+  if (!$newAddressForm.length) {
+    return;
+  }
+
+  // Initialize observers on address selectors, defined in shopify_common.js
+  if (Shopify) {
+    new Shopify.CountryProvinceSelector('AddressCountryNew', 'AddressProvinceNew', {
+      hideElement: 'AddressProvinceContainerNew'
+    });
+  }
+
+  // Initialize each edit form's country/province selector
+  $('.address-country-option').each(function() {
+    var formId = $(this).data('form-id');
+    var countrySelector = 'AddressCountry_' + formId;
+    var provinceSelector = 'AddressProvince_' + formId;
+    var containerSelector = 'AddressProvinceContainer_' + formId;
+
+    new Shopify.CountryProvinceSelector(countrySelector, provinceSelector, {
+      hideElement: containerSelector
+    });
+  });
+
+  // Toggle new/edit address forms
+  $('.address-new-toggle').on('click', function() {
+    $newAddressForm.toggleClass('hide');
+  });
+
+  $('.address-edit-toggle').on('click', function() {
+    var formId = $(this).data('form-id');
+    $('#EditAddress_' + formId).toggleClass('hide');
+  });
+
+  $('.address-delete').on('click', function() {
+    var $el = $(this);
+    var formId = $el.data('form-id');
+    var confirmMessage = $el.data('confirm-message');
+    if (confirm(confirmMessage || 'Are you sure you wish to delete this address?')) {
+      Shopify.postLink('/account/addresses/' + formId, {parameters: {_method: 'delete'}});
+    }
+  });
+})();
+
+/**
+ * Password Template Script
+ * ------------------------------------------------------------------------------
+ * A file that contains scripts highly couple code to the Password template.
+ *
+ * @namespace password
+ */
+
+theme.customerLogin = (function() {
+  var config = {
+    recoverPasswordForm: '#RecoverPassword',
+    hideRecoverPasswordLink: '#HideRecoverPasswordLink'
+  };
+
+  if (!$(config.recoverPasswordForm).length) {
+    return;
+  }
+
+  checkUrlHash();
+  resetPasswordSuccess();
+
+  $(config.recoverPasswordForm).on('click', onShowHidePasswordForm);
+  $(config.hideRecoverPasswordLink).on('click', onShowHidePasswordForm);
+
+  function onShowHidePasswordForm(evt) {
+    evt.preventDefault();
+    toggleRecoverPasswordForm();
+  }
+
+  function checkUrlHash() {
+    var hash = window.location.hash;
+
+    // Allow deep linking to recover password form
+    if (hash === '#recover') {
+      toggleRecoverPasswordForm();
+    }
+  }
+
+  /**
+   *  Show/Hide recover password form
+   */
+  function toggleRecoverPasswordForm() {
+    $('#RecoverPasswordForm').toggleClass('hide');
+    $('#CustomerLoginForm').toggleClass('hide');
+  }
+
+  /**
+   *  Show reset password success message
+   */
+  function resetPasswordSuccess() {
+    var $formState = $('.reset-password-success');
+
+    // check if reset password form was successfully submited.
+    if (!$formState.length) {
+      return;
+    }
+
+    // show success message
+    $('#ResetSuccess').removeClass('hide');
+  }
+})();
+
+
+/*================ Modules ================*/
+$(document).ready(function () {
+  // Select all links with hashes
+  $('a[href*="#"]')
+  // Remove links that don't actually link to anything
+    .not('[href="#"]')
+    .not('[href="#0"]')
+    .click(function (event) {
+      // On-page links
+      if (
+        location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
+        &&
+        location.hostname == this.hostname
+      ) {
+        // Figure out element to scroll to
+        var target = $(this.hash);
+        var link = $(this);
+        target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+        // Does a scroll target exist?
+        if (target.length) {
+          // Only prevent default if animation is actually gonna happen
+          event.preventDefault();
+          $('html, body').animate({
+            scrollTop: (target.offset().top - 100)
+          }, 1000, function () {
+            // Callback after animation
+            // Must change focus!
+            var $target = $(target);
+            /*$target.focus();*/
+            if ($target.is(":focus")) { // Checking if the target was focused
+
+              /*link.addClass('active');*/
+              return false;
+            } else {
+              $target.attr('tabindex', '-1'); // Adding tabindex for elements not focusable
+              $target.focus(); // Set focus again
+            }
+          });
+        }
+
+
+      }
+    });
+
+
+  $(window).scroll(function () {
+    //if you hard code, then use console
+    //.log to determine when you want the
+    //nav bar to stick.
+    /*console.log($(window).scrollTop());*/
+    if ($(window).scrollTop() > 650) {
+      $('.header').addClass('header--fixed');
+    }
+    if ($(window).scrollTop() < 650) {
+      $('.header').removeClass('header--fixed');
+    }
+
+
+    return onScroll();
+  });
+
+
+  function onScroll(event) {
+    var scrollPos = $(window).scrollTop();
+    $('header a[href*="#"]')
+    // Remove links that don't actually link to anything
+      .not('[href="#"]')
+      .not('[href="#0"]')
+      .each(function (event) {
+        // On-page links
+        if (
+          location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
+          &&
+          location.hostname == this.hostname
+        ) {
+          // Figure out element to scroll to
+          var target = $(this.hash);
+          var link = $(this);
+
+          if (target.offset().top - 200 <= scrollPos && target.offset().top + target.height() + 200 > scrollPos) {
+            link.addClass("active");
+          }
+          else {
+            link.removeClass("active");
+          }
+        }
+      });
+  }
+});
+
+
+
+
+
+
+
+(function() {
+    var MutationObserver, Util, WeakMap, getComputedStyle, getComputedStyleRX,
+        bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+        indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+    Util = (function() {
+        function Util() {}
+
+        Util.prototype.extend = function(custom, defaults) {
+            var key, value;
+            for (key in defaults) {
+                value = defaults[key];
+                if (custom[key] == null) {
+                    custom[key] = value;
+                }
+            }
+            return custom;
+        };
+
+        Util.prototype.isMobile = function(agent) {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(agent);
+        };
+
+        Util.prototype.createEvent = function(event, bubble, cancel, detail) {
+            var customEvent;
+            if (bubble == null) {
+                bubble = false;
+            }
+            if (cancel == null) {
+                cancel = false;
+            }
+            if (detail == null) {
+                detail = null;
+            }
+            if (document.createEvent != null) {
+                customEvent = document.createEvent('CustomEvent');
+                customEvent.initCustomEvent(event, bubble, cancel, detail);
+            } else if (document.createEventObject != null) {
+                customEvent = document.createEventObject();
+                customEvent.eventType = event;
+            } else {
+                customEvent.eventName = event;
+            }
+            return customEvent;
+        };
+
+        Util.prototype.emitEvent = function(elem, event) {
+            if (elem.dispatchEvent != null) {
+                return elem.dispatchEvent(event);
+            } else if (event in (elem != null)) {
+                return elem[event]();
+            } else if (("on" + event) in (elem != null)) {
+                return elem["on" + event]();
+            }
+        };
+
+        Util.prototype.addEvent = function(elem, event, fn) {
+            if (elem.addEventListener != null) {
+                return elem.addEventListener(event, fn, false);
+            } else if (elem.attachEvent != null) {
+                return elem.attachEvent("on" + event, fn);
+            } else {
+                return elem[event] = fn;
+            }
+        };
+
+        Util.prototype.removeEvent = function(elem, event, fn) {
+            if (elem.removeEventListener != null) {
+                return elem.removeEventListener(event, fn, false);
+            } else if (elem.detachEvent != null) {
+                return elem.detachEvent("on" + event, fn);
+            } else {
+                return delete elem[event];
+            }
+        };
+
+        Util.prototype.innerHeight = function() {
+            if ('innerHeight' in window) {
+                return window.innerHeight;
+            } else {
+                return document.documentElement.clientHeight;
+            }
+        };
+
+        return Util;
+
+    })();
+
+    WeakMap = this.WeakMap || this.MozWeakMap || (WeakMap = (function() {
+            function WeakMap() {
+                this.keys = [];
+                this.values = [];
+            }
+
+            WeakMap.prototype.get = function(key) {
+                var i, item, j, len, ref;
+                ref = this.keys;
+                for (i = j = 0, len = ref.length; j < len; i = ++j) {
+                    item = ref[i];
+                    if (item === key) {
+                        return this.values[i];
+                    }
+                }
+            };
+
+            WeakMap.prototype.set = function(key, value) {
+                var i, item, j, len, ref;
+                ref = this.keys;
+                for (i = j = 0, len = ref.length; j < len; i = ++j) {
+                    item = ref[i];
+                    if (item === key) {
+                        this.values[i] = value;
+                        return;
+                    }
+                }
+                this.keys.push(key);
+                return this.values.push(value);
+            };
+
+            return WeakMap;
+
+        })());
+
+    MutationObserver = this.MutationObserver || this.WebkitMutationObserver || this.MozMutationObserver || (MutationObserver = (function() {
+            function MutationObserver() {
+                if (typeof console !== "undefined" && console !== null) {
+                    console.warn('MutationObserver is not supported by your browser.');
+                }
+                if (typeof console !== "undefined" && console !== null) {
+                    console.warn('WOW.js cannot detect dom mutations, please call .sync() after loading new content.');
+                }
+            }
+
+            MutationObserver.notSupported = true;
+
+            MutationObserver.prototype.observe = function() {};
+
+            return MutationObserver;
+
+        })());
+
+    getComputedStyle = this.getComputedStyle || function(el, pseudo) {
+            this.getPropertyValue = function(prop) {
+                var ref;
+                if (prop === 'float') {
+                    prop = 'styleFloat';
+                }
+                if (getComputedStyleRX.test(prop)) {
+                    prop.replace(getComputedStyleRX, function(_, _char) {
+                        return _char.toUpperCase();
+                    });
+                }
+                return ((ref = el.currentStyle) != null ? ref[prop] : void 0) || null;
+            };
+            return this;
+        };
+
+    getComputedStyleRX = /(\-([a-z]){1})/g;
+
+    this.WOW = (function() {
+        WOW.prototype.defaults = {
+            boxClass: 'scroll',
+            animateClass: 'animated',
+            offset: 0,
+            mobile: true,
+            live: true,
+            callback: null,
+            scrollContainer: null
+        };
+
+        function WOW(options) {
+            if (options == null) {
+                options = {};
+            }
+            this.scrollCallback = bind(this.scrollCallback, this);
+            this.scrollHandler = bind(this.scrollHandler, this);
+            this.resetAnimation = bind(this.resetAnimation, this);
+            this.start = bind(this.start, this);
+            this.scrolled = true;
+            this.config = this.util().extend(options, this.defaults);
+            if (options.scrollContainer != null) {
+                this.config.scrollContainer = document.querySelector(options.scrollContainer);
+            }
+            this.animationNameCache = new WeakMap();
+            this.wowEvent = this.util().createEvent(this.config.boxClass);
+        }
+
+        WOW.prototype.init = function() {
+            var ref;
+            this.element = window.document.documentElement;
+            if ((ref = document.readyState) === "interactive" || ref === "complete") {
+                this.start();
+            } else {
+                this.util().addEvent(document, 'DOMContentLoaded', this.start);
+            }
+            return this.finished = [];
+        };
+
+        WOW.prototype.start = function() {
+            var box, j, len, ref;
+            this.stopped = false;
+            this.boxes = (function() {
+                var j, len, ref, results;
+                ref = this.element.querySelectorAll("." + this.config.boxClass);
+                results = [];
+                for (j = 0, len = ref.length; j < len; j++) {
+                    box = ref[j];
+                    results.push(box);
+                }
+                return results;
+            }).call(this);
+            this.all = (function() {
+                var j, len, ref, results;
+                ref = this.boxes;
+                results = [];
+                for (j = 0, len = ref.length; j < len; j++) {
+                    box = ref[j];
+                    results.push(box);
+                }
+                return results;
+            }).call(this);
+            if (this.boxes.length) {
+                if (this.disabled()) {
+                    this.resetStyle();
+                } else {
+                    ref = this.boxes;
+                    for (j = 0, len = ref.length; j < len; j++) {
+                        box = ref[j];
+                        this.applyStyle(box, true);
+                    }
+                }
+            }
+            if (!this.disabled()) {
+                this.util().addEvent(this.config.scrollContainer || window, 'scroll', this.scrollHandler);
+                this.util().addEvent(window, 'resize', this.scrollHandler);
+                this.interval = setInterval(this.scrollCallback, 50);
+            }
+            if (this.config.live) {
+                return new MutationObserver((function(_this) {
+                    return function(records) {
+                        var k, len1, node, record, results;
+                        results = [];
+                        for (k = 0, len1 = records.length; k < len1; k++) {
+                            record = records[k];
+                            results.push((function() {
+                                var l, len2, ref1, results1;
+                                ref1 = record.addedNodes || [];
+                                results1 = [];
+                                for (l = 0, len2 = ref1.length; l < len2; l++) {
+                                    node = ref1[l];
+                                    results1.push(this.doSync(node));
+                                }
+                                return results1;
+                            }).call(_this));
+                        }
+                        return results;
+                    };
+                })(this)).observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
+            }
+        };
+
+        WOW.prototype.stop = function() {
+            this.stopped = true;
+            this.util().removeEvent(this.config.scrollContainer || window, 'scroll', this.scrollHandler);
+            this.util().removeEvent(window, 'resize', this.scrollHandler);
+            if (this.interval != null) {
+                return clearInterval(this.interval);
+            }
+        };
+
+        WOW.prototype.sync = function(element) {
+            if (MutationObserver.notSupported) {
+                return this.doSync(this.element);
+            }
+        };
+
+        WOW.prototype.doSync = function(element) {
+            var box, j, len, ref, results;
+            if (element == null) {
+                element = this.element;
+            }
+            if (element.nodeType !== 1) {
+                return;
+            }
+            element = element.parentNode || element;
+            ref = element.querySelectorAll("." + this.config.boxClass);
+            results = [];
+            for (j = 0, len = ref.length; j < len; j++) {
+                box = ref[j];
+                if (indexOf.call(this.all, box) < 0) {
+                    this.boxes.push(box);
+                    this.all.push(box);
+                    if (this.stopped || this.disabled()) {
+                        this.resetStyle();
+                    } else {
+                        this.applyStyle(box, true);
+                    }
+                    results.push(this.scrolled = true);
+                } else {
+                    results.push(void 0);
+                }
+            }
+            return results;
+        };
+
+        WOW.prototype.show = function(box) {
+            this.applyStyle(box);
+            box.className = box.className + " " + this.config.animateClass;
+            if (this.config.callback != null) {
+                this.config.callback(box);
+            }
+            this.util().emitEvent(box, this.wowEvent);
+            this.util().addEvent(box, 'animationend', this.resetAnimation);
+            this.util().addEvent(box, 'oanimationend', this.resetAnimation);
+            this.util().addEvent(box, 'webkitAnimationEnd', this.resetAnimation);
+            this.util().addEvent(box, 'MSAnimationEnd', this.resetAnimation);
+            return box;
+        };
+
+        WOW.prototype.applyStyle = function(box, hidden) {
+            var delay, duration, iteration;
+            duration = box.getAttribute('data-scroll-duration');
+            delay = box.getAttribute('data-scroll-delay');
+            iteration = box.getAttribute('data-scroll-iteration');
+            return this.animate((function(_this) {
+                return function() {
+                    return _this.customStyle(box, hidden, duration, delay, iteration);
+                };
+            })(this));
+        };
+
+        WOW.prototype.animate = (function() {
+            if ('requestAnimationFrame' in window) {
+                return function(callback) {
+                    return window.requestAnimationFrame(callback);
+                };
+            } else {
+                return function(callback) {
+                    return callback();
+                };
+            }
+        })();
+
+        WOW.prototype.resetStyle = function() {
+            var box, j, len, ref, results;
+            ref = this.boxes;
+            results = [];
+            for (j = 0, len = ref.length; j < len; j++) {
+                box = ref[j];
+                results.push(box.style.visibility = 'visible');
+            }
+            return results;
+        };
+
+        WOW.prototype.resetAnimation = function(event) {
+            var target;
+            if (event.type.toLowerCase().indexOf('animationend') >= 0) {
+                target = event.target || event.srcElement;
+                return target.className = target.className.replace(this.config.animateClass, '').trim();
+            }
+        };
+
+        WOW.prototype.customStyle = function(box, hidden, duration, delay, iteration) {
+            if (hidden) {
+                this.cacheAnimationName(box);
+            }
+            box.style.visibility = hidden ? 'hidden' : 'visible';
+            if (duration) {
+                this.vendorSet(box.style, {
+                    animationDuration: duration
+                });
+            }
+            if (delay) {
+                this.vendorSet(box.style, {
+                    animationDelay: delay
+                });
+            }
+            if (iteration) {
+                this.vendorSet(box.style, {
+                    animationIterationCount: iteration
+                });
+            }
+            this.vendorSet(box.style, {
+                animationName: hidden ? 'none' : this.cachedAnimationName(box)
+            });
+            return box;
+        };
+
+        WOW.prototype.vendors = ["moz", "webkit"];
+
+        WOW.prototype.vendorSet = function(elem, properties) {
+            var name, results, value, vendor;
+            results = [];
+            for (name in properties) {
+                value = properties[name];
+                elem["" + name] = value;
+                results.push((function() {
+                    var j, len, ref, results1;
+                    ref = this.vendors;
+                    results1 = [];
+                    for (j = 0, len = ref.length; j < len; j++) {
+                        vendor = ref[j];
+                        results1.push(elem["" + vendor + (name.charAt(0).toUpperCase()) + (name.substr(1))] = value);
+                    }
+                    return results1;
+                }).call(this));
+            }
+            return results;
+        };
+
+        WOW.prototype.vendorCSS = function(elem, property) {
+            var j, len, ref, result, style, vendor;
+            style = getComputedStyle(elem);
+            result = style.getPropertyCSSValue(property);
+            ref = this.vendors;
+            for (j = 0, len = ref.length; j < len; j++) {
+                vendor = ref[j];
+                result = result || style.getPropertyCSSValue("-" + vendor + "-" + property);
+            }
+            return result;
+        };
+
+        WOW.prototype.animationName = function(box) {
+            var animationName, error;
+            try {
+                animationName = this.vendorCSS(box, 'animation-name').cssText;
+            } catch (error) {
+                animationName = getComputedStyle(box).getPropertyValue('animation-name');
+            }
+            if (animationName === 'none') {
+                return '';
+            } else {
+                return animationName;
+            }
+        };
+
+        WOW.prototype.cacheAnimationName = function(box) {
+            return this.animationNameCache.set(box, this.animationName(box));
+        };
+
+        WOW.prototype.cachedAnimationName = function(box) {
+            return this.animationNameCache.get(box);
+        };
+
+        WOW.prototype.scrollHandler = function() {
+            return this.scrolled = true;
+        };
+
+        WOW.prototype.scrollCallback = function() {
+            var box;
+            if (this.scrolled) {
+                this.scrolled = false;
+                this.boxes = (function() {
+                    var j, len, ref, results;
+                    ref = this.boxes;
+                    results = [];
+                    for (j = 0, len = ref.length; j < len; j++) {
+                        box = ref[j];
+                        if (!(box)) {
+                            continue;
+                        }
+                        if (this.isVisible(box)) {
+                            this.show(box);
+                            continue;
+                        }
+                        results.push(box);
+                    }
+                    return results;
+                }).call(this);
+                if (!(this.boxes.length || this.config.live)) {
+                    return this.stop();
+                }
+            }
+        };
+
+        WOW.prototype.offsetTop = function(element) {
+            var top;
+            while (element.offsetTop === void 0) {
+                element = element.parentNode;
+            }
+            top = element.offsetTop;
+            while (element = element.offsetParent) {
+                top += element.offsetTop;
+            }
+            return top;
+        };
+
+        WOW.prototype.isVisible = function(box) {
+            var bottom, offset, top, viewBottom, viewTop;
+            offset = box.getAttribute('data-scroll-offset') || this.config.offset;
+            viewTop = (this.config.scrollContainer && this.config.scrollContainer.scrollTop) || window.pageYOffset;
+            viewBottom = viewTop + Math.min(this.element.clientHeight, this.util().innerHeight()) - offset;
+            top = this.offsetTop(box);
+            bottom = top + box.clientHeight;
+            return top <= viewBottom && bottom >= viewTop;
+        };
+
+        WOW.prototype.util = function() {
+            return this._util != null ? this._util : this._util = new Util();
+        };
+
+        WOW.prototype.disabled = function() {
+            return !this.config.mobile && this.util().isMobile(navigator.userAgent);
+        };
+
+        return WOW;
+
+    })();
+
+}).call(this);
+
+new WOW().init();
+
+
+$(document).ready(function() {
+  var sections = new slate.Sections();
+  {% comment %}{#sections.register('section--process', theme.ProcessSlider);#}{% endcomment %}
+
+  // Common a11y fixes
+  slate.a11y.pageLinkFocus($(window.location.hash));
+
+  $('.in-page-link').on('click', function(evt) {
+    slate.a11y.pageLinkFocus($(evt.currentTarget.hash));
+  });
+
+  // Wrap videos in div to force responsive layout.
+  slate.rte.wrapTable();
+  slate.rte.iframeReset();
+
+  // Apply a specific class to the html element for browser support of cookies.
+  if (slate.cart.cookiesEnabled()) {
+    document.documentElement.className = document.documentElement.className.replace('supports-no-cookies', 'supports-cookies');
+  }
+});
