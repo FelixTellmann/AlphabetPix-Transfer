@@ -172,10 +172,11 @@
 /*
 
 $color__primary--alt: {{ settings.color__primary--alt }};
-$color__secondary: {{ settings.color__secondary }};
+
 */
 
 // Text colors
+$color__secondary: {{ settings.color_secondary }};
 $color__primary: {{ settings.color_primary }};
 $color__text: {{ settings.color_primary_body_text }};
 $color__heading: {{ settings.color_primary_heading_text }};
@@ -1334,18 +1335,18 @@ input[type='text'].create__input {
     font-family: 'Caviar Dreams', "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin: 0;
     font-size: 1.2rem;
-    line-height: 1.5;
+    line-height: 2;
     letter-spacing: 0.04em;
     font-weight: 700;
   }
-  p strong {
+  p > strong {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 900;
     font-size: 3rem;
     line-height: 1.2;
     text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7);
   }
-  p em {
+  p > em {
     display: inline-block;
     font-family: "Great Vibes", serif;
     font-weight: 300;
@@ -1355,6 +1356,22 @@ input[type='text'].create__input {
     text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.6);
     margin-bottom: 10px;
     line-height: 1.2;
+  }
+  p > em > strong {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 900;
+    line-height: 1.2;
+    font-size: 1.5rem;
+    color: $color__secondary;
+  }
+  p > strong > em  {
+    font-family: 'Caviar Dreams', "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0;
+    font-style: normal;
+    line-height: 2;
+    letter-spacing: 0.04em;
+    font-size: 3.8rem;
+    font-weight: 300;
   }
 }
 
@@ -1390,12 +1407,15 @@ input[type='text'].create__input {
   display: inline-block;
   padding: 4px 20px;
   background-color: #fff;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
   width: fit-content;
   opacity: 0.75;
   font-weight: 700;
   color: $color__primary;
   font-size: 1.3rem;
-  box-shadow: 5px 6px 20px rgba(0,0,0,0.6);
+  -webkit-box-shadow: 5px 6px 20px rgba(0,0,0,0.6);
+          box-shadow: 5px 6px 20px rgba(0,0,0,0.6);
 }
 
 ///*================  LAYOUT ================*/
