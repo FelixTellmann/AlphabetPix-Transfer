@@ -1,0 +1,168 @@
+<div data-section-id="{{ section.id }}" data-section-type="testimonials-section">
+  <div class="testimonials testimonials--{{ section.id }}">
+    <style>
+      {% if section.settings.background != blank %}
+      .testimonials--{{ section.id }} {
+        background-image: url('{{ section.settings.background | img_url: "2000x" }}');
+        background-size: cover;
+        background-position: center;
+      }
+      
+      {% endif %}
+    </style>
+    {% if section.blocks.size > 0 %}
+      <div class="testimonial__wrapper testimonial__wrapper--active" data-section-id="{{ section.id }}">
+        <div class="slider " id="Slider-{{ section.id }}" data-autoplay="{{ section.settings.autoplay }}" data-speed="{{ section.settings.autoplay_speed }}" data-section-id="{{ section.id }}">
+          {% for block in section.blocks %}
+            <div class="slider__slide-wrapper slide__overlay" data-block-id="{{ block.id }}" {{ block.shopify_attributes }}>
+              <div class="overlay__item" data-section-id="{{ section.id }}"></div>
+              <div class="testimonial__slide">
+                <div class="testimonial__content text-center">
+                  {% if block.settings.icon != 'none' %}
+                    <div class="testimonial__icon">
+                      {% include block.settings.icon %}
+                    </div>
+                  {% endif %}
+                  <h3 class="testimonial__heading">
+                    {{ block.settings.title }}
+                  </h3>
+                  <blockquote class="testimonial__quote">
+                    <p class="testimonial__body">
+                    {{ block.settings.body }}
+                    </p>
+                  </blockquote>
+                  <cite class="testimonial__author">
+                    - {{ block.settings.author }}
+                  </cite>
+                </div>
+                <figure class="slider__image-wrapper" {% comment %}{#style="height: {{ section.settings.slideshow_height }}"#}{% endcomment %}>
+                  <img class="testimonial__image lazyload"
+                          {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+                       src="{{ block.settings.image | img_url: '300x' }}"
+                       data-src="{{ img_url }}"
+                       data-widths="[540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+                       data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+                       data-sizes="auto"
+                       data-parent-fit="cover"
+                       alt="{{ block.settings.image.alt | escape }}">
+                </figure>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+
+{% comment %}{#<!--@formatter:off-->#}{% endcomment %}
+{% schema %}
+  {
+    "name": "Testimonials",
+    "class": "index-section index-section--slider",
+    "max_blocks": 12,
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "autoplay",
+        "label": "Auto-rotate slides",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "autoplay_speed",
+        "label": "Change slides every",
+        "options": [
+          { "value": "5000", "label": "5 seconds" },
+          { "value": "6000", "label": "6 seconds" },
+          { "value": "7000", "label": "7 seconds" },
+          { "value": "8000", "label": "8 seconds" },
+          { "value": "9000", "label": "9 seconds" },
+          { "value": "10000", "label": "10 seconds" }
+        ],
+        "default": "7000"
+      },
+      {
+        "type": "image_picker",
+        "id": "background",
+        "label": "Section Background"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "testimonial",
+        "name": "Testimonial Slide",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "select",
+            "id": "icon",
+            "label": "Icon Positiion/Size",
+            "default": "none",
+            "options": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "icon-star",
+                "value": "icon-star"
+              },
+              {
+                "label": "icon-camera",
+                "value": "icon-camera"
+              },
+              {
+                "label": "icon-planet",
+                "value": "icon-planet"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Testimonial Heading"
+          },
+          {
+            "type": "textarea",
+            "id": "body",
+            "label": "Subheading",
+            "default": "Tell your brand's story through video and images"
+          },
+          {
+            "type": "text",
+            "id": "author",
+            "label": "Author",
+            "default": "Alex S"
+          }
+        ]
+      }
+    ],
+    "presets": [{
+      "name": "Testimonials",
+      "category": "Section",
+      "settings": {
+        "autoplay": false,
+        "autoplay_speed": "5000"
+      },
+      "blocks": [
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        }
+      ]
+    }]
+  }
+{% endschema %}
+{% comment %}{#<!--@formatter:on-->#}{% endcomment %}

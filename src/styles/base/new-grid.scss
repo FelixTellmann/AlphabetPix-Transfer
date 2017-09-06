@@ -309,28 +309,31 @@ html {
 }
 
 @for $i from 1 through $columns {
+  $precision: percentage($i * 100 / $columns);
   .grid__item--#{$i} {
     -webkit-box-flex: 0;
-    -ms-flex: 0 0 percentage($i / $columns);
-    flex: 0 0 percentage($i / $columns);
+    -ms-flex: 0 0 calc(#{$precision} / 100);
+    flex: 0 0 calc(#{$precision} / 100);
   }
 }
 
 @each $size in $g-responsive-breakpoints {
   @include screen-size($size) {
     @for $i from 1 through $columns {
+      $precision: percentage($i * 100 / $columns);
       .grid__item--#{$i}--#{$size} {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 percentage($i / $columns);
-        flex: 0 0 percentage($i / $columns);
+        -ms-flex: 0 0 calc(#{$precision} / 100);
+        flex: 0 0 calc(#{$precision} / 100);
       }
     }
   }
 }
 
 @for $i from 1 through $columns {
+  $precision: percentage($i * 100 / $columns);
   .grid__offset--#{$i} {
-    margin-left: percentage($i / $columns);
+    margin-left: calc(#{$precision} / 100);
   }
 }
 

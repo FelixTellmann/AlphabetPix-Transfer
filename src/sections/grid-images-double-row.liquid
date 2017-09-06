@@ -11,58 +11,58 @@
               .grid-images__background--{{ block.id }} {
                 background-image: url('{{ block.settings.image | img_url: "600x" }}');
               }
-              
+      
               {% else %}
               .grid-images__background--{{ block.id }} {
                 background-image: url('{{ block.settings.image | img_url: "300x" }}');
               }
-              
+      
               {% endif %}
               {% endif %}
               {% endunless %}
-              
+      
               {% if block.settings.overlay == true %}
               .grid-images__background--{{ block.id }}::before {
                 background-color: {{ block.settings.overlay_color }};
                 opacity: calc({{ block.settings.overlay_opacity }} / 100);
               }
-              
+      
               {% endif %}
-              
+      
               .grid-images__text--{{ block.id }} p {
                 color: {{ block.settings.text_p_color }};
-              
+      
               {% if block.settings.text_shadow == false %} text-shadow: none;
               {% endif %}
               }
-              
+      
               .grid-images__text--{{ block.id }} p strong {
                 color: {{ block.settings.text_strong_color }};
               {% if block.settings.text_shadow == false %} text-shadow: none;
               {% endif %}
               }
-              
+      
               .grid-images__text--{{ block.id }} p em {
                 color: {{ block.settings.text_em_color }};
               {% if block.settings.text_shadow == false %} text-shadow: none;
               {% endif %}
               }
-              
+      
               {% if block.settings.icon_large != 'none' %}
               .{{ block.settings.icon_large }}--{{ block.id }} {
               {{ block.settings.icon_css }}
               }
-              
+      
               {% endif %}
-              
+      
               .grid-images__item--{{ block.id }} {
                 height: {{ block.settings.grid_height }}px;
                 transition: 0.2s all;
               }
-              
+    
             </style>
-            
-            <div class="grid__item--{{ block.settings.grid }}--md grid__item--{{ block.settings.grid | times: 2 }}--sm grid-images__item--{{ block.id }}"
+    
+            <div class="grid__item--{{ block.settings.grid }}--md grid__item--{% if block.settings.grid == '6' or block.settings.grid == '12' or block.settings.grid == '9' or block.settings.grid == '8' %}12{% else %}{{ block.settings.grid | times: 2 }}{% endif %}--sm grid-images__item--{{ block.id }}"
                  data-block-id="{{ block.id }}" {{ block.shopify_attributes }}{% if block.settings.grid_height_full %}style="height: 100%" {% endif %}>
               <div class="grid-images__wrapper grid-images__background--{{ block.id }} grid__row">
                 {% unless block.settings.image_disabled %}
@@ -72,16 +72,34 @@
                 {% endunless %}
                 {% if block.settings.icon_large != 'none' %}
                   <div class="grid-images__icon-large grid__item {{ block.settings.icon_large }}--{{ block.id }}">
-                    {% include block.settings.icon_large %}
+            
+                    {% if block.settings.icon_large != "png" %}
+                      {% include block.settings.icon_large %}
+                    {% else %}
+                      {% assign img_url = block.settings.icon_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+                      <img class="grid-images__icon-img lazyload"
+                           src="{{ block.settings.icon_image | img_url: '300x' }}"
+                           data-src="{{ img_url }}"
+                           data-widths="[540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+                           data-aspectratio="{{ block.settings.icon_image.aspect_ratio }}"
+                           data-sizes="auto"
+                           data-parent-fit="cover"
+                           alt="{{ block.settings.icon_image.alt | escape }}">
+                    {% endif %}
                   </div>
                 {% endif %}
                 <div class="grid-images__content text-center grid-images__text--{{ block.id }} grid__item--{{ block.settings.text_position }} grid__col justify--center align--center">
-                  {% if block.settings.icon_small != 'none' %}
+                  {% if block.settings.icon_small != 'none' and block.settings.icon_position == 'top' %}
                     <div class="grid-images__icon-small grid__row justify--center {{ block.settings.icon_small }}">
                       {% include block.settings.icon_small %}
                     </div>
                   {% endif %}
                   {{ block.settings.text }}
+                  {% if block.settings.icon_small != 'none' and block.settings.icon_position == 'bottom' %}
+                    <div class="grid-images__icon-small grid__row justify--center {{ block.settings.icon_small }}">
+                      {% include block.settings.icon_small %}
+                    </div>
+                  {% endif %}
                   {% if block.settings.highlight != blank %}
                     <span class="grid-images__highlight">
                       {{ block.settings.highlight }}
@@ -103,58 +121,58 @@
               .grid-images__background--{{ block.id }} {
                 background-image: url('{{ block.settings.image | img_url: "600x" }}');
               }
-    
+      
               {% else %}
               .grid-images__background--{{ block.id }} {
                 background-image: url('{{ block.settings.image | img_url: "300x" }}');
               }
-    
+      
               {% endif %}
               {% endif %}
               {% endunless %}
-    
+      
               {% if block.settings.overlay == true %}
               .grid-images__background--{{ block.id }}::before {
                 background-color: {{ block.settings.overlay_color }};
                 opacity: calc({{ block.settings.overlay_opacity }} / 100);
               }
-    
+      
               {% endif %}
-    
+      
               .grid-images__text--{{ block.id }} p {
                 color: {{ block.settings.text_p_color }};
-    
+      
               {% if block.settings.text_shadow == false %} text-shadow: none;
               {% endif %}
               }
-    
+      
               .grid-images__text--{{ block.id }} p strong {
                 color: {{ block.settings.text_strong_color }};
               {% if block.settings.text_shadow == false %} text-shadow: none;
               {% endif %}
               }
-    
+      
               .grid-images__text--{{ block.id }} p em {
                 color: {{ block.settings.text_em_color }};
               {% if block.settings.text_shadow == false %} text-shadow: none;
               {% endif %}
               }
-    
+      
               {% if block.settings.icon_large != 'none' %}
               .{{ block.settings.icon_large }}--{{ block.id }} {
               {{ block.settings.icon_css }}
               }
-    
+      
               {% endif %}
-    
+      
               .grid-images__item--{{ block.id }} {
                 height: {{ block.settings.grid_height }}px;
+                transition: 0.2s all;
               }
     
-              .
             </style>
-  
-            <div class="grid__item--{{ block.settings.grid }}--md grid__item--{{ block.settings.grid | times: 2 }}--sm grid-images__item--{{ block.id }}"
+    
+            <div class="grid__item--{{ block.settings.grid }}--md grid__item--{% if block.settings.grid == '6' or block.settings.grid == '12' or block.settings.grid == '9' or block.settings.grid == '8' %}12{% else %}{{ block.settings.grid | times: 2 }}{% endif %}--sm grid-images__item--{{ block.id }}"
                  data-block-id="{{ block.id }}" {{ block.shopify_attributes }}{% if block.settings.grid_height_full %}style="height: 100%" {% endif %}>
               <div class="grid-images__wrapper grid-images__background--{{ block.id }} grid__row">
                 {% unless block.settings.image_disabled %}
@@ -164,16 +182,34 @@
                 {% endunless %}
                 {% if block.settings.icon_large != 'none' %}
                   <div class="grid-images__icon-large grid__item {{ block.settings.icon_large }}--{{ block.id }}">
-                    {% include block.settings.icon_large %}
+            
+                    {% if block.settings.icon_large != "png" %}
+                      {% include block.settings.icon_large %}
+                    {% else %}
+                      {% assign img_url = block.settings.icon_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+                      <img class="grid-images__icon-img lazyload"
+                           src="{{ block.settings.icon_image | img_url: '300x' }}"
+                           data-src="{{ img_url }}"
+                           data-widths="[540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+                           data-aspectratio="{{ block.settings.icon_image.aspect_ratio }}"
+                           data-sizes="auto"
+                           data-parent-fit="cover"
+                           alt="{{ block.settings.icon_image.alt | escape }}">
+                    {% endif %}
                   </div>
                 {% endif %}
                 <div class="grid-images__content text-center grid-images__text--{{ block.id }} grid__item--{{ block.settings.text_position }} grid__col justify--center align--center">
-                  {% if block.settings.icon_small != 'none' %}
+                  {% if block.settings.icon_small != 'none' and block.settings.icon_position == 'top' %}
                     <div class="grid-images__icon-small grid__row justify--center {{ block.settings.icon_small }}">
                       {% include block.settings.icon_small %}
                     </div>
                   {% endif %}
                   {{ block.settings.text }}
+                  {% if block.settings.icon_small != 'none' and block.settings.icon_position == 'bottom' %}
+                    <div class="grid-images__icon-small grid__row justify--center {{ block.settings.icon_small }}">
+                      {% include block.settings.icon_small %}
+                    </div>
+                  {% endif %}
                   {% if block.settings.highlight != blank %}
                     <span class="grid-images__highlight">
                       {{ block.settings.highlight }}
@@ -358,10 +394,24 @@
               "value": "none"
             },
             {
+              "label": "PNG Image Icon",
+              "value": "png"
+            },
+            {
               "label": "icon-best-of-the-best",
               "value": "icon-best-of-the-best"
+            },
+            {
+              "label": "icon-star-flag-circle",
+              "value": "icon-star-flag-circle"
             }
           ]
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Icon Image",
+          "info": "PNG Icon here"
         },
         {
           "type": "textarea",
@@ -376,7 +426,7 @@
         {
           "type": "select",
           "id": "icon_small",
-          "label": "Icon Positiion/Size",
+          "label": "Icon Small",
           "default": "none",
           "options": [
             {
@@ -394,6 +444,26 @@
             {
               "label": "icon-planet",
               "value": "icon-planet"
+            },
+            {
+              "label": "icon-heading-highlight",
+              "value": "icon-heading-highlight"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "icon_position",
+          "label": "Icon Position",
+          "default": "top",
+          "options": [
+            {
+              "label": "Above Text",
+              "value": "top"
+            },
+            {
+              "label": "Below Text",
+              "value": "bottom"
             }
           ]
         },

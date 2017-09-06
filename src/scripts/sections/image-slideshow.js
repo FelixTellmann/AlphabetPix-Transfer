@@ -22,7 +22,6 @@ theme.Slider = (function () {
    singleOptionSelector: '[data-single-option-selector]'
    };*/
 
-  console.log('test');
   /**
    * Product section constructor. Runs on page load as well as Theme Editor
    * `section:load` events.
@@ -36,8 +35,9 @@ theme.Slider = (function () {
     var sectionId = this.$container.attr('data-section-id');
 
     var portfolioSelectors = {
-      sliderContainer: $('.slider').attr('data-section-id', sectionId)
+      sliderContainer: $('.slider[data-section-id="' + sectionId + '"')
     };
+
 
 
 
@@ -54,7 +54,6 @@ theme.Slider = (function () {
         prevArrow: false,
         nextArrow: false
       });
-
     },
 
 
@@ -70,3 +69,5 @@ theme.Slider = (function () {
 
   return Slider;
 })();
+
+

@@ -9,3 +9,12 @@ h4, .h4 {
   font-weight: 700;
   text-transform: uppercase;
 }
+
+q:before,
+blockquote p:before {
+  content: open-quote;
+}
+q:after,
+blockquote p:after {
+  content: close-quote;
+}

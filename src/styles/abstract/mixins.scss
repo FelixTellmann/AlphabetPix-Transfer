@@ -94,7 +94,7 @@
     @media (min-width: $g-responsive-breakpoint-xl) {
       @content;
     }
-  } @else if (type_of($size) == 'number') {
+  } @else {
     @media (min-width: $size) {
       @content;
     }
@@ -120,7 +120,7 @@
     @media (max-width: $g-responsive-breakpoint-xl) {
       @content;
     }
-  } @else if (type_of($size) == 'number') {
+  } @else {
     @media (max-width: $size) {
       @content;
     }
@@ -146,7 +146,7 @@
     @media (min-width: $g-responsive-breakpoint-xl) {
       @content;
     }
-  } @else if (type_of($size) == 'number') {
+  } @else {
     @media (min-width: $size) {
       @content;
     }

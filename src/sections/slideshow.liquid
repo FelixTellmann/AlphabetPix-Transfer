@@ -1,23 +1,23 @@
 <div data-section-id="{{ section.id }}" data-section-type="slider-section">
   
   {% if section.blocks.size > 0 %}
-  <div class="slider-wrapper">
-    
-    <div class="slider" id="Slider-{{ section.id }}" data-speed="{{ section.settings.autoplay_speed }}" data-section-id="{{ section.id }}">
-      {% for block in section.blocks %}
-        <div class="slider__slide-wrapper" data-block-id="{{ block.id }}" {{ block.shopify_attributes }}>
-          <figure class="slider__image-wrapper" {% comment %}{#style="height: {{ section.settings.slideshow_height }}"#}{% endcomment %}>
-            <img class="slider__image lazyload"
-                    {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-                 src="{{ block.settings.image | img_url: '300x' }}"
-                 data-src="{{ img_url }}"
-                 data-widths="[540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
-                 data-aspectratio="{{ block.settings.image.aspect_ratio }}"
-                 data-sizes="auto"
-                 data-parent-fit="cover"
-                 alt="{{ block.settings.image.alt | escape }}">
-          </figure>
-          {% comment %}{#<figure class="slider__frame">
+    <div class="slider-wrapper">
+      
+      <div class="slider" id="Slider-{{ section.id }}" data-autoplay="{{ section.settings.autoplay }}" data-speed="{{ section.settings.autoplay_speed }}" data-section-id="{{ section.id }}">
+        {% for block in section.blocks %}
+          <div class="slider__slide-wrapper" data-block-id="{{ block.id }}" {{ block.shopify_attributes }}>
+            <figure class="slider__image-wrapper" {% comment %}{#style="height: {{ section.settings.slideshow_height }}"#}{% endcomment %}>
+              <img class="slider__image lazyload"
+                      {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+                   src="{{ block.settings.image | img_url: '300x' }}"
+                   data-src="{{ img_url }}"
+                   data-widths="[540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+                   data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+                   data-sizes="auto"
+                   data-parent-fit="cover"
+                   alt="{{ block.settings.image.alt | escape }}">
+            </figure>
+            {% comment %}{#<figure class="slider__frame">
             <img class="slider__image slider__image--frame lazyload"
                     {% assign img_url = block.settings.frame | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
                  src="{{ block.settings.frame | img_url: '300x' }}"
@@ -28,12 +28,13 @@
                  data-parent-fit="cover"
                  alt="{{ block.settings.frame.alt | escape }}">
           </figure>#}{% endcomment %}
-        </div>
-      {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
     </div>
-  </div>
+  {% endif %}
 </div>
-{% endif %}
+
 
 {% comment %}{#<!--@formatter:off-->#}{% endcomment %}
 {% schema %}
@@ -136,7 +137,7 @@
     ],
     "presets": [{
       "name": "Slideshow",
-      "category": "Image",
+      "category": "Section",
       "settings": {
         "autoplay": true,
         "autoplay_speed": "5000"

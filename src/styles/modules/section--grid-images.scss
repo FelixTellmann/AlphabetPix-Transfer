@@ -82,8 +82,9 @@
 }
 
 .grid-images__icon-small {
+  max-width: 80px;
   height: 35px;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
   opacity: 0.5;
   svg {
     height: 100%;
@@ -122,4 +123,9 @@
   font-size: 1.3rem;
   -webkit-box-shadow: 5px 6px 20px rgba(0,0,0,0.6);
           box-shadow: 5px 6px 20px rgba(0,0,0,0.6);
+}
+
+.grid-images__icon-img {
+  height: auto;
+  width: 100%;
 }
