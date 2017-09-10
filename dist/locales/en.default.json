@@ -54,7 +54,17 @@
       "newsletter_placeholder": "My email address",
       "confirmation": "Thanks for subscribing",
       "blank_error": "Email can't be blank.",
-      "invalid_error": "Please enter a valid email address."
+      "invalid_error": "Please enter a valid email address.",
+      "title": "News & Updates",
+      "description": "Sign up to get the latest on sales, new releases and more …",
+      "name": "Name",
+      "email": "Email",
+      "subscriber_first_name": "First name",
+      "subscriber_last_name": "Last name",
+      "success_text": "Thank you for joining our mailing list!",
+      "signup": "Enter your email",
+      "placeholder": "Enter your email address...",
+      "submit": "Sign Up"
     },
     "header": {
       "expand_navigation": "Expand navigation",

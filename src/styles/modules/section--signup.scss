@@ -1,0 +1,216 @@
+/*============================================================================
+  #Section - Testimonials
+    -
+==============================================================================*/
+.signup {
+  padding: 80px 0;
+}
+
+.signup__image-wrapper, .signup__image  {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+.signup-item__wrapper {
+  position: relative;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  
+  &::before {
+    position: absolute;
+    content: '';
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+  }
+  
+  .placeholder-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+}
+
+.signup__figure, .signup-item__figure {
+  margin: 0;
+  position: absolute;
+  top: 10%;
+  width: 200px;
+  height: 200px;
+  text-align: center;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  border-radius: 100%;
+}
+
+.signup__figure, .signup-item__figure, .signup-item__heading {
+  > p {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 800;
+    font-size: 4rem;
+    font-stretch: condensed;
+    text-transform: uppercase;
+    margin: 0;
+    line-height: 1.1;
+  }
+  > p > em {
+    font-family: "Great Vibes", serif;
+    font-size: 6rem;
+    font-weight: 300;
+    margin: 0;
+    text-transform: capitalize;
+    letter-spacing: 3px;
+    font-style: normal;
+    > strong {
+      font-size: 6.5rem;
+      font-weight: 300;
+    }
+  }
+  > p > strong {
+    font-size: 6.5rem;
+  }
+}
+
+.signup-item__heading {
+  margin-bottom: 100px;
+}
+
+.signup-item__promo, .signup-item__promo p {
+  font-family: "Playfair Display", serif;
+  font-style: normal;
+  font-size: 1.6rem;
+  line-height: 1.6;
+  font-weight: 300;
+  margin-bottom: 25px;
+}
+
+.signup-item__content {
+  position: relative;
+  width: 100%;
+  padding: 10% 20% 10% 10%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+}
+
+.signup-item__form .signup-item__input {
+  display: inline-block;
+  padding: 20px 27px 18px;
+  border-radius: 18px;
+  border: 0px solid transparent;
+  color: #000;
+  line-height: 1;
+  text-decoration: none;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  box-shadow: inset 3px 3px 12px rgba(0,0,0,0.8);
+}
+/*
+.signup-item__content {
+  position: relative;
+  padding: 15px;
+  height: 100%;
+  
+  @include max-size(sm) {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  p {
+    font-family: 'Caviar Dreams', "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0;
+    font-size: 1.2rem;
+    line-height: 2;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+  }
+  p > strong {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 900;
+    font-size: 3rem;
+    line-height: 1.2;
+    text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7);
+  }
+  p > em {
+    display: inline-block;
+    font-family: "Great Vibes", serif;
+    font-weight: 300;
+    font-size: 4.7rem;
+    letter-spacing: 0.04em;
+    font-style: normal;
+    text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.6);
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  p > em > strong {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 900;
+    line-height: 1.2;
+    font-size: 1.5rem;
+    color: $color__secondary;
+  }
+  p > strong > em  {
+    font-family: 'Caviar Dreams', "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0;
+    font-style: normal;
+    line-height: 2;
+    letter-spacing: 0.04em;
+    font-size: 3.8rem;
+    font-weight: 300;
+  }
+}*/
+
+.signup-item__icon-small {
+  max-width: 80px;
+  height: 35px;
+  margin-bottom: 15px;
+  opacity: 0.5;
+  svg {
+    height: 100%;
+    .st0 {
+      fill: #fff
+    }
+  }
+}
+
+.signup-item__icon-large {
+  @include max-size(sm) {
+    position: absolute;
+    width: 40%;
+  }
+  svg {
+    height: 100%;
+    max-width: 100%;
+  }
+}
+
+.icon-best-of-the-best {
+  padding: 0 25px 50px 50px;
+  opacity: 0.9;
+}
+
+/*.signup-item__highlight {
+  display: inline-block;
+  padding: 4px 20px;
+  background-color: #fff;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  opacity: 0.75;
+  font-weight: 700;
+  color: $color__primary;
+  font-size: 1.3rem;
+  -webkit-box-shadow: 5px 6px 20px rgba(0,0,0,0.6);
+  box-shadow: 5px 6px 20px rgba(0,0,0,0.6);
+}*/
+
+.signup-item__icon-img {
+  height: auto;
+  width: 100%;
+}

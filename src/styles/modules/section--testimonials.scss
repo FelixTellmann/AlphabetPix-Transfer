@@ -64,16 +64,17 @@
     padding-right: calc((100% - 370px * 1) / 2);
     &.testimonial__wrapper--active:before {
       width: 0;
+      min-width: 0;
     }
     &.testimonial__wrapper--active:after {
       width: 0;
+      min-width: 0;
     }
   }
 }
 
 .testimonial__content {
   -webkit-user-select: text;
-  -khtml-user-select: text;
   -moz-user-select: text;
   -ms-user-select: text;
   user-select: text;
