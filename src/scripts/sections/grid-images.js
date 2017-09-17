@@ -22,7 +22,6 @@ theme.GridImages = (function () {
    singleOptionSelector: '[data-single-option-selector]'
    };*/
 
-  console.log('test');
 
   /**
    * Product section constructor. Runs on page load as well as Theme Editor

@@ -43,9 +43,16 @@
   width: 200px;
   height: 200px;
   text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-flow: column;
-  justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column;
+          flex-flow: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   border-radius: 100%;
 }
 
@@ -94,9 +101,16 @@
   position: relative;
   width: 100%;
   padding: 10% 20% 10% 10%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-flow: column;
-  justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column;
+          flex-flow: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 .signup-item__form .signup-item__input {
@@ -110,7 +124,8 @@
   font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
-  box-shadow: inset 3px 3px 12px rgba(0,0,0,0.8);
+  -webkit-box-shadow: inset 3px 3px 12px rgba(0,0,0,0.8);
+          box-shadow: inset 3px 3px 12px rgba(0,0,0,0.8);
 }
 /*
 .signup-item__content {

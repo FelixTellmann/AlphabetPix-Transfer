@@ -9,15 +9,12 @@
   left: 50%;
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   width: 80vw;
   max-width: 800px;
   margin: 0;
   
-
 }
-
-
 
 .frame__img {
   border-radius: 3px;
@@ -33,7 +30,7 @@
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   width: 86%;
   height: 65%;
 }
@@ -42,8 +39,8 @@
   position: absolute;
   bottom: -90px;
   left: 50%;
-  -webkit-transform: translate(-50%,0);
-          transform: translate(-50%,0);
+  -webkit-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
 }
 
 .create__label {
@@ -51,7 +48,7 @@
   left: 50%;
   top: 15%;
   -webkit-transform: translate(-50%, 0);
-          transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
   margin: 0;
   font-weight: 700;
   font-size: 1.9vw;
@@ -62,19 +59,23 @@
 }
 
 input[type='text'].create__input {
+  font-family: 'Inconsolata', monospace;
   width: 100%;
   height: 100%;
   line-height: 1;
-  
   font-size: 6.6vw;
   text-transform: uppercase;
-  padding: 12% 9% 9% 9%;
-  letter-spacing: 20px;
+  padding: 12% calc(9% - 0.5em) 9% 9%;
+  letter-spacing: 0.45em;
   font-weight: 700;
-  @include min-size(md) {
-    font-size: 64px;
+  text-indent: 0.225em;
+  margin: 0;
+  @include min-size(1000px) {
+    font-size: 66px;
   }
   &::-webkit-input-placeholder {
+    padding-right: 0.5em;
+    font-family: "Caviar Dreams", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: $color__primary;
     vertical-align: middle;
     opacity: 1;
@@ -82,8 +83,12 @@ input[type='text'].create__input {
     text-align: center;
     letter-spacing: initial;
     font-weight: 400;
+    text-indent: 0;
+    font-size: 60px;
   }
   &:-ms-input-placeholder {
+    padding-right: 0.5em;
+    font-family: "Caviar Dreams", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: $color__primary;
     vertical-align: middle;
     opacity: 1;
@@ -91,8 +96,12 @@ input[type='text'].create__input {
     text-align: center;
     letter-spacing: initial;
     font-weight: 400;
+    text-indent: 0;
+    font-size: 60px;
   }
   &::placeholder {
+    padding-right: 0.5em;
+    font-family: "Caviar Dreams", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: $color__primary;
     vertical-align: middle;
     opacity: 1;
@@ -100,6 +109,64 @@ input[type='text'].create__input {
     text-align: center;
     letter-spacing: initial;
     font-weight: 400;
+    text-indent: 0;
+    font-size: 60px;
   }
 }
 
+.create__image-wrapper {
+  position: absolute;
+  top: 12%;
+  right: 9%;
+  bottom: 9%;
+  left: 9%;
+  padding: 5% 0 3%;
+  z-index: 1;
+  pointer-events: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row nowrap;
+  flex-flow: row nowrap;
+}
+
+.create__image {
+  width: calc(100% / 9);
+  pointer-events: all;
+  display: block;
+  line-height: 0;
+  height: 0;
+  img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    /* max-height: 100%; */
+    padding: 2px;
+  }
+}
+
+.modal__body {
+  position: relative;
+  -ms-flex: 1 1 auto;
+  -webkit-box-flex: 1;
+  flex: 1 1 auto;
+  padding: 15px;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.modal__link {
+  flex: 0 1 calc(100% / 9);
+  pointer-events: all;
+  line-height: 0;
+  img {
+    display: block;
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    /* max-height: 100%; */
+    padding: 2px;
+  }
+}

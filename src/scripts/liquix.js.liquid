@@ -17,6 +17,7 @@ window.theme = window.theme || {};
 // =require sections/process.js
 // =require sections/image-slideshow.js
 // =require sections/testimonial-slideshow.js
+// =require sections/create.js
 // =require sections/grid-images.js
 
 /*================ Templates ================*/
@@ -30,11 +31,11 @@ window.theme = window.theme || {};
 
 $(document).ready(function() {
   var sections = new slate.Sections();
+  sections.register('create-section', theme.Create);
   sections.register('slider-section', theme.Slider);
   sections.register('testimonials-section', theme.TestimonialSlider);
   sections.register('grid-images-section', theme.GridImages);
   sections.register('theme-collection-section');
-  console.log(sections);
   // Common a11y fixes
   slate.a11y.pageLinkFocus($(window.location.hash));
 

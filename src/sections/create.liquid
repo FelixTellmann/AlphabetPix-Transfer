@@ -12,11 +12,16 @@
   </style>
 {% endif %}
 
-<div data-section-id="{{ section.id }}" data-section-type="slideshow-section">
+{% comment %}{#DATA DUMP#}{% endcomment %}
+<script>
+  window.products = {{ collections['letters'].products | json }};
+</script>
+
+<div data-section-id="{{ section.id }}" data-section-type="create-section">
   <div id="Slideshow-{{ section.id }}" class="slideshow">
     <div class="slideshow__slides">
       {% for block in section.blocks %}
-        <div class="slideshow__slide slideshow__slide--{{ block.id }}{% if forloop.first %} slideshow__slide--active{% endif %}{% if section.settings.show_overlay %} slideshow__overlay{% endif %}" {% unless forloop.first %}aria-hidden="true"{% endunless %} {{ block.shopify_attributes }}>
+        <div data-section-id="{{ section.id }}" data-block-id="{{ block.id }}" class="create__block slideshow__slide slideshow__slide--{{ block.id }}{% if forloop.first %} slideshow__slide--active{% endif %}{% if section.settings.show_overlay %} slideshow__overlay{% endif %}" {% unless forloop.first %}aria-hidden="true"{% endunless %} {{ block.shopify_attributes }}>
           
           {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
           <style>
@@ -34,7 +39,6 @@
                data-parent-fit="cover"
                alt="{{ block.settings.image.alt | escape }}">
           
-          
           <form action="/cart">
             <figure class="frame fadeIn scroll">
               <div class="frame__wrapper">
@@ -50,7 +54,12 @@
                 
                 <div class="frame__input">
                   <label for="create__input--{{ block.id }}" class="create__label">{{ block.settings.label }}</label>
-                  <input id="create__input--{{ block.id }}" name="create__input--{{ block.id }}" type="text" class="create__input" placeholder="{{ block.settings.placeholder }}">
+                  <input id="create__input--{{ block.id }}" name="create__input--{{ block.id }}" type="text" class="create__input" placeholder="{{ block.settings.placeholder }}" maxlength="10" data-theme-style="{{ block.settings.theme }}">
+                  <div id="create__image-wrapper--{{ block.id }}" class="create__image-wrapper">
+                    {% for i in (0..8) %}
+                      <a data-theme-style="{{ block.settings.theme }}" id="create__image--{{ block.id }}--{{ i }}" class="create__image" href="#"></a>
+                    {% endfor %}
+                  </div>
                 </div>
               
               </div>
@@ -61,8 +70,6 @@
               </div>
             </figure>
           </form>
-        
-        
         </div>
       {% endfor %}
     </div>
@@ -120,6 +127,28 @@
       {% endfor %}
     </div>
   {% endif %}
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="create__modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal__body">
+        ...
+      </div>
+    
+    </div>
+  </div>
+</div>
+
+<div id="create__image-preloader--{{ section.id }}" class="create__image-preloader visually-hidden">
+  <div id="whitespace" class="visually-hidden"></div>
 </div>
 
 {% comment %}{#<!--@formatter:off-->#}{% endcomment %}
@@ -241,8 +270,32 @@
   "blocks": [
     {
       "type": "image",
-      "name": "Image slide",
+      "name": "Theme Style",
       "settings": [
+        {
+          "type": "select",
+          "id": "theme",
+          "label": "Theme",
+          "default": "classic",
+          "options": [
+            {
+              "label": "Classic",
+              "value": "classic"
+            },
+            {
+              "label": "Antique",
+              "value": "antique"
+            },
+            {
+              "label": "Shoreline",
+              "value": "shoreline"
+            },
+            {
+              "label": "Frontier",
+              "value": "frontier"
+            }
+          ]
+        },
         {
           "type": "image_picker",
           "id": "image",

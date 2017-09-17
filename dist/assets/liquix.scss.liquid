@@ -669,6 +669,15 @@ html {
   #FLEX-GRID - END
 \*------------------------------------------------------------------------------*/
 @font-face {
+  font-family: 'Inconsolata';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Inconsolata Bold'), local('Inconsolata-Bold'), url(https://fonts.gstatic.com/s/inconsolata/v15/AIed271kqQlcIRSOnQH0yZ_TkvowlIOtbR7ePgFOpF4.ttf) format('truetype');
+}
+
+
+
+@font-face {
   font-family: "Caviar Dreams";
   src: url("CaviarDreams.ttf");
   font-weight: 300;
@@ -909,6 +918,18 @@ blockquote p:after {
   margin: 0 10px;
 }
 /*============================================================================
+  #Section Headings
+    -
+==============================================================================*/
+
+.footer {
+  height: 600px;
+}
+
+.footer__wrapper {
+  height: 100%;
+}
+/*============================================================================
   #Create Section
     - frame
     - create (form)
@@ -919,15 +940,12 @@ blockquote p:after {
   left: 50%;
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   width: 80vw;
   max-width: 800px;
   margin: 0;
   
-
 }
-
-
 
 .frame__img {
   border-radius: 3px;
@@ -943,7 +961,7 @@ blockquote p:after {
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   width: 86%;
   height: 65%;
 }
@@ -952,8 +970,8 @@ blockquote p:after {
   position: absolute;
   bottom: -90px;
   left: 50%;
-  -webkit-transform: translate(-50%,0);
-          transform: translate(-50%,0);
+  -webkit-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
 }
 
 .create__label {
@@ -961,7 +979,7 @@ blockquote p:after {
   left: 50%;
   top: 15%;
   -webkit-transform: translate(-50%, 0);
-          transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
   margin: 0;
   font-weight: 700;
   font-size: 1.9vw;
@@ -972,19 +990,23 @@ blockquote p:after {
 }
 
 input[type='text'].create__input {
+  font-family: 'Inconsolata', monospace;
   width: 100%;
   height: 100%;
   line-height: 1;
-  
   font-size: 6.6vw;
   text-transform: uppercase;
-  padding: 12% 9% 9% 9%;
-  letter-spacing: 20px;
+  padding: 12% calc(9% - 0.5em) 9% 9%;
+  letter-spacing: 0.45em;
   font-weight: 700;
-  @include min-size(md) {
-    font-size: 64px;
+  text-indent: 0.225em;
+  margin: 0;
+  @include min-size(1000px) {
+    font-size: 66px;
   }
   &::-webkit-input-placeholder {
+    padding-right: 0.5em;
+    font-family: "Caviar Dreams", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: $color__primary;
     vertical-align: middle;
     opacity: 1;
@@ -992,8 +1014,12 @@ input[type='text'].create__input {
     text-align: center;
     letter-spacing: initial;
     font-weight: 400;
+    text-indent: 0;
+    font-size: 60px;
   }
   &:-ms-input-placeholder {
+    padding-right: 0.5em;
+    font-family: "Caviar Dreams", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: $color__primary;
     vertical-align: middle;
     opacity: 1;
@@ -1001,8 +1027,12 @@ input[type='text'].create__input {
     text-align: center;
     letter-spacing: initial;
     font-weight: 400;
+    text-indent: 0;
+    font-size: 60px;
   }
   &::placeholder {
+    padding-right: 0.5em;
+    font-family: "Caviar Dreams", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: $color__primary;
     vertical-align: middle;
     opacity: 1;
@@ -1010,9 +1040,67 @@ input[type='text'].create__input {
     text-align: center;
     letter-spacing: initial;
     font-weight: 400;
+    text-indent: 0;
+    font-size: 60px;
   }
 }
 
+.create__image-wrapper {
+  position: absolute;
+  top: 12%;
+  right: 9%;
+  bottom: 9%;
+  left: 9%;
+  padding: 5% 0 3%;
+  z-index: 1;
+  pointer-events: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row nowrap;
+  flex-flow: row nowrap;
+}
+
+.create__image {
+  width: calc(100% / 9);
+  pointer-events: all;
+  display: block;
+  line-height: 0;
+  height: 0;
+  img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    /* max-height: 100%; */
+    padding: 2px;
+  }
+}
+
+.modal__body {
+  position: relative;
+  -ms-flex: 1 1 auto;
+  -webkit-box-flex: 1;
+  flex: 1 1 auto;
+  padding: 15px;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.modal__link {
+  flex: 0 1 calc(100% / 9);
+  pointer-events: all;
+  line-height: 0;
+  img {
+    display: block;
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    /* max-height: 100%; */
+    padding: 2px;
+  }
+}
 
 .button {
   display: inline-block;
@@ -1628,9 +1716,16 @@ input[type='text'].create__input {
   width: 200px;
   height: 200px;
   text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-flow: column;
-  justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column;
+          flex-flow: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   border-radius: 100%;
 }
 
@@ -1679,9 +1774,16 @@ input[type='text'].create__input {
   position: relative;
   width: 100%;
   padding: 10% 20% 10% 10%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-flow: column;
-  justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column;
+          flex-flow: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 .signup-item__form .signup-item__input {
@@ -1695,7 +1797,8 @@ input[type='text'].create__input {
   font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
-  box-shadow: inset 3px 3px 12px rgba(0,0,0,0.8);
+  -webkit-box-shadow: inset 3px 3px 12px rgba(0,0,0,0.8);
+          box-shadow: inset 3px 3px 12px rgba(0,0,0,0.8);
 }
 /*
 .signup-item__content {
@@ -2045,6 +2148,172 @@ input[type='text'].create__input {
   display: none;
 }
 
+
+.modal-open {
+  overflow: hidden;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  display: none;
+  overflow: hidden;
+  outline: 0;
+}
+
+.modal.fade .modal-dialog {
+  transition: -webkit-transform 0.3s ease-out;
+  -webkit-transition: -webkit-transform 0.3s ease-out;
+  transition: transform 0.3s ease-out;
+  transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
+  -webkit-transform: translate(0, -25%);
+          transform: translate(0, -25%);
+}
+
+.modal.show .modal-dialog {
+  -webkit-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+
+.modal-open .modal {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 10px;
+  pointer-events: none;
+}
+
+.modal-content {
+  position: relative;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex-direction: column;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+          flex-direction: column;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+  outline: 0;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  background-color: #000;
+}
+
+.modal-backdrop.fade {
+  opacity: 0;
+}
+
+.modal-backdrop.show {
+  opacity: 0.5;
+}
+
+.modal-header {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex-align: center;
+      -webkit-box-align: center;
+          align-items: center;
+  -ms-flex-pack: justify;
+      -webkit-box-pack: justify;
+          justify-content: space-between;
+  padding: 15px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.modal-header .close {
+  margin-left: auto;
+}
+
+.modal-title {
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+
+
+.modal-footer {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex-align: center;
+      -webkit-box-align: center;
+          align-items: center;
+  -ms-flex-pack: end;
+      -webkit-box-pack: end;
+          justify-content: flex-end;
+  padding: 15px;
+  border-top: 1px solid #e9ecef;
+}
+
+.modal-footer > :not(:first-child) {
+  margin-left: .25rem;
+}
+
+.modal-footer > :not(:last-child) {
+  margin-right: .25rem;
+}
+
+.modal-scrollbar-measure {
+  position: absolute;
+  top: -9999px;
+  width: 50px;
+  height: 50px;
+  overflow: scroll;
+}
+
+@media (min-width: 576px) {
+  .modal-dialog {
+    max-width: 500px;
+    margin: 50px auto
+  }
+  .modal-sm {
+    max-width: 300px;
+  }
+}
+
+@media (min-width: 992px) {
+  .modal-lg {
+    max-width: 900px;
+  }
+}
+
+button.close {
+  padding: 0 15px;
+  cursor: pointer;
+  background: 0 0;
+  border: 0;
+  -webkit-appearance: none;
+}
+
+.close {
+  float: right;
+  font-size: 3.2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .5;
+}
 @charset "UTF-8";
 
 /*!
