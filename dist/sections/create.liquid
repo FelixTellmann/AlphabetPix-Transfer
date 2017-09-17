@@ -57,7 +57,7 @@
                   <input id="create__input--{{ block.id }}" name="create__input--{{ block.id }}" type="text" class="create__input" placeholder="{{ block.settings.placeholder }}" maxlength="10" data-theme-style="{{ block.settings.theme }}">
                   <div id="create__image-wrapper--{{ block.id }}" class="create__image-wrapper">
                     {% for i in (0..8) %}
-                      <a data-theme-style="{{ block.settings.theme }}" id="create__image--{{ block.id }}--{{ i }}" class="create__image" href="#"></a>
+                      <a data-letter-position="{{ i }}" data-theme-style="{{ block.settings.theme }}" id="create__image--{{ block.id }}--{{ i }}" class="create__image" href="#"></a>
                     {% endfor %}
                   </div>
                 </div>

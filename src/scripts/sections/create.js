@@ -38,7 +38,11 @@ theme.Create = (function () {
     let blockTheme = [];
     let blockImgLinks = [];
     let lastValue = "";
+    let modal = $("#create__modal");
+    let modalContainer = $("#create__modal .modal__body");
+    let modalLink = $(".modal__link");
     window.onTimeout = [];
+
 
     /* SETUP IMAGES PRELOADED VISUALLY HIDDEN TO COPY DEFAULT IMAGES */
     let preloadContainer = $('#create__image-preloader--' + sectionId);
@@ -49,115 +53,125 @@ theme.Create = (function () {
       });
     });
 
+    /* CREATE Data FOR EACH BLOCK*/
     $(".create__block[data-section-id='" + sectionId + "'").each(function (i) {
       blockIds[i] = $(this).attr('data-block-id');
     });
-
     $.each(blockIds, function (i, v) {
       blockInput[i] = $("#create__input--" + v);
       blockTheme[i] = blockInput[i].attr('data-theme-style');
       blockImgLinks[i] = $("#create__image-wrapper--" + v + " .create__image");
+      onTimeout[i] = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
     });
 
+    /* on IMG CLICk - open Modal to select letter images*/
     blockImgLinks[0].on('click', function (e) {
       e.preventDefault();
       let letter = $(this).children('img').attr('data-letter-class');
-      let modal = $("#create__modal");
-      let modalContainer = $("#create__modal .modal__body");
-      let preloadedImgArr = $('[id^="' + letter + '"][data-theme-style^="' + blockTheme[0] + '"]');
+      let letterPosition = $(this).attr('data-letter-position');
+      let preloadedImgArr = $('[id^="' + letter + '-"][data-theme-style^="' + blockTheme[0] + '"]');
       if (!preloadedImgArr.get(0)) {
-        preloadedImgArr = $('[id^="' + letter + '"]');
+        preloadedImgArr = $('[id^="' + letter + '-"]');
       }
 
+      /* LOAD IMAGES INTO MODAL CONTAINER*/
       modalContainer.empty();
       $.each(preloadedImgArr, function (i, v) {
-        modalContainer.append("<a class='modal__link' href='#' data-selector-id='"+ $(this).attr('id') +"' data-letter-id='" + $(this).attr('data-letter-id') +"'>" + $(this).clone(false).removeAttr('id').wrap("<div />").parent().html() + "</a>");
+        modalContainer.append('<a class="modal__link" href="#" data-selector-id="' + $(this).attr('id') + '" data-letter-position="' + letterPosition + '" data-letter-id="' + $(this).attr('data-letter-id') + '">' + $(this).clone(false).removeAttr('id').wrap("<div />").parent().html() + '</a>');
       });
+
+      /* OPEN MODAL */
       modal.modal('toggle');
+
+      /* on IMG in MODAL CLICK - Select image and add to image wrapper at right position */
+      modalLink = $(".modal__link");
+      modalLink.on('click', function (e) {
+        e.preventDefault();
+        let selectorId = $(this).attr('data-selector-id');
+        let letterPosition = $(this).attr('data-letter-position');
+        replaceCharacter(letterPosition, selectorId, true);
+        modal.modal('toggle');
+      });
     });
 
-
-    /* BLOCK OTHER CHARACTERS */
-    /*blockInput[0].on('keypress', function (event) {
-      var regex = new RegExp("^[a-zA-Z0-9\s\@\#\&\*\-]+$");
-      var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-      if (!regex.test(key)) {
-        event.preventDefault();
-        return false;
-      }
-    });*/
-
-    onTimeout[0] = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
+    /* ON TEXT INPUT - LOAD DEFAULT OR PRESELECTED IMAGE FOR EACH CHAR*/
     blockInput[0].on('input', function () {
+      let characterArray = blockInput[0].val().toLowerCase().split('');
+
       /* LIMIT INPUT TO 9 CHARACTERS */
       if (blockInput[0].val().length > 9) {
         blockInput[0].val(blockInput[0].val().slice(0, 9));
-        console.log('Too many letters');
-        /* TODO Change to USER MESSAGE (Not Console log)*/
       }
-
-      let characterArray = blockInput[0].val().toLowerCase().split('');
-      let replaceCharacter = function (i, title) {
-        let imgContainer = $("#create__image--" + blockIds[0] + "--" + (i));
-        let preloadedImg = $(($('[id^="' + title + '"][data-theme-style^="' + blockTheme[0] + '"]'))[0]);
-        if (!preloadedImg.get(0)) {
-          preloadedImg = $(($('[id^="' + title + '"]'))[0]);
-        }
-        if (i === onTimeout[0][i]) {
-          return true;
-        } else {
-          if (i === characterArray.length - 1 && characterArray.length > lastValue.split('').length) {
-            onTimeout[0][i] = i;
-            setTimeout(function () {
-              preloadedImg.clone(false).removeAttr('id').appendTo(imgContainer);
-              imgContainer.css('height', '100%');
-              onTimeout[0][i] = -1;
-            }, 600)
-          } else {
-            preloadedImg.clone(false).removeAttr('id').appendTo(imgContainer);
-            imgContainer.css('height', '100%');
-          }
-        }
-      };
 
       /* IDENTIFY CHARACTER & APPEND IMAGE TO LETTER */
       for (let i = 0; i <= 9; i++) {
-        $("#create__image--" + blockIds[0] + "--" + (i)).empty().removeAttr('style');
-        $.each(products, function (k, v) {
-          let title = this.title;
-          if (characterArray[i] === ' ') {
-            replaceCharacter(i, 'whitespace')
-          } else if (title.replace('letter', '').replace('-', '') === characterArray[i]) {
-            replaceCharacter(i, title);
-          } else if (characterArray[i] === '*' && title.includes('star')) {
-            replaceCharacter(i, title)
-          } else if (characterArray[i] === '&' && title.includes('ampersand')) {
-            replaceCharacter(i, title)
-          } else if (characterArray[i] === '#' && title.includes('hash')) {
-            replaceCharacter(i, title)
-          } else if (characterArray[i] === '!' && title.includes('exclaim')) {
-            replaceCharacter(i, title)
-          } else if (characterArray[i] === '-' && title.includes('dash')) {
-            replaceCharacter(i, title)
-          } else if (characterArray[i] === '@' && title.includes('heart')) {
-            replaceCharacter(i, title)
-          }
-        });
+        let customTitle = '';
+        let imgContainer = $("#create__image--" + blockIds[0] + "--" + (i));
+        if (imgContainer.attr('data-custom-selection') === 'true' && blockInput[0].val().length > imgContainer.attr('data-letter-position') && characterArray[i] === lastValue[i]) {
+          customTitle = $('[id^="letter"][data-letter-id="' + imgContainer.children('img').attr('data-letter-id') + '"]').attr('id');
+          replaceCharacter(i, customTitle, true)
+        } else {
+          insertImageAt(i, characterArray[i], imgContainer);
+        }
+      }
+      /* SAVE ENTRY FOR COMPARISON */
+      lastValue = blockInput[0].val().toLowerCase().split('');
+    });
+
+    let insertImageAt = function (i, char, container = []) {
+      container.empty().removeAttr('style').removeAttr('data-custom-selection');
+      $.each(products, function (k, v) {
+        let title = this.title;
+        if (char === ' ') {
+          replaceCharacter(i, 'whitespace')
+        } else if (title.replace('letter', '').replace('-', '') === char) {
+          replaceCharacter(i, title);
+        } else if (char === '*' && title.includes('star')) {
+          replaceCharacter(i, title)
+        } else if (char === '&' && title.includes('ampersand')) {
+          replaceCharacter(i, title)
+        } else if (char === '#' && title.includes('hash')) {
+          replaceCharacter(i, title)
+        } else if (char === '!' && title.includes('exclaim')) {
+          replaceCharacter(i, title)
+        } else if (char === '-' && title.includes('dash')) {
+          replaceCharacter(i, title)
+        } else if (char === '@' && title.includes('heart')) {
+          replaceCharacter(i, title)
+        }
+      });
+    };
+
+    let replaceCharacter = function (i, title, customSelection = false) {
+      let characterArrayTest = blockInput[0].val().toLowerCase().split('');
+      let imgContainer = $("#create__image--" + blockIds[0] + "--" + (i));
+      if (customSelection) {
+        imgContainer.attr('data-custom-selection', 'true');
+        imgContainer.empty().removeAttr('style');
+      } else {
+        imgContainer.removeAttr('data-custom-selection');
       }
 
-
-      /*
-     });*/
-
-
-      /* COMMENTED OUT FOR MULTI LETTER ENTRIES - VIA COPY / PASTE*/
-      /*let test = blockInput[0].val().replace(lastValue,'');
-      if(test.length > 1) {
-
-      }*/
-
-      lastValue = blockInput[0].val();
-    });
+      let preloadedImg = $(($('[id^="' + title + '"][data-theme-style^="' + blockTheme[0] + '"]'))[0]);
+      if (!preloadedImg.get(0)) {
+        preloadedImg = $(($('[id^="' + title + '"]'))[0]);
+      }
+      if (i === onTimeout[0][i]) {
+        return true;
+      } else {
+        if (i === characterArrayTest.length - 1 && characterArrayTest.length > lastValue.length) {
+          onTimeout[0][i] = i;
+          setTimeout(function () {
+            preloadedImg.clone(false).removeAttr('id').appendTo(imgContainer);
+            imgContainer.css('height', '100%');
+            onTimeout[0][i] = -1;
+          }, 600)
+        } else {
+          preloadedImg.clone(false).removeAttr('id').appendTo(imgContainer);
+          imgContainer.css('height', '100%');
+        }
+      }
+    };
 
 
     /* this.initSlider(portfolioSelectors);*/
