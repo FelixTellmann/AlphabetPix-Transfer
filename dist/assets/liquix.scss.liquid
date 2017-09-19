@@ -941,29 +941,32 @@ blockquote p:after {
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  width: 80vw;
-  max-width: 800px;
+  width: calc(9.5vw * 7 + 9.5vw);
+  height: 25vw;
+  max-width: calc(9.5vw * 9 + 9.5vw);
+  max-height: 300px;
   margin: 0;
-  
+  transition: all 0.5s ease-in-out;
+  @include min-size(1200px) {
+    width: calc(114px * 7 + 114px);
+    height: 25vw;
+    max-width: calc(114px * 9 + 114px);
+    max-height: 300px;
+  }
 }
 
-.frame__img {
-  border-radius: 3px;
-  display: block;
+.frame__wrapper {
   width: 100%;
   height: 100%;
-  -webkit-box-shadow: 13px 13px 25px rgba(0, 0, 0, 0.5);
-  box-shadow: 13px 13px 25px rgba(0, 0, 0, 0.5);
 }
 
 .frame__input {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  width: 86%;
-  height: 65%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
 }
 
 .frame__button {
@@ -984,75 +987,110 @@ blockquote p:after {
   font-weight: 700;
   font-size: 1.9vw;
   white-space: nowrap;
+  z-index: 1;
   @include min-size(md) {
     font-size: 14px;
   }
 }
 
 input[type='text'].create__input {
+  left: 0.15em;
+  position: relative;
   font-family: 'Inconsolata', monospace;
   width: 100%;
   height: 100%;
   line-height: 1;
-  font-size: 6.6vw;
+  font-size: 11.75vw;
   text-transform: uppercase;
-  padding: 12% calc(9% - 0.5em) 9% 9%;
-  letter-spacing: 0.45em;
+  padding: 5.25vw 5vw;
+  letter-spacing: 0.30em;
   font-weight: 700;
-  text-indent: 0.225em;
   margin: 0;
-  @include min-size(1000px) {
-    font-size: 66px;
+  background-color: transparent;
+  border: 0;
+  &:focus {
+    outline-offset: 0;
+    outline: none;
+  }
+  @include min-size(1200px) {
+    padding: 63px 60px;
+    font-size: 141px;
   }
   &::-webkit-input-placeholder {
     padding-right: 0.5em;
     font-family: "Caviar Dreams", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: $color__primary;
-    vertical-align: middle;
     opacity: 1;
     text-transform: uppercase;
     text-align: center;
     letter-spacing: initial;
     font-weight: 400;
-    text-indent: 0;
-    font-size: 60px;
+    text-indent: -0.15em;
+    font-size: 6vw;
+    position: relative;
+    line-height: 6vw;
+    margin: 0;
+    bottom: 15px;
+    @include min-size(1200px) {
+      font-size: 72px;
+      line-height: 72px;
+    }
   }
   &:-ms-input-placeholder {
     padding-right: 0.5em;
     font-family: "Caviar Dreams", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: $color__primary;
-    vertical-align: middle;
     opacity: 1;
     text-transform: uppercase;
     text-align: center;
     letter-spacing: initial;
     font-weight: 400;
-    text-indent: 0;
-    font-size: 60px;
+    text-indent: -0.15em;
+    font-size: 6vw;
+    position: relative;
+    line-height: 6vw;
+    margin: 0;
+    bottom: 15px;
+    @include min-size(1200px) {
+      font-size: 72px;
+      line-height: 72px;
+    }
   }
   &::placeholder {
     padding-right: 0.5em;
     font-family: "Caviar Dreams", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: $color__primary;
-    vertical-align: middle;
     opacity: 1;
     text-transform: uppercase;
     text-align: center;
     letter-spacing: initial;
     font-weight: 400;
-    text-indent: 0;
-    font-size: 60px;
+    text-indent: -0.15em;
+    font-size: 6vw;
+    position: relative;
+    line-height: 6vw;
+    margin: 0;
+    bottom: 15px;
+    @include min-size(1200px) {
+      font-size: 72px;
+      line-height: 72px;
+    }
   }
 }
 
 .create__image-wrapper {
   position: absolute;
-  top: 12%;
-  right: 9%;
-  bottom: 9%;
-  left: 9%;
-  padding: 5% 0 3%;
+  top: 5.25vw;
+  bottom: 5.25vw;
+  left: 5vw;
+  width: calc(9.5vw * 9);
   z-index: 1;
+  @include min-size(1200px) {
+    top: 63px;
+    bottom: 63px;
+    left: 60px;
+    width: calc(114px * 9);
+  }
   pointer-events: none;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1061,6 +1099,7 @@ input[type='text'].create__input {
   -webkit-box-direction: normal;
   -ms-flex-flow: row nowrap;
   flex-flow: row nowrap;
+  
 }
 
 .create__image {
@@ -1089,14 +1128,14 @@ input[type='text'].create__input {
   display: flex;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-      -ms-flex-flow: row wrap;
-          flex-flow: row wrap;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
 }
 
 .modal__link {
   -webkit-box-flex: 0;
-      -ms-flex: 0 1 calc(100% / 9);
-          flex: 0 1 calc(100% / 9);
+  -ms-flex: 0 1 calc(100% / 9);
+  flex: 0 1 calc(100% / 9);
   pointer-events: all;
   line-height: 0;
   img {
