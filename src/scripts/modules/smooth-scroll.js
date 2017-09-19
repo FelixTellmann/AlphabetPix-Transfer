@@ -4,6 +4,8 @@ $(document).ready(function () {
   // Remove links that don't actually link to anything
     .not('[href="#"]')
     .not('[href="#0"]')
+    .not('[href="/#"]')
+    .not('[href="/#0"]')
     .click(function (event) {
       // On-page links
       if (
@@ -20,8 +22,8 @@ $(document).ready(function () {
           // Only prevent default if animation is actually gonna happen
           event.preventDefault();
           $('html, body').animate({
-            scrollTop: (target.offset().top - 100)
-          }, 1000, function () {
+            scrollTop: (target.offset().top - 200)
+          }, 800, function () {
             // Callback after animation
             // Must change focus!
             var $target = $(target);
@@ -35,10 +37,11 @@ $(document).ready(function () {
               $target.focus(); // Set focus again
             }
           });
+          /* RELOAD ANIMATIONS */
+          new WOW().init();
         }
-
-
       }
+
     });
 
 
@@ -54,7 +57,6 @@ $(document).ready(function () {
       $('.header').removeClass('header--fixed');
     }
 
-
     return onScroll();
   });
 
@@ -65,6 +67,8 @@ $(document).ready(function () {
     // Remove links that don't actually link to anything
       .not('[href="#"]')
       .not('[href="#0"]')
+      .not('[href="/#"]')
+      .not('[href="/#0"]')
       .each(function (event) {
         // On-page links
         if (

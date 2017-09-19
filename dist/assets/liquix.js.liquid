@@ -1580,7 +1580,105 @@ theme.customerLogin = (function() {
 
 
 /*================ Modules ================*/
-{% comment %}{#// =require modules/smooth-scroll.js#}{% endcomment %}
+$(document).ready(function () {
+  // Select all links with hashes
+  $('a[href*="#"]')
+  // Remove links that don't actually link to anything
+    .not('[href="#"]')
+    .not('[href="#0"]')
+    .not('[href="/#"]')
+    .not('[href="/#0"]')
+    .click(function (event) {
+      // On-page links
+      if (
+        location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
+        &&
+        location.hostname == this.hostname
+      ) {
+        // Figure out element to scroll to
+        var target = $(this.hash);
+        var link = $(this);
+        target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+        // Does a scroll target exist?
+        if (target.length) {
+          // Only prevent default if animation is actually gonna happen
+          event.preventDefault();
+          $('html, body').animate({
+            scrollTop: (target.offset().top - 200)
+          }, 800, function () {
+            // Callback after animation
+            // Must change focus!
+            var $target = $(target);
+            /*$target.focus();*/
+            if ($target.is(":focus")) { // Checking if the target was focused
+
+              /*link.addClass('active');*/
+              return false;
+            } else {
+              $target.attr('tabindex', '-1'); // Adding tabindex for elements not focusable
+              $target.focus(); // Set focus again
+            }
+          });
+          /* RELOAD ANIMATIONS */
+          new WOW().init();
+        }
+      }
+
+    });
+
+
+  $(window).scroll(function () {
+    //if you hard code, then use console
+    //.log to determine when you want the
+    //nav bar to stick.
+    /*console.log($(window).scrollTop());*/
+    if ($(window).scrollTop() > 650) {
+      $('.header').addClass('header--fixed');
+    }
+    if ($(window).scrollTop() < 650) {
+      $('.header').removeClass('header--fixed');
+    }
+
+    return onScroll();
+  });
+
+
+  function onScroll(event) {
+    var scrollPos = $(window).scrollTop();
+    $('header a[href*="#"]')
+    // Remove links that don't actually link to anything
+      .not('[href="#"]')
+      .not('[href="#0"]')
+      .not('[href="/#"]')
+      .not('[href="/#0"]')
+      .each(function (event) {
+        // On-page links
+        if (
+          location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
+          &&
+          location.hostname == this.hostname
+        ) {
+          // Figure out element to scroll to
+          var target = $(this.hash);
+          var link = $(this);
+
+          if (target.offset().top - 200 <= scrollPos && target.offset().top + target.height() + 200 > scrollPos) {
+            link.addClass("active");
+          }
+          else {
+            link.removeClass("active");
+          }
+        }
+      });
+  }
+});
+
+
+
+
+
+
+
 (function() {
     var MutationObserver, Util, WeakMap, getComputedStyle, getComputedStyleRX,
         bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
@@ -1904,13 +2002,13 @@ theme.customerLogin = (function() {
         };
 
         WOW.prototype.applyStyle = function(box, hidden) {
-            var delay, duration, iteration;
+            var delay, duration, iteration, repeat;
             duration = box.getAttribute('data-scroll-duration');
             delay = box.getAttribute('data-scroll-delay');
             iteration = box.getAttribute('data-scroll-iteration');
             return this.animate((function(_this) {
                 return function() {
-                    return _this.customStyle(box, hidden, duration, delay, iteration);
+                    return _this.customStyle(box, hidden, duration, delay, iteration, repeat);
                 };
             })(this));
         };
@@ -1946,7 +2044,7 @@ theme.customerLogin = (function() {
             }
         };
 
-        WOW.prototype.customStyle = function(box, hidden, duration, delay, iteration) {
+        WOW.prototype.customStyle = function(box, hidden, duration, delay, iteration, repeat) {
             if (hidden) {
                 this.cacheAnimationName(box);
             }
@@ -1966,6 +2064,7 @@ theme.customerLogin = (function() {
                     animationIterationCount: iteration
                 });
             }
+
             this.vendorSet(box.style, {
                 animationName: hidden ? 'none' : this.cachedAnimationName(box)
             });
@@ -2057,6 +2156,10 @@ theme.customerLogin = (function() {
                     return this.stop();
                 }
             }
+        };
+
+        WOW.prototype.addBox = function(element){
+            this.boxes.push(element);
         };
 
         WOW.prototype.offsetTop = function(element) {

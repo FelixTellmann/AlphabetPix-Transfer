@@ -45,15 +45,15 @@
 
 @import url('vendor/slick.scss');
 @import url('vendor/_bootstrap-modal.scss');
-@import url('vendor/animate.scss');
+@import url('vendor/animate.scss.liquid');
 
 
 
 /* TEMPORARY FIX FOR DEVELOPMENT */
 
-.slideshow {
+/*.slideshow {
   height: 800px !important;
-}
+}*/
 
 .testing {
   height: 200px;

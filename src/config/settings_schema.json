@@ -8,6 +8,21 @@
     "theme_support_url": "http:\/\/www.liquix.io"
   },
   {
+    "name": "Development",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Development Settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "animations",
+        "default": true,
+        "label": "Enable/Disable Animations"
+      }
+    ]
+  },
+  {
     "name": "Colors",
     "settings": [
       {

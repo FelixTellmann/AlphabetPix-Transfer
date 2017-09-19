@@ -41,14 +41,17 @@
           }
         </style>
         <a href="{{ section.settings.announcement_link }}" class="announcement-bar announcement-bar--link">
-          
-          <p class="announcement-bar__message page-width">
-            {% if section.settings.announcement_icon != 'none' %}
-              {%- assign icon = 'icon-' | append: section.settings.announcement_icon -%}
-              {% include icon %}
-            {% endif %}
-            {{ section.settings.announcement_text | escape }}
-          </p>
+          <div class="page-width announcement-bar__wrapper grid__row align--center">
+            <p class="announcement-bar__message grid__item--2 grid__content">
+              {{ section.settings.announcement_text | escape }}
+            </p>
+            <figure class="announcement-bar__figure grid__item">
+              <img class="announcement-bar__img" src="{{ section.settings.announcement_image | img_url: 'master' }}" alt="{{ section.settings.announcement_image.alt }}" >
+            </figure>
+            <div class="announcement-bar__slogan grid__item text-center">
+              {{ section.settings.announcement_slogan }}
+            </div>
+          </div>
           <button class="announcement-bar__close btn btn--clear" aria-expanded="true">{% include 'icon-close' %}</button>
         </a>
       {% endif %}
@@ -77,7 +80,7 @@
             {% endif %}
           </a>
         </h1>
-        <div class="grid__item--5 grid__content grid__col justify--center header__logo-text">
+        <div class="grid__item--7 grid__content grid__col justify--center header__logo-text">
           {{ section.settings.logo_text }}
         </div>
       </div>
@@ -220,6 +223,15 @@
     },
     {
       "type": "header",
+      "content": "Logo Text"
+    },
+    {
+      "type": "richtext",
+      "id": "logo_text",
+      "label": "Logo headline"
+    },
+    {
+      "type": "header",
       "content": "Navigation"
     },
     {
@@ -259,8 +271,18 @@
     {
       "type": "text",
       "id": "announcement_text",
-      "label": "Announcement text",
-      "default": "Announce something here"
+      "label": "Announcement Name",
+      "default": "Jones"
+    },
+    {
+      "type": "image_picker",
+      "id": "announcement_image",
+      "label": "Announcement Image"
+    },
+    {
+      "type": "richtext",
+      "id": "announcement_slogan",
+      "label": "Announcement Slogan"
     },
     {
       "type": "url",
@@ -269,89 +291,16 @@
       "info": "Optional"
     },
     {
-      "type": "select",
-      "id": "announcement_icon",
-      "label": "Icon",
-      "default": "checkmark",
-      "options": [
-        {
-          "label": "None",
-          "value": "none"
-        },
-        {
-          "label": "Box",
-          "value": "box"
-        },
-        {
-          "label": "Card",
-          "value": "card"
-        },
-        {
-          "label": "Cart",
-          "value": "cart"
-        },
-        {
-          "label": "Checkmark",
-          "value": "checkmark"
-        },
-        {
-          "label": "Clock",
-          "value": "clock"
-        },
-        {
-          "label": "Envelope",
-          "value": "envelope"
-        },
-        {
-          "label": "Globe",
-          "value": "globe"
-        },
-        {
-          "label": "Leaf",
-          "value": "leaf"
-        },
-        {
-          "label": "Padlock",
-          "value": "padlock"
-        },
-        {
-          "label": "Price Tag",
-          "value": "pricetag"
-        },
-        {
-          "label": "Silhouette",
-          "value": "silhouette"
-        },
-        {
-          "label": "Trophy",
-          "value": "trophy"
-        },
-        {
-          "label": "Truck",
-          "value": "truck"
-        }
-      ]
-    },
-    {
       "type": "color",
       "id": "announcement_color_bg",
-      "label": "Bar",
+      "label": "Background Color",
       "default": "#7796A8"
     },
     {
       "type": "color",
       "id": "announcement_color_text",
-      "label": "Text",
+      "label": "Text Color",
       "default": "#fff"
-    },
-    {
-      "type": "header",
-      "content": "Logo Text"
-    },
-    {
-      "type": "richtext",
-      "id": "logo_text",
-      "label": "Logo headline"
     }
   ]
 }

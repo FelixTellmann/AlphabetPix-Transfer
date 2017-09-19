@@ -321,13 +321,13 @@
         };
 
         WOW.prototype.applyStyle = function(box, hidden) {
-            var delay, duration, iteration;
+            var delay, duration, iteration, repeat;
             duration = box.getAttribute('data-scroll-duration');
             delay = box.getAttribute('data-scroll-delay');
             iteration = box.getAttribute('data-scroll-iteration');
             return this.animate((function(_this) {
                 return function() {
-                    return _this.customStyle(box, hidden, duration, delay, iteration);
+                    return _this.customStyle(box, hidden, duration, delay, iteration, repeat);
                 };
             })(this));
         };
@@ -363,7 +363,7 @@
             }
         };
 
-        WOW.prototype.customStyle = function(box, hidden, duration, delay, iteration) {
+        WOW.prototype.customStyle = function(box, hidden, duration, delay, iteration, repeat) {
             if (hidden) {
                 this.cacheAnimationName(box);
             }
@@ -383,6 +383,7 @@
                     animationIterationCount: iteration
                 });
             }
+
             this.vendorSet(box.style, {
                 animationName: hidden ? 'none' : this.cachedAnimationName(box)
             });
@@ -474,6 +475,10 @@
                     return this.stop();
                 }
             }
+        };
+
+        WOW.prototype.addBox = function(element){
+            this.boxes.push(element);
         };
 
         WOW.prototype.offsetTop = function(element) {
