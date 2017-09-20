@@ -38,7 +38,7 @@
           
           {% comment %}{# Section -- Hero -- Highlight #}{% endcomment %}
           {% if section.settings.highlight != blank %}
-            <figure class="signup__figure signup__highlight--{{ section.id }}">
+            <figure class="signup__figure signup__highlight--{{ section.id }} {% if section.settings.highlight_scroll_animation != blank %}{{ section.settings.highlight_scroll_animation }}{% endif %}">
               {{ section.settings.highlight }}
             </figure>
           {% endif %}
@@ -47,7 +47,7 @@
       
       {% comment %}{# Section -- Blocks #}{% endcomment %}
       <div class="grid__row--sm">
-        <div class="grid__item--6">
+        <div class="grid__item--6 grid__row" style="overflow: hidden;">
           {% for block in section.blocks %}
             {% comment %}{# Section -- Block -- Marketing (Left) #}{% endcomment %}
             {% if block.type == 'left' %}
@@ -55,6 +55,14 @@
                 .signup__item--{{ block.id }} {
                   height: {{ block.settings.grid_height }}px;
                 }
+
+                {% if block.settings.grid_responsive and block.settings.grid_responsive_height %}
+                @media (max-width: 640px) {
+                  .signup__item--{{ block.id }} {
+                    height: calc({{ block.settings.grid_height }}px / 2);
+                  }
+                }
+                {% endif %}
                 
                 {% if block.settings.background != blank %}
                 .signup-item__background--{{ block.id }} {
@@ -83,13 +91,14 @@
                 .signup-item__image--{{ block.id }} {
                 {{ block.settings.image_css }}
                 }
+                
               
               </style>
-              <div class="signup__item--{{ block.id }}" {{ block.shopify_attributes }}>
-                <div class="signup-item__wrapper signup-item__background--{{ block.id }} grid__row">
+              <div class="signup__item--{{ block.id }} {% if block.settings.grid_responsive %}grid__item--12--sm grid__item--{{ block.settings.grid_mobile }}{% else %}grid__item--12{% endif %}" {{ block.shopify_attributes }}>
+                <div class="signup-item__wrapper signup-item__background--{{ block.id }} grid__row {% if block.settings.scroll_animation != blank %}{{ block.settings.scroll_animation  }}{% endif %}">
                   
                   {% if block.settings.highlight != blank %}
-                    <figure class="signup-item__figure signup-item__highlight--{{ block.id }}">
+                    <figure class="signup-item__figure signup-item__highlight--{{ block.id }} {% if block.settings.highlight_scroll_animation != blank %}{{ block.settings.highlight_scroll_animation }}{% endif %}">
                       {{ block.settings.highlight }}
                     </figure>
                   {% endif %}
@@ -113,7 +122,7 @@
             {% endif %}
           {% endfor %}
         </div>
-        <div class="grid__item--6">
+        <div class="grid__item--6" style="overflow: hidden;">
           {% for block in section.blocks %}
             {% if block.type == 'right' %}
               <style>
@@ -143,9 +152,9 @@
               
               </style>
               <div class="signup__item--{{ block.id }}" {{ block.shopify_attributes }}>
-                <div class="signup-item__wrapper signup-item__background--{{ block.id }} grid__row">
+                <div class="signup-item__wrapper signup-item__background--{{ block.id }} grid__row {% if block.settings.scroll_animation != blank %}{{ block.settings.scroll_animation  }}{% endif %}">
                   
-                  <div class="signup-item__content signup-item__content--{{ block.id }}">
+                  <div class="signup-item__content signup-item__content--{{ block.id }} {% if block.settings.highlight_scroll_animation != blank %}{{ block.settings.highlight_scroll_animation }}{% endif %}">
                     <h2 class="signup-item__heading">
                       {{ block.settings.heading }}
                     </h2>
@@ -276,6 +285,11 @@
         "id": "highlight_css",
         "label": "Custom CSS",
         "info": "Add custom CSS to position the Highlight"
+      },
+      {
+        "type": "text",
+        "id": "highlight_scroll_animation",
+        "label": "Highlight Animation Class"
       }
     ],
     "blocks": [
@@ -329,6 +343,11 @@
             "default": 90
           },
           {
+            "type": "text",
+            "id": "scroll_animation",
+            "label": "Animation Class"
+          },
+          {
             "type": "header",
             "content": "Highlight"
           },
@@ -336,6 +355,44 @@
             "type": "richtext",
             "id": "highlight",
             "label": "Block Highlight"
+          },
+          {
+            "type": "checkbox",
+            "id": "grid_responsive",
+            "label": "Enable Responsive Grid",
+            "default": false
+          },
+          {
+            "type": "select",
+            "id": "grid_mobile",
+            "label": "Mobile Grid",
+            "default": "3",
+            "options": [
+              {
+                "label": "1/6th Block",
+                "value": "2"
+              },
+              {
+                "label": "1/4th Block",
+                "value": "3"
+              },
+              {
+                "label": "1/3rd Block",
+                "value": "4"
+              },
+              {
+                "label": "2/3rd Block",
+                "value": "8"
+              },
+              {
+                "label": "1/2th Block",
+                "value": "6"
+              },
+              {
+                "label": "1 Block",
+                "value": "12"
+              }
+            ]
           },
           {
             "type": "color",
@@ -354,6 +411,11 @@
             "id": "highlight_css",
             "label": "Custom CSS",
             "info": "Add custom CSS to position the Highlight"
+          },
+          {
+            "type": "text",
+            "id": "highlight_scroll_animation",
+            "label": "Highlight Animation Class"
           },
           {
             "type": "header",
@@ -423,8 +485,18 @@
             "default": 90
           },
           {
+            "type": "text",
+            "id": "scroll_animation",
+            "label": "Animation Class"
+          },
+          {
             "type": "header",
             "content": "Content"
+          },
+          {
+            "type": "text",
+            "id": "highlight_scroll_animation",
+            "label": "Highlight Animation Class"
           },
           {
             "type": "richtext",
