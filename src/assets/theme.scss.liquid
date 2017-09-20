@@ -4550,17 +4550,12 @@ $image-bar-placeholder-border-color: rgba($color-body-text, 0.25);
   position: relative;
   display: table;
   width: 100%;
-  background: {
-    size: cover;
-    repeat: no-repeat;
-    position: 50% 50%;
-    color: $color-secondary-bg;
-  }
-
+  
   &.lazyloaded {
     background-color: transparent;
   }
 }
+
 
 .hero__overlay {
   @include overlay(1);
@@ -6821,7 +6816,7 @@ $social-sharing-link-border-color: rgba($color-body-text, 0.1);
 
   40% {
     opacity: 1;
-  }  
+  }
 }
 
 @include keyframes(sk-circleFadeDelay) {

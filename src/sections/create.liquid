@@ -21,9 +21,9 @@
   <div id="Slideshow-{{ section.id }}" class="slideshow">
     <div class="slideshow__slides">
       {% for block in section.blocks %}
-        <div data-section-id="{{ section.id }}" data-block-id="{{ block.id }}" class="create__block slideshow__slide slideshow__slide--{{ block.id }}{% if forloop.first %} slideshow__slide--active{% endif %}{% if section.settings.show_overlay %} slideshow__overlay{% endif %}" {% unless forloop.first %}aria-hidden="true"{% endunless %} {{ block.shopify_attributes }}>
+        <div id="create__slide--{{ block.id }}" data-section-id="{{ section.id }}" data-block-id="{{ block.id }}" class="create__block slideshow__slide slideshow__slide--{{ block.id }}{% if forloop.first %} slideshow__slide--active{% endif %}{% if section.settings.show_overlay %} slideshow__overlay{% endif %}" {% unless forloop.first %}aria-hidden="true"{% endunless %} {{ block.shopify_attributes }}>
           
-          {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+          
           <style>
             .slideshow__image--{{ block.id }} {
               object-position: {{ block.settings.alignment }};
@@ -38,9 +38,9 @@
   
              }
           </style>
-          
+          {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
           <img class="slideshow__image slideshow__image--{{ block.id }} lazyload"
-               src="{{ block.settings.image | img_url: '300x' }}"
+               src="{{ block.settings.image | img_url: '1000x' }}"
                data-src="{{ img_url }}"
                data-widths="[540, 900, 1512, 2048]"
                data-aspectratio="{{ block.settings.image.aspect_ratio }}"
@@ -79,7 +79,7 @@
       
       <div class="slideshow__buttons critical-hide" data-count="{{ section.blocks.size }}">
         {% for block in section.blocks %}
-          <div class="slideshow__button slideshow__button--{{ section.blocks.size }}{% if block.settings.cta_link != blank %} slideshow__button--link{% endif %}">
+          <div id="create__slide-button--{{ block.id }}" class="slideshow__button slideshow__button--{{ section.blocks.size }}{% if block.settings.cta_link != blank %} slideshow__button--link{% endif %}">
             <button class="slideshow__button-label text-title btn--clear">
               <span class="visually-hidden">{{ 'sections.slider.slide' | t: number: forloop.index }}</span>
               {{ block.settings.theme }}

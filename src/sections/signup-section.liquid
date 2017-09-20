@@ -98,7 +98,7 @@
                     <figure class="signup-item__figure signup-item__image--{{ block.id }}">
                       <img class="signup-item__image lazyload"
                               {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-                           src="{{ block.settings.image | img_url: '300x' }}"
+                           src="{{ block.settings.image | img_url: '1000x' }}"
                            data-src="{{ img_url }}"
                            data-widths="[540, 900, 1512, 2048]"
                            data-aspectratio="{{ block.settings.image.aspect_ratio }}"
@@ -210,7 +210,7 @@
             <figure class="slider__image-wrapper">
               <img class="testimonial__image lazyload"
                       {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-                   src="{{ block.settings.image | img_url: '300x' }}"
+                   src="{{ block.settings.image | img_url: '1000x' }}"
                    data-src="{{ img_url }}"
                    data-widths="[540, 900, 1512, 2048]"
                    data-aspectratio="{{ block.settings.image.aspect_ratio }}"
@@ -232,7 +232,7 @@
 {% schema %}
   {
     "name": "Sign-Up Blocks",
-    "class": "index-section index-section--slider",
+    "class": "index-section index-section--sign-up",
     "settings": [
       {
         "id": "title",

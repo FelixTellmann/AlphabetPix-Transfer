@@ -7,7 +7,7 @@
             <figure class="theme-collection__figure {% if block.settings.frame_active %}theme-collection__frame--{{ block.settings.frame_position }}{% endif %}">
               <img class="theme-collection__image lazyload"
                       {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-                   src="{{ block.settings.image | img_url: '300x' }}"
+                   src="{{ block.settings.image | img_url: '1000x' }}"
                    data-src="{{ img_url }}"
                    data-widths="[540, 900, 1512, 2048]"
                    data-aspectratio="{{ block.settings.image.aspect_ratio }}"

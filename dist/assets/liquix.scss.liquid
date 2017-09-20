@@ -768,6 +768,18 @@ html {
   font-style: italic;
 }
 
+h1, .h1 {
+  font-family: 'Caviar Dreams', "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h2, .h2 {
+  font-family: 'Caviar Dreams', "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0;
+  padding-right: 15px;
+}
+
 h3, .h3 {
   font-family: 'Caviar Dreams', "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 700;
@@ -791,6 +803,10 @@ blockquote p:after {
 
 .testimonial__wrapper .slider {
   margin: 0;
+}
+
+html {
+  background-color: #fff;
 }
 
 
@@ -1215,6 +1231,7 @@ input[type='text'].create__input {
   max-height: 1200px;
   margin-left: auto;
   margin-right: auto;
+  display: block;
 }
 
 .slider__image--frame {
@@ -1328,7 +1345,7 @@ input[type='text'].create__input {
   left: 0;
   font-size: 5rem;
   color: #fff;
-  opacity: 0.75;
+  opacity: 0.95;
   text-transform: uppercase;
   -webkit-writing-mode: vertical-lr;
       -ms-writing-mode: tb-lr;
@@ -1353,7 +1370,7 @@ input[type='text'].create__input {
 }
 
 .theme-collection__description {
-  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
   padding-right: 15px;
   p {
     margin: 0;
@@ -1671,6 +1688,7 @@ input[type='text'].create__input {
 }
 
 .testimonial__slide {
+  max-width: 370px;
   min-height: 600px;
   padding: 30px;
   @include screen-size(lg) {
@@ -2263,7 +2281,7 @@ input[type='text'].create__input {
 }
 
 .slick-initialized .slick-slide {
-  display: block;
+  display: block !important;
 }
 
 .slick-loading .slick-slide {

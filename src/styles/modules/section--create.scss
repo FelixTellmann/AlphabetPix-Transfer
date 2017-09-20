@@ -15,6 +15,7 @@
   max-width: calc(9.5vw * 9 + 9.5vw);
   max-height: 300px;
   margin: 0;
+  -webkit-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
   @include min-size(1200px) {
     width: calc(114px * 7 + 114px);

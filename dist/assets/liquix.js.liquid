@@ -1624,7 +1624,18 @@ $(document).ready(function () {
         }
       }
 
+      if ($(this).attr('href').includes('create__slide')) {
+        $('.create__block').removeClass('slideshow__slide--active');
+        $($(this).attr('href').replace(/^\//, '')).addClass('slideshow__slide--active');
+        $('.slideshow__button--active').removeClass('slideshow__button--active');
+        $('#create__slide-button--' + $(this).attr('href').replace(/\D+/g, '')).addClass('slideshow__button--active');
+      }
+
     });
+
+  /*$('button.slideshow__button-label').on('click', function () {
+    $('.create__block').removeClass('slideshow__slide--active');
+  });*/
 
 
   $(window).scroll(function () {

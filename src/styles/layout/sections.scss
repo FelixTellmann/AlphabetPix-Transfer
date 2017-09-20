@@ -2,3 +2,29 @@
   #Section Global
     -
 ==============================================================================*/
+
+@include min-size(lg) {
+  .index-section--slideshow {
+    height: 800px;
+  }
+  
+  .index-section--slider {
+    height: 1200px;
+  }
+  
+  .index-section--image-with-text-overlay {
+    height: 627.5px;
+  }
+  
+  .index-section--theme-collection {
+    height: 2114.590px;
+  }
+  
+  .index-section--testimonial-slider {
+    height:1060px;
+  }
+  
+  .index-section--sign-up {
+  
+  }
+}

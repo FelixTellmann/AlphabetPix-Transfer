@@ -10,18 +10,18 @@
   <div class="hero__inner">
     <div class="page-width text-center">
       {% if section.settings.heading_top != blank %}
-        <h2 class="h4 section__heading-top moveDown scroll" data-scroll-delay="0.1s" data-scroll-duration="0.4s">
+        <h2 class="h4 section__heading-top moveDown scroll" data-scroll-delay="0.3s" data-scroll-duration="0.5s">
           {{ section.settings.heading_top }}
         </h2>
       {% endif %}
       {% if section.settings.heading != blank %}
-        <h1 id="{{ section.settings.title | handle }}" class="section__heading fadeIn scroll scroll-repeat" data-scroll-delay="0.3s" data-scroll-duration="0.4s">
+        <h1 id="{{ section.settings.title | handle }}" class="section__heading fadeIn scroll scroll-repeat" data-scroll-delay="0.5s" data-scroll-duration="0.5s">
           {{ section.settings.heading }}
         </h1>
       {% endif %}
       
       {% if section.settings.heading_bottom != blank %}
-        <div class="section__subheading moveUp scroll" data-scroll-delay="0.1s" data-scroll-duration="0.4s">
+        <div class="section__subheading moveUp scroll" data-scroll-delay="0.3s" data-scroll-duration="0.4s">
           <div class="section__heading-clip"></div>
           <div class="section__heading-wrapper">
             <div class="section__heading-seperator">

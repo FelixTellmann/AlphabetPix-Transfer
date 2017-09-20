@@ -5,11 +5,11 @@
       
       <div class="slider" id="Slider-{{ section.id }}" data-autoplay="{{ section.settings.autoplay }}" data-speed="{{ section.settings.autoplay_speed }}" data-section-id="{{ section.id }}">
         {% for block in section.blocks %}
-          <div class="slider__slide-wrapper" data-block-id="{{ block.id }}" {{ block.shopify_attributes }}>
+          <div class="slider__slide-wrapper" data-block-id="{{ block.id }}" {{ block.shopify_attributes }} {% unless forloop.first %} style="display: none;" {% endunless %}>
             <figure class="slider__image-wrapper" {% comment %}{#style="height: {{ section.settings.slideshow_height }}"#}{% endcomment %}>
               <img class="slider__image lazyload"
                       {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-                   src="{{ block.settings.image | img_url: '300x' }}"
+                   src="{{ block.settings.image | img_url: '2000x' }}"
                    data-src="{{ img_url }}"
                    data-widths="[540, 900, 1512, 2048]"
                    data-aspectratio="{{ block.settings.image.aspect_ratio }}"

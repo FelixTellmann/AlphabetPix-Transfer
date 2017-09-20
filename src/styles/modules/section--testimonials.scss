@@ -85,6 +85,7 @@
 }
 
 .testimonial__slide {
+  max-width: 370px;
   min-height: 600px;
   padding: 30px;
   @include screen-size(lg) {
