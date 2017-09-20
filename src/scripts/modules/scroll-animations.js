@@ -323,7 +323,7 @@
         WOW.prototype.applyStyle = function(box, hidden) {
             var delay, duration, iteration, repeat;
             duration = box.getAttribute('data-scroll-duration');
-            delay = box.getAttribute('data-scroll-delay');
+            delay = box.getAttribute('data-scroll-delay') || "0.3s";
             iteration = box.getAttribute('data-scroll-iteration');
             return this.animate((function(_this) {
                 return function() {
