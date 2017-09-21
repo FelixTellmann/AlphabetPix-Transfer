@@ -20,12 +20,12 @@
   <select name="id" class="product-form__master-select supports-no-js" data-master-select>
     {% for variant in product.variants %}
       {% if variant.available %}
-
+        
         {% comment %}
         Note: if you use option_selection.js, your select tag will be overwritten, meaning what you have inside <option> will not reflect what you coded below.
         {% endcomment %}
         <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-sku="{{ variant.sku }}" value="{{ variant.id }}">{{ variant.title }} - {{ variant.price | money_with_currency }}</option>
-
+      
       {% else %}
         <option disabled="disabled">
           {{ variant.title }} - {{ 'products.product.sold_out' | t }}

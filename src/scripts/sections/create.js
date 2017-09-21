@@ -94,9 +94,33 @@ theme.Create = (function () {
       });
     });
 
+    let resizeFrame = function(blockId, length, spacing) {
+      if (window.innerWidth >= 1200 && length >= 4) {
+        $('figure.frame[data-block-id="' + blockId + '"').css('width','calc(114px * ' + (length + spacing) + ' + 114px)')
+      } else if (window.innerWidth >= 1200 && length > 2 && length < 4) {
+        $('figure.frame[data-block-id="' + blockId + '"').css('width','calc(114px * ' + (3 + spacing) + ' + 114px)')
+      } else if (window.innerWidth >= 1200 && length <= 2) {
+        $('figure.frame[data-block-id="' + blockId + '"').css('width','calc(114px * ' + 7 + ' + 114px)')
+      }
+    };
+
+    /* CHANGE FRAME SIZE ACCORDING TO INPUT */
+    blockInput[0].on('blur', function () {
+      let characterArray = blockInput[0].val().toLowerCase().split('');
+      resizeFrame(blockIds[0], characterArray.length, 0)
+    });
+
+    blockInput[0].on('focus', function () {
+      let characterArray = blockInput[0].val().toLowerCase().split('');
+      resizeFrame(blockIds[0], characterArray.length, 1)
+    });
+
     /* ON TEXT INPUT - LOAD DEFAULT OR PRESELECTED IMAGE FOR EACH CHAR*/
     blockInput[0].on('input', function () {
       let characterArray = blockInput[0].val().toLowerCase().split('');
+
+      /* CHANGE FRAME SIZE ACCORDING TO INPUT */
+      resizeFrame(blockIds[0], characterArray.length, 1);
 
       /* LIMIT INPUT TO 9 CHARACTERS */
       if (blockInput[0].val().length > 9) {
@@ -117,6 +141,9 @@ theme.Create = (function () {
       /* SAVE ENTRY FOR COMPARISON */
       lastValue = blockInput[0].val().toLowerCase().split('');
     });
+
+
+
 
     let insertImageAt = function (i, char, container = []) {
       container.empty().removeAttr('style').removeAttr('data-custom-selection');

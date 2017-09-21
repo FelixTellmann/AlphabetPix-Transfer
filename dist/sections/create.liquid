@@ -48,9 +48,9 @@
                data-parent-fit="cover"
                alt="{{ block.settings.image.alt | escape }}">
           
-          <form action="/cart">
-            <label for="create__input--{{ block.id }}" class="create__label">{{ block.settings.label }}</label>
-            <figure class="frame faceIn scroll" data-scroll-delay="0.2s">
+          <form action="/cart" enctype="multipart/form-data">
+            <label for="create__input--{{ block.id }}" class="create__label text-center">{{ block.settings.label }}</label>
+            <figure class="frame fadeIn scroll" data-scroll-delay="0.2s" data-block-id="{{ block.id }}">
               <div class="frame__wrapper frame__img--{{ block.id }} tada scroll" data-scroll-delay="4s">
                 <div class="frame__input">
                   <input id="create__input--{{ block.id }}" name="create__input--{{ block.id }}" type="text" class="create__input" placeholder="{{ block.settings.placeholder }}" maxlength="10" data-theme-style="{{ block.settings.theme }}">
@@ -128,17 +128,36 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="create__modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="create__modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <h5 class="modal-title">Select your Photo</h5>
+        <p class="line-item-property__field">
+          <label for="your-name">Upload your own Image - Required Size: 3000px - 2000px</label>
+          <input id="your-name" type="file" name="properties[Custom Image]">
+        </p>
+  
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal__body">
         ...
+      </div>
+      <div class="modal-footer">
+        {% for p in item.properties %}
+          {% unless p.last == blank %}
+            <div class="line-item-property">
+              {{ p.first }}:
+              {% if p.last contains '/uploads/' %}
+                <span class="value"><a  href="{{ p.last }}">Link</a></span>
+              {% else %}
+                <span class="value">{{ p.last }}</span>
+              {% endif %}
+            </div>
+          {% endunless %}
+        {% endfor %}
       </div>
     
     </div>
@@ -367,7 +386,7 @@
           "content": "Text"
         },
         {
-          "type": "text",
+          "type": "textarea",
           "id": "label",
           "label": "Label Text",
           "default": "- SEE YOUR NAME IN PHOTOS NOW! –"
