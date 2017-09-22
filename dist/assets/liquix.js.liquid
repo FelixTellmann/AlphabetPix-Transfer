@@ -1243,7 +1243,7 @@ theme.Create = (function () {
     $.each(products, function (i, v) {
       let product_this = this;
       $.each(this.variants, function (i, v) {
-        preloadContainer.append('<img data-letter-class="' + product_this.title + '" data-letter-id="' + product_this.title.replace(" ", "-") + '-' + this.title.replace(" / ", "-") + '" data-theme-style="' + this.title.replace(/[\d\s\/]/g, "") + '" id="' + product_this.title + "-" + i + '" class="' + product_this.title + '" src="' + this.featured_image.src + '" alt="' + product_this.title + '">')
+        preloadContainer.append('<img data-letter-class="' + product_this.title + '" data-variant-id="' + this.id + '" data-letter-id="' + product_this.title.replace(" ", "-") + '-' + this.title.replace(" / ", "-") + '" data-theme-style="' + this.title.replace(/[\d\s\/]/g, "") + '" id="' + product_this.title + "-" + i + '" class="' + product_this.title + '" src="' + this.featured_image.src + '" alt="' + product_this.title + '">')
       });
     });
 
@@ -1287,12 +1287,12 @@ theme.Create = (function () {
         modal.modal('toggle');
       });
     });
-
+    /*TODO add spacing options for mobile etc screen sizes using vw */
     let resizeFrame = function(blockId, length, spacing) {
-      if (window.innerWidth >= 1200 && length >= 4) {
+      $('.data__frame[data-block-id="' + blockId+'"]').attr('disabled','disabled');
+      if (window.innerWidth >= 1200 && length > 2) {
+        $("#data__frame--" + blockId + "--" + length).removeAttr('disabled');
         $('figure.frame[data-block-id="' + blockId + '"').css('width','calc(114px * ' + (length + spacing) + ' + 114px)')
-      } else if (window.innerWidth >= 1200 && length > 2 && length < 4) {
-        $('figure.frame[data-block-id="' + blockId + '"').css('width','calc(114px * ' + (3 + spacing) + ' + 114px)')
       } else if (window.innerWidth >= 1200 && length <= 2) {
         $('figure.frame[data-block-id="' + blockId + '"').css('width','calc(114px * ' + 7 + ' + 114px)')
       }
@@ -1341,6 +1341,8 @@ theme.Create = (function () {
 
     let insertImageAt = function (i, char, container = []) {
       container.empty().removeAttr('style').removeAttr('data-custom-selection');
+      let dataLetterContainer = $("#data__letter--" + blockIds[0] + "--" + (i));
+      dataLetterContainer.attr('disabled','disabled').attr('value','');
       $.each(products, function (k, v) {
         let title = this.title;
         if (char === ' ') {
@@ -1366,6 +1368,7 @@ theme.Create = (function () {
     let replaceCharacter = function (i, title, customSelection = false) {
       let characterArrayTest = blockInput[0].val().toLowerCase().split('');
       let imgContainer = $("#create__image--" + blockIds[0] + "--" + (i));
+
       if (customSelection) {
         imgContainer.attr('data-custom-selection', 'true');
         imgContainer.empty().removeAttr('style');
@@ -1377,6 +1380,10 @@ theme.Create = (function () {
       if (!preloadedImg.get(0)) {
         preloadedImg = $(($('[id^="' + title + '"]'))[0]);
       }
+
+      let dataLetterContainer = $("#data__letter--" + blockIds[0] + "--" + (i));
+      dataLetterContainer.removeAttr('disabled').attr('value', preloadedImg.attr('data-variant-id'));
+
       if (i === onTimeout[0][i]) {
         return true;
       } else {

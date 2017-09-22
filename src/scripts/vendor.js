@@ -5,16 +5,17 @@
 
 
 /*!
- * jquery-3.2.1.min.js
- */
-// =require vendor/jquery-3.2.1.min.js
-
-
-/*!
  * slick.min.js
  */
 
 // =require vendor/slick.min.js
+
+/*!
+ * dom-to-image.min.js
+ */
+
+// =require vendor/dom-to-image.min.js
+
 
 
 // Attempts to preserve comments that likely contain licensing information,

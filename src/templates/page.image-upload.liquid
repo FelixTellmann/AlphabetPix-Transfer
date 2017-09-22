@@ -1,0 +1,16 @@
+{% layout 'cart' %}
+
+
+<script>
+  $(function() {
+    $('#admin_bar_iframe').remove();
+  });
+</script>
+<form action="/cart/add" enctype="multipart/form-data" method="post">
+  <div class="create__product-data"> <!-- TODO Add visually-hidden after development  -->
+    <input id="custom-image__input" class="visually-hidden" type="text" name="id" value="{{ all_products['custom-image'].variants[0].id }}">
+    <input id="custom-image__properties" type="file" name="properties[Your name]">
+    <input type="hidden" name="return_to" value="pages/image-upload-success"/>
+    <button id="custom-image__submit" type="submit" name="add">Submit</button>
+  </div>
+</form>
