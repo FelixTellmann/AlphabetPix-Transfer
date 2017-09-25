@@ -19,7 +19,17 @@
   <div id="Slideshow-{{ section.id }}" class="slideshow">
     <div class="slideshow__slides">
       {% for block in section.blocks %}
-        
+        {% assign product = all_products[block.settings.frame] %}
+        {% for image in product.images %}
+          {% if image.src contains 'left' %}
+            {% assign frame_left = image.src  %}
+          {% elsif image.src contains 'center' %}
+            {% assign frame_center = image.src  %}
+          {% elsif image.src contains 'right' %}
+            {% assign frame_right = image.src  %}
+          {% endif %}
+          
+        {% endfor %}
         
         <div id="create__slide--{{ block.id }}" data-section-id="{{ section.id }}" data-block-id="{{ block.id }}" class="create__block slideshow__slide slideshow__slide--{{ block.id }}{% if forloop.first %} slideshow__slide--active{% endif %}{% if section.settings.show_overlay %} slideshow__overlay{% endif %}" {% unless forloop.first %}aria-hidden="true"{% endunless %} {{ block.shopify_attributes }}>
           
@@ -31,7 +41,10 @@
             }
             
             .frame__img--{{ block.id }} {
-              background: url('{{ block.settings.frame_left | img_url: '2000x' }}') left/auto 100% no-repeat, /* On top, like z-index: 4; */ url('{{ block.settings.frame_right | img_url: '2000x' }}') right/auto 100% no-repeat, /* like z-index: 3; */ url('{{ block.settings.frame_center | img_url: '2000x' }}') center/100% 100% no-repeat;
+              background:
+                  url('{{ frame_left | product_img_url: '2000x' }}') left/auto 100% no-repeat, /* On top, like z-index: 4; */
+                  url('{{ frame_right | product_img_url: '2000x' }}') right/auto 100% no-repeat, /* like z-index: 3; */
+                  url('{{ frame_center | product_img_url: '2000x' }}') center/100% 100% no-repeat;
               
             }
           </style>
@@ -50,7 +63,7 @@
           <figure class="frame fadeIn scroll" data-scroll-delay="0.2s" data-block-id="{{ block.id }}">
             <div class="frame__wrapper frame__img--{{ block.id }} tada scroll" data-scroll-delay="4s">
               <div class="frame__input">
-                <input id="create__input--{{ block.id }}" name="create__input--{{ block.id }}" type="text" class="create__input" placeholder="{{ block.settings.placeholder }}" maxlength="10" data-theme-style="{{ block.settings.theme }}">
+                <input id="create__input--{{ block.id }}" name="create__input--{{ block.id }}" type="text" class="create__input" placeholder="{{ block.settings.placeholder }}" maxlength="10" data-theme-style="{{ block.settings.theme }}" autocomplete="off">
               </div>
               <div id="create__image-wrapper--{{ block.id }}" class="create__image-wrapper">
                 {% for i in (0..8) %}
@@ -65,7 +78,7 @@
             </div>
             <form action="/cart/add" enctype="multipart/form-data" method="post" data-block-id="{{ block.id }}">
               <div class="create__product-data"> <!-- TODO Add visually-hidden after development  -->
-                {% assign product = all_products[block.settings.frame] %}
+                
                 <div class="create__product-data visually-hidden">
                   {% for variant in product.variants %}
                     <input id="data__frame--{{ block.id }}--{{ variant.option1 }}" type="text" name="id[]" value="{{ variant.id }}" data-frame-size="{{ variant.option1 }}" class="data__frame" data-block-id="{{ block.id }}" disabled="disabled">
@@ -76,9 +89,8 @@
                     <input id="data__letter--{{ block.id }}--{{ i }}" type="text" name="id[]" value="" data-letter-position="{{ i }}" class="data__letter" data-block-id="{{ block.id }}" disabled="disabled">
                   {% endfor %}
                 </div>
-                <input id="your-name" type="file" name="properties[Your name]">
-                <input type="hidden" name="return_to" value="/index/"/>
-                <button class="" type="submit" name="add">Submit</button>
+                <input type="hidden" name="return_to" value="/"/>
+                <button id="submit--{{ block.id }}" type="submit" name="add">Submit</button>
               </div>
             </form>
           </figure>
@@ -178,7 +190,8 @@
 </div>
 
 <div id="create__image-preloader--{{ section.id }}" class="create__image-preloader visually-hidden">
-  <div id="whitespace" class="visually-hidden"></div>
+  <img id="whitespace" class="visually-hidden">
+  
 </div>
 
 {% comment %}{#<!--@formatter:off-->#}{% endcomment %}
@@ -379,25 +392,6 @@
               "value": "bottom right"
             }
           ]
-        },
-        {
-          "type": "header",
-          "content": "Frame"
-        },
-        {
-          "type": "image_picker",
-          "id": "frame_left",
-          "label": "Frame Left Side"
-        },
-        {
-          "type": "image_picker",
-          "id": "frame_center",
-          "label": "Frame Center"
-        },
-        {
-          "type": "image_picker",
-          "id": "frame_right",
-          "label": "Frame Right Side"
         },
         {
           "type": "header",

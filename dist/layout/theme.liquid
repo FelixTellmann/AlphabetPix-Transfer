@@ -91,13 +91,56 @@
     window.products = {{ collections['letters'].products | json }};
     window.cart = {{ cart | json }};
     window.cart_backup = {{ cart | json }};
+    window.stopAjaxRequest = false;
+    window.inProgress = false;
 
-    window.updateCart = function(e)  {
+    window.getCart = function(e)  {
       $.get('/cart.js', function (data) {
         window.cart = data;
       }, 'json');
     };
-  
+
+    window.addToCart = function (data) {
+      $.post('/cart/add.js', data, function (e) {
+        $.get('/cart.js', function (response) {
+          window.cart = response;
+        }, 'json');
+      }, 'json');
+    };
+
+    window.clearCart = function (data, callback) {
+      window.cart_backup = cart;
+      $.post('/cart/clear.js', data, function (e) {
+        $.get('/cart.js', function (response) {
+          window.cart = response;
+        }, 'json');
+      }, 'json');
+    };
+    
+    window.addToCartMultiple = function (dataArr) {
+
+      let count = 0;
+      let addToCart = function (array, i) {
+        if (stopAjaxRequest === false) {
+          $.post('/cart/add.js', array[i], function (response) {
+            i++;
+            if (i < array.length) {
+              addToCart(array, i)
+            } else {
+              $.get('/cart.js', function (response) {
+                window.cart = response;
+                inProgress = false;
+              }, 'json');
+            }
+          }, 'json');
+        } else {
+          inProgress = false;
+          stopAjaxRequest = false;
+        }
+      };
+      addToCart(dataArr, count);
+    }
+    
   </script>
 </head>
 

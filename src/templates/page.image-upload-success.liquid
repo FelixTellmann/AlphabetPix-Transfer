@@ -9,18 +9,22 @@
     $.get('/cart.js', function (data) {
       let custom_image_id = 0;
       let custom_image_image = '';
-      $.each(data.items, function(i,v) {
-        if (this.properties !== null && this.properties.custom_image.length > 1) {
-          custom_image_id =  this.id;
-          custom_image_image = this.properties.custom_image;
-        }
+      $.each(data.items, function (i, v) {
+        let thisItem = this;
+        $.each(this.properties, function (k, v) {
+          if (k === 'custom_image') {
+            custom_image_id = thisItem.id;
+            custom_image_image = thisItem.properties.custom_image;
+          }
+        });
       });
-      setTimeout(function(e) {
-        $.post('/cart/update.js', "updates[" + custom_image_id + "]=0", function (data) {}, 'json');
+      setTimeout(function (e) {
+        $.post('/cart/update.js', "updates[" + custom_image_id + "]=0", function (data) {
+        }, 'json');
         window.parent.addCustomImage(custom_image_id, custom_image_image);
-        window.parent.updateCart();
+        window.parent.getCart();
         window.location.href = "https://alphabetpix.myshopify.com/pages/image-upload/";
-      },500);
+      }, 500);
     }, 'json');
   })
 </script>
