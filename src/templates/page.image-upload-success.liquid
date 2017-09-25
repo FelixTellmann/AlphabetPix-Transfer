@@ -1,8 +1,26 @@
 {% layout 'cart' %}
 
 <script>
-  
+  /*TODO change to REDIRECT IFRAME FOR ADDITONAL IMAGE UPLOAD IF NEED BE ?*/
+  /* REDIRECT BACK TO image-upload */
   $(function () {
-    window.parent.closeIframe();
+    $('#admin_bar_iframe').remove();
+
+    $.get('/cart.js', function (data) {
+      let custom_image_id = 0;
+      let custom_image_image = '';
+      $.each(data.items, function(i,v) {
+        if (this.properties !== null && this.properties.custom_image.length > 1) {
+          custom_image_id =  this.id;
+          custom_image_image = this.properties.custom_image;
+        }
+      });
+      setTimeout(function(e) {
+        $.post('/cart/update.js', "updates[" + custom_image_id + "]=0", function (data) {}, 'json');
+        window.parent.addCustomImage(custom_image_id, custom_image_image);
+        window.parent.updateCart();
+        window.location.href = "https://alphabetpix.myshopify.com/pages/image-upload/";
+      },500);
+    }, 'json');
   })
 </script>

@@ -1,6 +1,6 @@
 <!doctype html>
 <!--[if IE 9]> <html class="ie9 supports-no-js{% if hide_footer %} site-footer--hidden{% endif %}" lang="{{ shop.locale }}"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html class="supports-no-js {% if hide_footer %} site-footer--hidden{% endif %}" lang="{{ shop.locale }}"> <!--<![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="custom-image__wrapper supports-no-js {% if hide_footer %} site-footer--hidden{% endif %}" lang="{{ shop.locale }}"> <!--<![endif]-->
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1">
@@ -30,10 +30,10 @@
  
 </head>
 
-<body id="{{ page_title | handle }}">
+<body id="{{ page_title | handle }}" class="custom-image__wrapper">
   
   
-  <main class="content-for-layout" id="MainContent" role="main">
+  <main class="content-for-layout custom-image__wrapper" id="MainContent" role="main">
     {{ content_for_layout }}
   </main>
 

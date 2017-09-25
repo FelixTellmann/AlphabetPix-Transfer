@@ -41,6 +41,7 @@ theme.Create = (function () {
     let modal = $("#create__modal");
     let modalContainer = $("#create__modal .modal__body");
     let modalLink = $(".modal__link");
+    window.customImages = [];
     window.onTimeout = [];
 
 
@@ -53,6 +54,14 @@ theme.Create = (function () {
       });
     });
 
+    /* CUSTOM IMAGE - ADD TO PRELOAD CONTAINER & ADD TO CURRENT MODAL*/ /* TODO ALSO MAKE IMAGE AVAILABLE IN EACH MODAL */
+    window.addCustomImage = function(id, img) {
+      let letter = $('.modal__body').attr('data-letter-class');
+      let letterPosition = $('.modal__body').attr('data-letter-position');
+      preloadContainer.append('<img data-letter-class="' + letter + '" data-variant-id="' + id + '" data-theme-style="all" id="custom_image-' + letter + '" class="' + letter + '" src="' + img + '">');
+      updateModal(letterPosition, letter, blockTheme[0]);
+    };
+
     /* CREATE Data FOR EACH BLOCK*/
     $(".create__block[data-section-id='" + sectionId + "'").each(function (i) {
       blockIds[i] = $(this).attr('data-block-id');
@@ -64,25 +73,30 @@ theme.Create = (function () {
       onTimeout[i] = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
     });
 
+    /* LOAD IMAGES INTO MODAL CONTAINER*/
+    let updateModal = function (letterPosition, letter, theme) {
+      let preloadedImgArr = $('[id^="' + letter + '-"][data-theme-style^="' + theme + '"], [id^="' + letter + '-"][data-theme-style^="all"]');
+      if (!preloadedImgArr.get(0)) {
+        preloadedImgArr = $('[id^="' + letter + '-"]');
+      }
+      let customImgArr = $('[id^="custom_image-"]');
+      modalContainer.empty().attr('data-letter-position', letterPosition).attr('data-letter-class', letter);
+      $.each(preloadedImgArr, function (i, v) {
+        modalContainer.append('<a class="modal__link" href="#" data-selector-id="' + $(this).attr('id') + '" data-letter-position="' + letterPosition + '" data-letter-id="' + $(this).attr('data-letter-id') + '">' + $(this).clone(false).removeAttr('id').wrap("<div />").parent().html() + '</a>');
+      });
+      $.each(customImgArr, function () {
+        modalContainer.prepend('<a class="modal__link" href="#" data-selector-id="' + $(this).attr('id') + '" data-letter-position="' + letterPosition + '" data-letter-id="' + $(this).attr('data-letter-id') + '">' + $(this).clone(false).removeAttr('id').wrap("<div />").parent().html() + '</a>');
+      });
+    };
+
     /* on IMG CLICk - open Modal to select letter images*/
     blockImgLinks[0].on('click', function (e) {
       e.preventDefault();
       let letter = $(this).children('img').attr('data-letter-class');
       let letterPosition = $(this).attr('data-letter-position');
-      let preloadedImgArr = $('[id^="' + letter + '-"][data-theme-style^="' + blockTheme[0] + '"]');
-      if (!preloadedImgArr.get(0)) {
-        preloadedImgArr = $('[id^="' + letter + '-"]');
-      }
-
-      /* LOAD IMAGES INTO MODAL CONTAINER*/
-      modalContainer.empty();
-      $.each(preloadedImgArr, function (i, v) {
-        modalContainer.append('<a class="modal__link" href="#" data-selector-id="' + $(this).attr('id') + '" data-letter-position="' + letterPosition + '" data-letter-id="' + $(this).attr('data-letter-id') + '">' + $(this).clone(false).removeAttr('id').wrap("<div />").parent().html() + '</a>');
-      });
-
+      updateModal(letterPosition, letter, blockTheme[0]);
       /* OPEN MODAL */
       modal.modal('toggle');
-
       /* on IMG in MODAL CLICK - Select image and add to image wrapper at right position */
       modalLink = $(".modal__link");
       modalLink.on('click', function (e) {
@@ -91,8 +105,11 @@ theme.Create = (function () {
         let letterPosition = $(this).attr('data-letter-position');
         replaceCharacter(letterPosition, selectorId, true);
         modal.modal('toggle');
+        modalContainer.empty().removeAttr('data-letter-position').removeAttr('data-letter-class');
       });
     });
+
+
     /*TODO add spacing options for mobile etc screen sizes using vw */
     let resizeFrame = function(blockId, length, spacing) {
       $('.data__frame[data-block-id="' + blockId+'"]').attr('disabled','disabled');

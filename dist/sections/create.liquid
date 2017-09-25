@@ -12,33 +12,8 @@
   </style>
 {% endif %}
 
-{% comment %}{#DATA DUMP#}{% endcomment %}
-<script>
-  window.products = {{ collections['letters'].products | json }};
-  window.cart = {{ cart | json }};
-  window.cart_backup = {{ cart | json }};
- 
-  
-</script>
 
-<script>
-  window.closeIframe = function(e)  {
-    $('.line-item-property__field').remove();
-    window.custom_iamge_cart_before = cart;
-    $.get('/cart.js', function (data) {
-      window.custom_image_cart = data;
-      $("#create__modal").modal('toggle');
-      console.log(data)
-    }, 'json');
-    setTimeout(function(e) {
-      $.post('/cart/update.js', "updates[{{ all_products['custom-image'].variants[0].id }}]=0", function (data) {
-        $.get('/cart.js', function (data) {
-          console.log(data)
-        }, 'json')
-      }, 'json');
-    },500);
-  }
-</script>
+{{ '1e1cdf06c3bae9413b7e2b78c9d8b0be.jpg' | uploads_img_url: '300x' }}
 
 <div data-section-id="{{ section.id }}" data-section-type="create-section">
   <div id="Slideshow-{{ section.id }}" class="slideshow">
@@ -173,7 +148,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Select your Photo</h5>
-        <iframe class="line-item-property__field" src="/pages/image-upload/">
+        <iframe frameborder="0" scrolling="no" id="create__product-data__custom-image" class="modal__image-upload" src="/pages/image-upload/">
         </iframe>
         
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">

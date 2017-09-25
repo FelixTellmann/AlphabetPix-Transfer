@@ -2,15 +2,50 @@
 
 
 <script>
-  $(function() {
+  $(function () {
     $('#admin_bar_iframe').remove();
+    
+    $("#custom-image__properties").on('change',function (e) {
+      
+  
+      setTimeout(function() {
+        $('.custom-image__label').remove();
+        $('.upload-progress').removeClass('visually-hidden');
+      }, 100);
+
+      let bar = $('.upload-progress__bar');
+      let percent = $('.upload-progress__percent');
+      let percentVal = 0;
+
+
+      function addPercent() {
+        bar.width(percentVal + '%');
+        percent.html(percentVal + '%');
+        if (percentVal++ < 100) {
+          setTimeout(addPercent, 80);
+        }
+      }
+      addPercent();
+      $('#custom-image__form').submit();
+    })
   });
+ 
+  
+  
 </script>
-<form action="/cart/add" enctype="multipart/form-data" method="post">
-  <div class="create__product-data"> <!-- TODO Add visually-hidden after development  -->
-    <input id="custom-image__input" class="visually-hidden" type="text" name="id" value="{{ all_products['custom-image'].variants[0].id }}">
-    <input id="custom-image__properties" type="file" name="properties[Your name]">
+<div class="custom-image"> <!-- TODO Add visually-hidden after development  -->
+  <form id="custom-image__form" action="/cart/add" enctype="multipart/form-data" method="post" class="custom-image__form">
+    <div class="upload-progress visually-hidden">
+      <div class="upload-progress__bar"></div>
+      <div class="upload-progress__percent">0%</div>
+    </div>
+    <label for="custom-image__properties" class="custom-image__label">
+      {% include 'icon-upload' %}
+      <span>Upload your own Image</span>
+    </label>
+    <input id="custom-image__input"  type="hidden" name="id" value="{{ all_products['custom-image'].variants[0].id }}">
+    <input id="custom-image__properties" class="visually-hidden" type="file" accept="image/*" name="properties[custom_image]">
     <input type="hidden" name="return_to" value="pages/image-upload-success"/>
-    <button id="custom-image__submit" type="submit" name="add">Submit</button>
-  </div>
-</form>
+    <button class="visually-hidden" id="custom-image__submit" type="submit" name="add">Submit</button>
+  </form>
+</div>
