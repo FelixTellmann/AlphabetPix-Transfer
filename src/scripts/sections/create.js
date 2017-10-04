@@ -82,7 +82,7 @@ theme.Create = (function () {
     $.each(products, function (i, v) {
       let product_this = this;
       $.each(this.variants, function (i, v) {
-        preloadContainer.append('<img data-letter-class="' + product_this.title + '" data-variant-id="' + this.id + '" data-letter-id="' + product_this.title + "-" + i + '" data-theme-style="' + this.title.replace(/[\d\s\/]/g, "") + '" id="' + product_this.title + "-" + i + '" class="' + product_this.title + '" src="' + this.featured_image.src + '" alt="' + product_this.title + '">')
+        preloadContainer.append('<img data-letter-class="' + product_this.title + '" data-variant-id="' + this.id + '" data-variant-sku="' + this.sku + '" data-letter-id="' + product_this.title + "-" + i + '" data-theme-style="' + this.title.replace(/[\d\s\/]/g, "") + '" id="' + product_this.title + "-" + i + '" class="' + product_this.title + '" src="' + this.featured_image.src + '" alt="' + product_this.title + '">')
       });
     });
 
@@ -95,7 +95,7 @@ theme.Create = (function () {
     window.addCustomImage = function (id, img) {
       let letter = $('.modal__body').attr('data-letter-class');
       let letterPosition = $('.modal__body').attr('data-letter-position');
-      preloadContainer.append('<img data-letter-class="' + letter + '" data-variant-id="' + id + '" data-theme-style="all" id="' + letter + '--custom-letter--' + customImageCount + '" class="' + letter + '" src="' + img + '" data-letter-id="' + letter + '--custom-letter--' + customImageCount + '" data-custom-letter="true">');
+      preloadContainer.append('<img data-letter-class="' + letter + '" data-variant-id="' + id + '" data-theme-style="all" id="' + letter + '--custom-letter--' + customImageCount + '" class="' + letter + '" src="' + img + '" data-letter-id="' + letter + '--custom-letter--' + customImageCount + '" data-custom-letter="true" data-variant-sku="' + letter + '--custom-letter--' + customImageCount + '">');
       updateModal(letterPosition, letter, blockTheme[0]);
     };
 
@@ -211,7 +211,7 @@ theme.Create = (function () {
       }
 
       let dataLetterContainer = $("#data__letter--" + blockIds[0] + "--" + (i));
-      dataLetterContainer.removeAttr('disabled').attr('value', preloadedImg.attr('data-variant-id'));
+      dataLetterContainer.removeAttr('disabled').attr('value', preloadedImg.attr('data-variant-sku')); /* preloadedImg.attr('data-letter-class') + '||' + preloadedImg.attr('data-variant-id') + '||' +  */
 
       if (i === onTimeout[0][i]) {
         return true;
@@ -229,6 +229,7 @@ theme.Create = (function () {
         }
       }
     };
+
 
     let updateCart = function () {
       cartData = [];
@@ -275,9 +276,9 @@ theme.Create = (function () {
       resizeFrame(blockIds[0], characterArray.length, 0);
 
       /*Update Cart with Current Cart items & prototype frame*/
-      if (characterArray.length > 2) {
+      /*if (characterArray.length > 2) {
         updateCart();
-      }
+      }*/
     });
 
 
@@ -386,7 +387,7 @@ theme.Create = (function () {
       });
     };
 
-    loadFrame();
+    /*loadFrame();*/
 
 
   }

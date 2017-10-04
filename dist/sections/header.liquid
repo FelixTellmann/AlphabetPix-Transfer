@@ -104,7 +104,7 @@
             <span class="">{{ 'general.header.view_cart' | t }}</span>
           </a>
           <a href="/cart" class="grid__content nav__link nav__link--bubble ajax-cart__toggle" aria-expanded="false">
-            <span class="cart__count site-header__cart-bubble{% if cart.item_count > 0 %} site-header__cart-bubble--visible{% endif %}">1</span>
+            <span class="cart__count site-header__cart-bubble{% if cart.item_count > 0 %} site-header__cart-bubble--visible{% endif %}">{{ cart.item_count }}</span>
           </a>
           <div class="grid__content nav__link nav__link--burger site-header__section site-header__section--button nav--mobile">
             <button class="site-header__navigation btn btn--clear btn--square" aria-expanded="false" role="navigation">

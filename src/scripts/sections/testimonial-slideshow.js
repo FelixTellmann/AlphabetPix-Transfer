@@ -94,7 +94,7 @@ theme.TestimonialSlider = (function () {
             slidesToShow: 5
           }
         }, {
-          breakpoint: 1440,
+          breakpoint: 1441,
           settings: {
             slidesToShow: 3
           }

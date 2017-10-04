@@ -95,8 +95,9 @@
     window.inProgress = false;
 
     window.getCart = function(e)  {
-      $.get('/cart.js', function (data) {
-        window.cart = data;
+      $.get('/cart.js', function (response) {
+        window.cart = response;
+        updateCount(response);
       }, 'json');
     };
 
@@ -104,6 +105,16 @@
       $.post('/cart/add.js', data, function (e) {
         $.get('/cart.js', function (response) {
           window.cart = response;
+          updateCount(response);
+        }, 'json');
+      }, 'json');
+    };
+    
+    window.updateCart = function (data) {
+      $.post('/cart/update.js', data, function (e) {
+        $.get('/cart.js', function (response) {
+          window.cart = response;
+          updateCount(response);
         }, 'json');
       }, 'json');
     };
@@ -113,12 +124,12 @@
       $.post('/cart/clear.js', data, function (e) {
         $.get('/cart.js', function (response) {
           window.cart = response;
+          updateCount(response);
         }, 'json');
       }, 'json');
     };
     
     window.addToCartMultiple = function (dataArr) {
-
       let count = 0;
       let addToCart = function (array, i) {
         if (stopAjaxRequest === false) {
@@ -130,6 +141,7 @@
               $.get('/cart.js', function (response) {
                 window.cart = response;
                 inProgress = false;
+                updateCount(response);
               }, 'json');
             }
           }, 'json');
@@ -139,7 +151,47 @@
         }
       };
       addToCart(dataArr, count);
-    }
+    };
+    
+    window.updateCartMultiple = function (dataArr) {
+      let count = 0;
+      let updateCart = function (array, i) {
+        if (stopAjaxRequest === false) {
+          $.post('/cart/update.js', array[i], function (response) {
+            i++;
+            if (i < array.length) {
+              updateCart(array, i)
+            } else {
+              $.get('/cart.js', function (response) {
+                window.cart = response;
+                updateCount(response);
+                inProgress = false;
+              }, 'json');
+            }
+          }, 'json');
+        } else {
+          inProgress = false;
+          stopAjaxRequest = false;
+        }
+      };
+      updateCart(dataArr, count);
+    };
+
+    window.updateCount = function (cart) {
+      let totalCount = 0;
+      $.each(cart.items,function (i) {
+        totalCount += this.quantity;
+      });
+      $('span.cart__count').empty().append(totalCount)
+    };
+    
+    $(function() {
+      $('input[id^="quantity_').on('change', function() {
+        setTimeout(function() {
+          getCart();
+        },1500);
+      })
+    })
     
   </script>
 </head>

@@ -5,6 +5,7 @@
   /* REDIRECT BACK TO image-upload */
   $(function () {
     $('#admin_bar_iframe').remove();
+    $('html').css('padding-top','0');
 
     $.get('/cart.js', function (data) {
       let custom_image_id = 0;

@@ -27,19 +27,15 @@
   <form action="/cart" method="post" novalidate class="cart__form">
     <table class="cart__table">
       <thead class="cart__table-header border-bottom">
-        <th class="text-left" colspan="2">{{ 'cart.label.product' | t }}</th>
-        <th class="text-center">{{ 'cart.label.price' | t }}</th>
-        <th class="text-center">{{ 'cart.label.quantity' | t }}</th>
-        <th class="text-right">{{ 'cart.label.total' | t }}</th>
+        <tr>
+          <th class="text-left">{{ 'cart.label.product' | t }}</th>
+          <th class="text-center">{{ 'cart.label.price' | t }}</th>
+          <th class="text-center">{{ 'cart.label.quantity' | t }}</th>
+          <th class="text-right">{{ 'cart.label.total' | t }}</th>
+        </tr>
       </thead>
-
+    
       <tbody data-cart-item-list>
-
-        {% comment %}
-        If the cart has no items, then include a item element with a template class
-        so that it is hidden but still available for use client-side by ajax-cart.js
-        {% endcomment %}
-
         {%- assign cartItems = 'template ' | split: ' ' -%}
         {% if cart.items.size > 0 %}
           {%- assign cartItems = cart.items -%}
@@ -47,7 +43,76 @@
 
         {% for item in cartItems %}
           <tr class="cart-item{% if item == 'template' %} ajax-cart__template{% endif %}" data-cart-item data-cart-item-id="{{ item.key }}">
-            <td class="cart-item__image-wrapper">
+            <td style="max-width: 810px;"> <!-- ================ CAN CHANGE CLASS ADD FRAME HERE ================ -->
+              
+              
+              {% assign product = item.product %}
+              
+              {% for image in product.images %}
+                {% if image.src contains 'left' %}
+                  {% assign frame_left = image.src  %}
+                {% elsif image.src contains 'center' %}
+                  {% assign frame_center = image.src  %}
+                {% elsif image.src contains 'right' %}
+                  {% assign frame_right = image.src  %}
+                {% endif %}
+              {% endfor %}
+              
+              {% assign number_of_letters = 0 %}
+              {% for p in item.properties %}
+                {% if p.first contains 'Letter' %}
+                  {% assign number_of_letters = number_of_letters | plus: 1 %}
+                {% endif %}
+              {% endfor %}
+  
+              
+              
+              <script>
+                /*$(function () {
+                  setTimeout(function () {
+                    domtoimage.toJpeg($('.cart-item__frame[data-item-id="{{ item.id }}"]')[0], {quality: 0.95})
+                      .then(function (dataUrl) {
+                        let img = new Image();
+                        img.src = dataUrl;
+                        $('.cart-item__frame[data-item-id="{{ item.id }}"]').empty().append(img)
+                      })
+                      .catch(function (error) {
+                        console.error('oops, something went wrong!', error);
+                      });
+                  }, 2800); /!* Timer might need to be adjusted for image load to be completed *!/
+                })*/
+              </script>
+  
+              <style>
+                .cart-item__frame--center[data-item-id="{{ item.id }}"] {
+                  width: calc(3.2vw + (7.6vw * {{ number_of_letters }}));
+                  max-width: calc(38.4px + (91.2px * {{ number_of_letters }}));
+                }
+              </style>
+  
+              <figure class="cart-item__frame" data-item-id="{{ item.id }}">
+                <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="cart-item__frame--left" data-item-id="{{ item.id }}">
+                <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="cart-item__frame--center" data-item-id="{{ item.id }}">
+                <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="cart-item__frame--right" data-item-id="{{ item.id }}">
+                <figure class="cart-item__letters">
+                  {% for p in item.properties %}
+                    {% if p.first contains 'Letter' %}
+                      {% assign value = p.last | split: '-' %}
+                      {% if value[0] contains '_' %}
+                        {% capture productHandle %}letter-symbol-{{ value[0] | replace: '_' }}{% endcapture %}
+                      {% else %}
+                        {% capture productHandle %}letter-{{ value[0] }}{% endcapture %}
+                      {% endif %}
+                      {% assign product = all_products[productHandle] %}
+                      {% for variant in product.variants %}{% if variant.sku == p.last %}<img class="cart-item__letter-img" data-letter-class=" {{ productVariant[0] }}" data-variant-id="{{ variantId }}" src="{{ variant.image.src | product_img_url: '300x' }}" alt="">{% endif %}{% endfor %}
+                    {% endif %}
+                  {% endfor %}
+                </figure>
+              </figure>
+              
+            </td>
+          <!-- ================ USE THE BELOW INFO TO ADD IMPORTANT INFO TO THE FRAME FOR CHANGES i.e. Remove item etc. ================ -->
+            {% comment %}{#<td class="cart-item__meta small--text-left">
               {% assign itemImage = true %}
               {% if item.image == blank and item.product.featured_image == blank %}
                 {% assign itemImage = false %}
@@ -55,9 +120,7 @@
               <a class="cart-item__image-link" href="{{ item.url | within: collections.all }}" style="background-image: {% if itemImage %}url('{{ item | img_url: 'medium' }}'){% else %}none{% endif %};" data-cart-item-background-image data-cart-item-href>
                 <img class="cart-item__image lazyload {% unless itemImage %}hide{% endunless %}" src="{{ item | img_url: 'medium' }}" alt="{{ item.title | escape }}" data-cart-item-image>
               </a>
-            </td>
-
-            <td class="cart-item__meta small--text-left">
+              
               <a class="cart-item__meta-title h4" href="{{ item.url }}" data-cart-item-href data-cart-item-title>{{ item.product.title }}</a>
 
               <p class="cart-item__meta-variant" data-cart-item-variant-title>
@@ -65,20 +128,7 @@
                   {{ item.variant.title }}
                 {% endunless %}
               </p>
-
-              {% comment %}
-              Optional, loop through custom product line items if available
-
-              Line item properties come in as having two parts. The first part will be passed with the default form,
-              but p.last is the actual custom property and may be blank. If it is, don't show it.
-
-              For more info on line item properties, visit:
-              - http://docs.shopify.com/support/your-store/products/how-do-I-collect-additional-information-on-the-product-page-Like-for-a-monogram-engraving-or-customization
-
-              If the item has no properties, then include a property element with a template class
-              so that it is hidden but still available for use client-side by ajax-cart.js
-              {% endcomment %}
-
+              
               {%- assign itemProperties = 'template ' | split: ' ' -%}
               {%- assign property_size = item.properties | size -%}
 
@@ -129,7 +179,7 @@
               </p>
 
               <p class="cart-item__message" data-item-message></p>
-            </td>
+            </td>#}{% endcomment %}
 
             <td class="cart-item__price-wrapper small--hide">
               <p>
@@ -186,6 +236,17 @@
     </footer>
   </form>
 </div>
+
+
+<script>
+  
+  $(function() {
+    getCart();
+  });
+
+</script>
+
+
 
 {% comment %}{#<!--@formatter:off-->#}{% endcomment %}
 {% schema %}
