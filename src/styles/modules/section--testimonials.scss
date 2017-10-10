@@ -134,3 +134,35 @@
   padding: 50px;
   height: auto;
 }
+
+.slider__button {
+  position: absolute;
+  top: 50%;
+  font-size: 0;
+  color: #fff;
+  z-index: 1011;
+  background: transparent;
+  border: none;
+  transition: 0.3s all;
+  
+  svg {
+    width: 30px;
+    height:30px;
+    fill: currentColor;
+  }
+  @include max-size(sm) {
+    display: none;
+  }
+  @include hover {
+    transform: scale(1.6);
+    opacity: 0.8;
+  }
+}
+
+.slider__prevArrow {
+  left: calc((100% - 370px * 5) / 2);
+}
+
+.slider__nextArrow {
+  right: calc((100% - 370px * 5) / 2);
+}

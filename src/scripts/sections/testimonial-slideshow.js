@@ -35,7 +35,10 @@ theme.TestimonialSlider = (function () {
     var sectionId = this.$container.attr('data-section-id');
 
     var TestimonialSelectors = {
-      sliderContainer: $('.slider[data-section-id="' + sectionId + '"')
+      sliderContainer: $('.slider[data-section-id="' + sectionId + '"'),
+      id: sectionId,
+      sliderAutoplay: $('.slider[data-section-id="' + sectionId + '"]').attr('data-autoplay'),
+      sliderAutoplaySpeed: $('.slider[data-section-id="' + sectionId + '"]').attr('data-speed')
     };
 
 
@@ -78,34 +81,68 @@ theme.TestimonialSlider = (function () {
   TestimonialSlider.prototype = $.extend({}, TestimonialSlider.prototype, {
 
     initTestimonialSlider: function (sliderContainer) {
-      sliderContainer.sliderContainer.slick({
-        dots: false,
-        slidesToShow: 5,
-        centerMode: true,
-        swipeToSlide: true,
-        centerPadding: '0px',
-        speed: 500,
-        prevArrow: false,
-        infinite: true,
-        nextArrow: false,
-        responsive: [{
-          breakpoint: 2048,
-          settings: {
-            slidesToShow: 5
+      if (sliderContainer.sliderAutoplay == 'true') {
+        sliderContainer.sliderContainer.slick({
+          dots: false,
+          slidesToShow: 5,
+          centerMode: true,
+          swipeToSlide: true,
+          centerPadding: '0px',
+          autoplay: true,
+          autoplaySpeed: sliderContainer.sliderAutoplaySpeed,
+          speed: 500,
+          prevArrow: $('.slider__button.slider__prevArrow[data-section-id="' + sliderContainer.id + '"]'),
+          infinite: true,
+          nextArrow: $('.slider__button.slider__nextArrow[data-section-id="' + sliderContainer.id + '"]'),
+          responsive: [{
+            breakpoint: 2048,
+            settings: {
+              slidesToShow: 5
+            }
+          }, {
+            breakpoint: 1441,
+            settings: {
+              slidesToShow: 3
+            }
+          }, {
+            breakpoint: 800,
+            settings: {
+              slidesToShow: 1
+            }
           }
-        }, {
-          breakpoint: 1441,
-          settings: {
-            slidesToShow: 3
+          ]
+        });
+      } else {
+        sliderContainer.sliderContainer.slick({
+          dots: false,
+          slidesToShow: 5,
+          centerMode: true,
+          swipeToSlide: true,
+          centerPadding: '0px',
+          pauseOnHover: false,
+          speed: 500,
+          prevArrow: $('.slider__button.slider__prevArrow[data-section-id="' + sliderContainer.id + '"]'),
+          infinite: true,
+          nextArrow: $('.slider__button.slider__nextArrow[data-section-id="' + sliderContainer.id + '"]'),
+          responsive: [{
+            breakpoint: 2048,
+            settings: {
+              slidesToShow: 5
+            }
+          }, {
+            breakpoint: 1441,
+            settings: {
+              slidesToShow: 3
+            }
+          }, {
+            breakpoint: 800,
+            settings: {
+              slidesToShow: 1
+            }
           }
-        }, {
-          breakpoint: 800,
-          settings: {
-            slidesToShow: 1
-          }
-        }
-        ]
-      });
+          ]
+        });
+      }
     },
 
 

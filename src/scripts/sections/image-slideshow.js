@@ -35,9 +35,10 @@ theme.Slider = (function () {
     var sectionId = this.$container.attr('data-section-id');
 
     var portfolioSelectors = {
-      sliderContainer: $('.slider[data-section-id="' + sectionId + '"'),
-      sliderAutoplay: $('.slider[data-section-id="' + sectionId + '"').attr('data-autoplay'),
-      sliderAutoplaySpeed: $('.slider[data-section-id="' + sectionId + '"').attr('data-speed')
+      sliderContainer: $('.slider[data-section-id="' + sectionId + '"]'),
+      sliderAutoplay: $('.slider[data-section-id="' + sectionId + '"]').attr('data-autoplay'),
+      sliderAutoplaySpeed: $('.slider[data-section-id="' + sectionId + '"]').attr('data-speed'),
+      sliderFrames: $('.slider__frame[data-section-id="' + sectionId + '"]')
     };
 
 
@@ -51,16 +52,44 @@ theme.Slider = (function () {
 
     initSlider: function (sliderContainer) {
 
+
+      if (sliderContainer.sliderAutoplay == 'true') {
         sliderContainer.sliderContainer.slick({
           dots: true,
           infinite: true,
           speed: 500,
           prevArrow: false,
           nextArrow: false,
-          autoplay: sliderContainer.sliderAutoplay,
-          autoplaySpeed: sliderContainer.sliderAutoplaySpeed
+          autoplay: true,
+          autoplaySpeed: sliderContainer.sliderAutoplaySpeed,
+          pauseOnHover: false
         });
+      } else {
+        sliderContainer.sliderContainer.slick({
+          dots: true,
+          infinite: true,
+          speed: 500,
+          prevArrow: false,
+          nextArrow: false
+        });
+      }
+
+      $.each(sliderContainer.sliderFrames, function(i,v) {
+        if (i > 0) {
+          $(this).attr('style','display: none;')
+        }
+      });
+
+      sliderContainer.sliderContainer.on('beforeChange', function(event, slick, currentSlide, nextSlide){
+
+        setTimeout(function() {
+          $(sliderContainer.sliderFrames[currentSlide]).removeClass('animated').attr('style','display: none;');
+        }, 200);
+        $(sliderContainer.sliderFrames[nextSlide]).addClass('animated').attr('style', '');
+      });
+
     },
+
 
 
     onBlockSelect: function (evt) {

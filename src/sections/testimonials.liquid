@@ -50,6 +50,12 @@
             </div>
           {% endfor %}
         </div>
+        <button class="slider__button slider__prevArrow" data-section-id="{{ section.id }}">
+          {% include 'icon-arrow-left' %}
+        </button>
+        <button class="slider__button slider__nextArrow"  data-section-id="{{ section.id }}">
+          {% include 'icon-arrow-right' %}
+        </button>
       </div>
     {% endif %}
   </div>

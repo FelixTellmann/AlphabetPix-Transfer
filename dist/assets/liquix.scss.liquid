@@ -1732,9 +1732,12 @@ input[type='text'].create__input {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  transform: rotateY(180deg);
-  backface-visibility: hidden;
-  transform-origin: 50% 50%;
+  -webkit-transform: rotateY(180deg);
+          transform: rotateY(180deg);
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  -webkit-transform-origin: 50% 50%;
+          transform-origin: 50% 50%;
   -webkit-transition-property: transform;
   -webkit-transition-property: -webkit-transform;
   transition-property: -webkit-transform;
@@ -1747,7 +1750,8 @@ input[type='text'].create__input {
 }
 
 .sweepToBottom:hover:before, .sweepToBottom:focus:before, .sweepToBottom:active:before {
-  transform: rotateY(360deg);
+  -webkit-transform: rotateY(360deg);
+          transform: rotateY(360deg);
 }
 /*============================================================================
   #Section - Testimonials
@@ -1884,6 +1888,38 @@ input[type='text'].create__input {
   margin: 0 auto;
   padding: 50px;
   height: auto;
+}
+
+.slider__button {
+  position: absolute;
+  top: 50%;
+  font-size: 0;
+  color: #fff;
+  z-index: 1011;
+  background: transparent;
+  border: none;
+  transition: 0.3s all;
+  
+  svg {
+    width: 30px;
+    height:30px;
+    fill: currentColor;
+  }
+  @include max-size(sm) {
+    display: none;
+  }
+  @include hover {
+    transform: scale(1.6);
+    opacity: 0.8;
+  }
+}
+
+.slider__prevArrow {
+  left: calc((100% - 370px * 5) / 2);
+}
+
+.slider__nextArrow {
+  right: calc((100% - 370px * 5) / 2);
 }
 /*============================================================================
   #Section - Testimonials
