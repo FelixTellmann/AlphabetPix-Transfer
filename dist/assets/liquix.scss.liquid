@@ -1305,8 +1305,10 @@ input[type='text'].create__input {
 .slider__image-wrapper {
   overflow: hidden;
   margin: 0;
-  width: 100%;
+  /*width: 100%;*/
   height: 100%;
+  display: inline-block;
+  position: relative;
 }
 
 .slider__image {
@@ -1319,6 +1321,14 @@ input[type='text'].create__input {
   display: block;
 }
 
+.slider__image.slider__image--frame {
+  max-height: none;
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+}
+
 .slider__image--frame {
   -webkit-box-shadow: 10px 10px 20px rgba(0,0,0,0.6);
           box-shadow: 10px 10px 20px rgba(0,0,0,0.6);
@@ -1327,16 +1337,16 @@ input[type='text'].create__input {
 .slider__frame {
   position: absolute;
   z-index: 30;
-  width: 600px;
-  max-width: 60%;
+  width: auto;
+  max-width: 100%;
   height: auto;
   max-height: 100%;
-  bottom: 60px;
   margin: 0;
-  padding: 15px;
-  left: calc((100vw - 1100px) / 2);
+  /*bottom: 60px;*/
+  /*padding: 15px;*/
+  /*left: calc((100vw - 1100px) / 2);*/
   
-  @include max-size(lg) {
+/*  @include max-size(lg) {
     bottom: 20px;
     left: 60px;
   }
@@ -1345,7 +1355,7 @@ input[type='text'].create__input {
     left: 0;
     max-width: 70%;
   }
-  
+  */
 }
 
 .slick-dots {
@@ -1722,10 +1732,9 @@ input[type='text'].create__input {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-transform: scaleY(0);
-  transform: scaleY(0);
-  -webkit-transform-origin: 50% 0;
-  transform-origin: 50% 0;
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+  transform-origin: 50% 50%;
   -webkit-transition-property: transform;
   -webkit-transition-property: -webkit-transform;
   transition-property: -webkit-transform;
@@ -1738,8 +1747,7 @@ input[type='text'].create__input {
 }
 
 .sweepToBottom:hover:before, .sweepToBottom:focus:before, .sweepToBottom:active:before {
-  -webkit-transform: scaleY(1);
-  transform: scaleY(1);
+  transform: rotateY(360deg);
 }
 /*============================================================================
   #Section - Testimonials
@@ -2490,6 +2498,7 @@ input[type='text'].create__input {
 
 .slick-initialized .slick-slide {
   display: block !important;
+  text-align: center;
 }
 
 .slick-loading .slick-slide {

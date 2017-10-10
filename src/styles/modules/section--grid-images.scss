@@ -165,10 +165,9 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-transform: scaleY(0);
-  transform: scaleY(0);
-  -webkit-transform-origin: 50% 0;
-  transform-origin: 50% 0;
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+  transform-origin: 50% 50%;
   -webkit-transition-property: transform;
   -webkit-transition-property: -webkit-transform;
   transition-property: -webkit-transform;
@@ -181,6 +180,5 @@
 }
 
 .sweepToBottom:hover:before, .sweepToBottom:focus:before, .sweepToBottom:active:before {
-  -webkit-transform: scaleY(1);
-  transform: scaleY(1);
+  transform: rotateY(360deg);
 }

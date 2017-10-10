@@ -67,7 +67,8 @@
                 }
               }
               {% endif %}
-    
+              
+              
             </style>
   
             <div class="grid-images__item--{{ block.id }} {% if block.settings.grid_responsive %}grid__item--{{ block.settings.grid_mobile }}{% endif %} grid__item--{{ block.settings.grid }}--md grid__item--{% if block.settings.grid == '6' or block.settings.grid == '12' or block.settings.grid == '9' or block.settings.grid == '8' %}12{% else %}{{ block.settings.grid | times: 2 }}{% endif %}--sm"
@@ -110,6 +111,12 @@
                   }
     
                   {% endif %}
+
+                  {% if block.settings.text_custom_css != blank %}
+                  .grid-images__text--{{ block.id }} {
+                    {{ block.settings.text_custom_css }}
+                  }
+                  {% endif %}
                 </style>
                 <div class="grid-images__content text-center grid-images__text--{{ block.id }} grid__item--{{ block.settings.text_position }} grid__col justify--center align--center {% if block.settings.animation_class != blank %}{{ block.settings.animation_class  }}{% endif %}">
                   {% if block.settings.icon_small != 'none' and block.settings.icon_position == 'top' %}
@@ -131,6 +138,14 @@
                 </div>
               </div>
             </div>
+          {% endif %}
+          {% if block.type == "custom" %}
+            {% if block.settings.position == 'left' %}
+              <style>
+                {{ block.settings.custom_css }}
+              </style>
+              {{ block.settings.custom_element }}
+            {% endif %}
           {% endif %}
         {% endfor %}
       </div>
@@ -262,6 +277,14 @@
                 </div>
               </div>
             </div>
+          {% endif %}
+          {% if block.type == "custom" %}
+            {% if block.settings.position == 'right' %}
+              <style>
+                {{ block.settings.custom_css }}
+              </style>
+              {{ block.settings.custom_element }}
+            {% endif %}
           {% endif %}
         {% endfor %}
       </div>
@@ -582,6 +605,11 @@
           ]
         },
         {
+          "type": "textarea",
+          "id": "text_custom_css",
+          "label": "Custom Text Css"
+        },
+        {
           "type": "checkbox",
           "id": "text_shadow",
           "label": "Use Text Shadow",
@@ -644,6 +672,38 @@
           "id": "animation_text_color",
           "label": "Animation Text Color",
           "default": "#ffffff"
+        }
+      ]
+    },
+    {
+      "type": "custom",
+      "name": "Custom Overlay",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "custom_element",
+          "label": "Custom Element"
+        },
+        {
+          "type": "textarea",
+          "id": "custom_css",
+          "label": "Custom CSS"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Grid Item Position",
+          "default": "left",
+          "options": [
+            {
+              "label": "Left",
+              "value": "left"
+            },
+            {
+              "label": "Right",
+              "value": "right"
+            }
+          ]
         }
       ]
     }

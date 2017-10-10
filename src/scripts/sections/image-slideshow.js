@@ -35,8 +35,11 @@ theme.Slider = (function () {
     var sectionId = this.$container.attr('data-section-id');
 
     var portfolioSelectors = {
-      sliderContainer: $('.slider[data-section-id="' + sectionId + '"')
+      sliderContainer: $('.slider[data-section-id="' + sectionId + '"'),
+      sliderAutoplay: $('.slider[data-section-id="' + sectionId + '"').attr('data-autoplay'),
+      sliderAutoplaySpeed: $('.slider[data-section-id="' + sectionId + '"').attr('data-speed')
     };
+
 
 
 
@@ -47,13 +50,16 @@ theme.Slider = (function () {
   Slider.prototype = $.extend({}, Slider.prototype, {
 
     initSlider: function (sliderContainer) {
-      sliderContainer.sliderContainer.slick({
-        dots: true,
-        infinite: true,
-        speed: 500,
-        prevArrow: false,
-        nextArrow: false
-      });
+
+        sliderContainer.sliderContainer.slick({
+          dots: true,
+          infinite: true,
+          speed: 500,
+          prevArrow: false,
+          nextArrow: false,
+          autoplay: sliderContainer.sliderAutoplay,
+          autoplaySpeed: sliderContainer.sliderAutoplaySpeed
+        });
     },
 
 

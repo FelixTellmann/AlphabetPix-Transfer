@@ -16,18 +16,24 @@
                    data-sizes="auto"
                    data-parent-fit="cover"
                    alt="{{ block.settings.image.alt | escape }}">
+              <figure class="slider__frame {% if block.settings.scroll_animation != blank %}{{ block.settings.scroll_animation }}{% endif %}" data-block-id="{{ block.id }}" >
+                <style>
+                  .slider__frame[data-block-id="{{ block.id }}"] {
+                  {{ block.settings.css }}
+                  }
+                </style>
+                <img class="slider__image slider__image--frame lazyload"
+                        {% assign img_url = block.settings.frame | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+                     src="{{ block.settings.frame | img_url: '900x' }}"
+                     data-src="{{ img_url }}"
+                     data-widths="[540, 900, 1512, 2048]"
+                     data-aspectratio="{{ block.settings.frame.aspect_ratio }}"
+                     data-sizes="auto"
+                     data-parent-fit="cover"
+                     alt="{{ block.settings.frame.alt | escape }}"
+                     data-block-id="{{ block.id }}">
+              </figure>
             </figure>
-            {% comment %}{#<figure class="slider__frame">
-            <img class="slider__image slider__image--frame lazyload"
-                    {% assign img_url = block.settings.frame | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-                 src="{{ block.settings.frame | img_url: '300x' }}"
-                 data-src="{{ img_url }}"
-                 data-widths="[540, 900, 1512, 2048]"
-                 data-aspectratio="{{ block.settings.frame.aspect_ratio }}"
-                 data-sizes="auto"
-                 data-parent-fit="cover"
-                 alt="{{ block.settings.frame.alt | escape }}">
-          </figure>#}{% endcomment %}
           </div>
         {% endfor %}
       </div>
@@ -41,7 +47,6 @@
   {
     "name": "Slideshow",
     "class": "index-section index-section--slider",
-    "max_blocks": 6,
     "settings": [
       {
         "type": "checkbox",
@@ -117,20 +122,13 @@
           },
           {
             "type": "text",
-            "id": "title",
-            "label": "Heading",
-            "default": "Image slide"
+            "id": "scroll_animation",
+            "label": "Animation"
           },
           {
-            "type": "text",
-            "id": "subheading",
-            "label": "Subheading",
-            "default": "Tell your brand's story through video and images"
-          },
-          {
-            "type": "url",
-            "id": "link",
-            "label": "Slide link"
+            "type": "textarea",
+            "id": "css",
+            "label": "CSS Positioning"
           }
         ]
       }
