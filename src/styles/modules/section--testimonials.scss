@@ -143,6 +143,7 @@
   z-index: 1011;
   background: transparent;
   border: none;
+  -webkit-transition: 0.3s all;
   transition: 0.3s all;
   
   svg {
@@ -154,7 +155,8 @@
     display: none;
   }
   @include hover {
-    transform: scale(1.6);
+    -webkit-transform: scale(1.6);
+            transform: scale(1.6);
     opacity: 0.8;
   }
 }
