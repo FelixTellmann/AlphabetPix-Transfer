@@ -200,7 +200,7 @@
 
   <a class="in-page-link visually-hidden skip-link" href="#MainContent">{{ 'general.accessibility.skip_to_content' | t }}</a>
 
-  {% section 'header' %}
+  {% section 'static-header' %}
 
   <div class="main-content" data-drawer-push>
     <div class="main-content__wrapper">
@@ -209,7 +209,7 @@
         {{ content_for_layout }}
       </main>
 
-      {% section 'footer' %}
+      {% section 'static-footer' %}
     </div>
   </div>
 

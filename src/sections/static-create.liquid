@@ -1,0 +1,335 @@
+<style>
+  .create {
+    background: url('{{ section.settings.bg_image | img_url: '2000x' }}') center center/cover no-repeat;
+  }
+</style>
+
+<script>
+  window.create_section = {{ section.settings | json }};
+  {% for block in section.blocks %}
+  window.create_section_block_{{ forloop.index0 }} = {{ block.settings | json }};
+  {% endfor %}
+</script>
+
+{% assign frame = all_products[section.settings.frame] %}
+{% for image in frame.images %}
+  {% if image.src contains 'left' %}
+    {% assign frame_left = image.src %}
+  {% elsif image.src contains 'center' %}
+    {% assign frame_center = image.src %}
+  {% elsif image.src contains 'right' %}
+    {% assign frame_right = image.src %}
+  {% endif %}
+{% endfor %}
+
+
+<div data-section-id="{{ section.id }}" data-section-type="create-section">
+  <div id="create-{{ section.id }}" class="create">
+    
+    <nav class="process">
+      <button data-step-id="1" class="process__item process__step-1 process__item--active">{{ section.settings.step-1 }}</button>
+      <button data-step-id="2" class="process__item process__step-2">{{ section.settings.step-2 }}</button>
+      <button data-step-id="3" class="process__item process__step-3">{{ section.settings.step-3 }}</button>
+      <button data-step-id="4" class="process__item process__step-4">{{ section.settings.step-4 }}</button>
+    </nav>
+    
+    <div class="create__slider">
+      <!-- ================  STEP 1 ================ -->
+      <div class="create__step-1">
+        <label for="frame__input" class="frame__label">{{ section.settings.label }}</label>
+        <div id="frame" class="frame__position frame__size">
+          <figure class="frame tada scroll" data-scroll-delay="4s">
+            <div class="frame__background">
+              <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
+              <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
+              <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
+              <div class="frame__image--mat" style="background-color: {{ section.settings.mat_color }}"></div>
+            </div>
+            <input id="frame__input" name="frame__input" type="text" class="frame__input" placeholder="{{ section.settings.placeholder }}" maxlength="9" autocomplete="off" data-section-id="{{ section.id }}">
+            <div id="frame__image-container" class="frame__letter-wrapper">
+              {% for i in (0..8) %}
+                <a class="frame__letter" href="#" data-letter-position="{{ i }}"></a>
+              {% endfor %}
+            </div>
+          </figure>
+          <nav class="create__button">
+            <button class="button button--next button--moema">{{ section.settings.action-1 }}</button>
+          </nav>
+        </div>
+      </div>
+      
+      <!-- ================  STEP 2 ================ -->
+      <div class="create__step-2">
+        <label for="frame__input" class="frame__label">{{ section.settings.label }}</label>
+        <div id="frame" class="frame__position frame__size">
+          <figure class="frame tada scroll" data-scroll-delay="4s">
+            <div class="frame__background">
+              <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
+              <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
+              <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
+              <div class="frame__image--mat" style="background-color: {{ section.settings.mat_color }}"></div>
+            </div>
+            <input id="frame__input" name="frame__input" type="text" class="frame__input" placeholder="{{ section.settings.placeholder }}" maxlength="9" autocomplete="off" data-section-id="{{ section.id }}">
+            <div id="frame__image-container" class="frame__letter-wrapper">
+              {% for i in (0..8) %}
+                <a class="frame__letter" href="#" data-letter-position="{{ i }}"></a>
+              {% endfor %}
+            </div>
+          </figure>
+          <nav class="create__button">
+            <button class="button button--prev button--moema">Previous Step</button>
+            <button class="button button--next button--moema">{{ section.settings.action-1 }}</button>
+          </nav>
+        </div>
+      </div>
+      
+      
+      <!-- ================  STEP 3 ================ -->
+      <div class="create__step-3">
+        <label for="frame__input" class="frame__label">{{ section.settings.label }}</label>
+        <div id="frame" class="frame__position frame__size">
+          <figure class="frame tada scroll" data-scroll-delay="4s">
+            <div class="frame__background">
+              <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
+              <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
+              <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
+              <div class="frame__image--mat" style="background-color: {{ section.settings.mat_color }}"></div>
+            </div>
+            <input id="frame__input" name="frame__input" type="text" class="frame__input" placeholder="{{ section.settings.placeholder }}" maxlength="9" autocomplete="off" data-section-id="{{ section.id }}">
+            <div id="frame__image-container" class="frame__letter-wrapper">
+              {% for i in (0..8) %}
+                <a class="frame__letter" href="#" data-letter-position="{{ i }}"></a>
+              {% endfor %}
+            </div>
+          </figure>
+          <nav class="create__button">
+            <button class="button button--prev button--moema">Previous Step</button>
+            <button class="button button--next button--moema">{{ section.settings.action-1 }}</button>
+          </nav>
+        </div>
+      </div>
+      
+      <!-- ================  STEP 4 ================ -->
+      <div class="create__step-4">
+        <label for="frame__input" class="frame__label">{{ section.settings.label }}</label>
+        <div id="frame" class="frame__position frame__size">
+          <figure class="frame tada scroll" data-scroll-delay="4s">
+            <div class="frame__background">
+              <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
+              <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
+              <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
+              <div class="frame__image--mat" style="background-color: {{ section.settings.mat_color }}"></div>
+            </div>
+            <input id="frame__input" name="frame__input" type="text" class="frame__input" placeholder="{{ section.settings.placeholder }}" maxlength="9" autocomplete="off" data-section-id="{{ section.id }}">
+            <div id="frame__image-container" class="frame__letter-wrapper">
+              {% for i in (0..8) %}
+                <a class="frame__letter" href="#" data-letter-position="{{ i }}"></a>
+              {% endfor %}
+            </div>
+          </figure>
+          <nav class="create__button">
+            <button class="button button--prev button--moema">Previous Step</button>
+            <button class="button button--next button--moema">{{ section.settings.action-1 }}</button>
+          </nav>
+        </div>
+      </div>
+    
+    
+    </div>
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="create__modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Select your Photo</h5>
+          <iframe frameborder="0" scrolling="no" id="create__product-data__custom-image" class="modal__image-upload" src="/pages/image-upload/">
+          </iframe>
+          
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal__body">
+          ...
+        </div>
+        <div class="modal-footer">
+          {% for p in item.properties %}
+            {% unless p.last == blank %}
+              <div class="line-item-property">
+                {{ p.first }}:
+                {% if p.last contains '/uploads/' %}
+                  <span class="value"><a href="{{ p.last }}">Link</a></span>
+                {% else %}
+                  <span class="value">{{ p.last }}</span>
+                {% endif %}
+              </div>
+            {% endunless %}
+          {% endfor %}
+        </div>
+      
+      </div>
+    </div>
+  </div>
+  
+  <div id="create__preload-images" class="visually-hidden">
+    <img data-letter-id="whitespace" id="whitespace" class="preload-image visually-hidden">
+  
+  </div>
+  
+  {% comment %}{#<!--@formatter:off-->#}{% endcomment %}
+{% schema %}
+{
+  "name": "Create Your Photo",
+  "class": "create-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "theme",
+      "label": "Theme",
+      "default": "classic",
+      "options": [
+        {
+          "label": "Classic",
+          "value": "classic"
+        },
+        {
+          "label": "Antique",
+          "value": "antique"
+        },
+        {
+          "label": "Shoreline",
+          "value": "shoreline"
+        },
+        {
+          "label": "Frontier",
+          "value": "frontier"
+        }
+      ]
+    },
+    {
+      "type": "product",
+      "id": "frame",
+      "label": "Frame Selection"
+    },
+    {
+      "type": "color",
+      "id": "mat_color",
+      "label": "Mat Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Title Text",
+      "default": "- SEE YOUR NAME IN PHOTOS NOW! –"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Placeholder Text",
+      "default": "TYPE YOUR NAME"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Subheading",
+      "default": "- SEE YOUR NAME IN PHOTOS NOW! –"
+    },
+    {
+      "type": "header",
+      "content": "Process Steps"
+    },
+    {
+      "type": "text",
+      "id": "step-1",
+      "label": "Step 1",
+      "default": "Type your Name"
+    },
+    {
+      "type": "text",
+      "id": "action-1",
+      "label": "Next Button",
+      "default": "NEXT:  SELECT COLLECTION"
+    },
+    {
+      "type": "text",
+      "id": "step-2",
+      "label": "Step 2",
+      "default": "Select Your Theme"
+    },
+    {
+      "type": "text",
+      "id": "action-2",
+      "label": "Next Button",
+      "default": "NEXT:  SELECT YOUR PHOTO LETTERS"
+    },
+    {
+      "type": "text",
+      "id": "step-3",
+      "label": "Step 3",
+      "default": "Select Frame & Mat"
+    },
+    {
+      "type": "text",
+      "id": "action-3",
+      "label": "Next Button",
+      "default": "NEXT:  SELECT YOUR FRAME & MAT"
+    },
+    {
+      "type": "text",
+      "id": "step-4",
+      "label": "Step 4",
+      "default": "Confirm"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "theme",
+      "name": "Theme Style",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "theme",
+          "label": "Theme Selection"
+        },
+        {
+          "type": "product",
+          "id": "frame",
+          "label": "Frame Selection"
+        },
+        {
+          "type": "textarea",
+          "id": "label",
+          "label": "Label Text",
+          "default": "- SEE YOUR NAME IN PHOTOS NOW! –"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "Placeholder Text",
+          "default": "Tell your story"
+        },
+        {
+          "type": "text",
+          "id": "button",
+          "label": "Button Title",
+          "default": "Slide title"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+{% comment %}{#<!--@formatter:on-->#}{% endcomment %}

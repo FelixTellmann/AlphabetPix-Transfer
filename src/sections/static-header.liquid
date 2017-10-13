@@ -46,7 +46,7 @@
               {{ section.settings.announcement_text | escape }}
             </p>
             <figure class="announcement-bar__figure grid__item">
-              <img class="announcement-bar__img" src="{{ section.settings.announcement_image | img_url: 'master' }}" alt="{{ section.settings.announcement_image.alt }}" >
+              <img class="announcement-bar__img" src="{{ section.settings.announcement_image | img_url: 'master' }}" alt="{{ section.settings.announcement_image.alt }}">
             </figure>
             <div class="announcement-bar__slogan grid__item text-center">
               {{ section.settings.announcement_slogan }}
@@ -86,36 +86,30 @@
       </div>
       
       
-      <nav class="nav grid__col">
-        <div class="nav__list grid__row justify--fe">
-          {% for link in linklists[section.settings.primary_navigation].links %}
-            <a class="nav__link grid__content{% if link.active %} active{% endif %}" href="{{ link.url }}" tabindex="-1">{{ link.title }}</a>
-          {% endfor %}
-        </div>
-        
-        <div class="nav__cart grid__row justify--fe align--center">
-          <a href="/cart" class="nav__link ajax-cart__toggle" aria-expanded="false">
-            <span class="btn btn--clear btn--square btn--hover-scale site-header__cart">
-              {%- assign icon = 'icon-header-' | append: section.settings.icon %}
-              {% include icon %}
-            </span>
-          </a>
-          <a href="/cart" class="grid__content nav__link nav__link--text ajax-cart__toggle" aria-expanded="false">
-            <span class="">{{ 'general.header.view_cart' | t }}</span>
-          </a>
-          <a href="/cart" class="grid__content nav__link nav__link--bubble ajax-cart__toggle" aria-expanded="false">
-            <span class="cart__count site-header__cart-bubble{% if cart.item_count > 0 %} site-header__cart-bubble--visible{% endif %}">{{ cart.item_count }}</span>
-          </a>
-          <div class="grid__content nav__link nav__link--burger site-header__section site-header__section--button nav--mobile">
-            <button class="site-header__navigation btn btn--clear btn--square" aria-expanded="false" role="navigation">
-              <span class="burger-icon burger-icon--top"></span>
-              <span class="burger-icon burger-icon--mid"></span>
-              <span class="burger-icon burger-icon--bottom"></span>
-              <span class="icon__fallback-text">{{ 'general.header.expand_navigation' | t }}</span>
-            </button>
-          </div>
-        </div>
+      <nav class="nav__list grid__row justify--fe align--center">
+        {% for link in linklists[section.settings.primary_navigation].links %}
+          <a class="nav__link grid__content{% if link.active %} active{% endif %}" href="{{ link.url }}" tabindex="-1">{{ link.title }}</a>
+        {% endfor %}
+        {% comment %}{# - Is the Cart Really needed here twice? }#
+        <a href="/cart" class="grid__content nav__link nav__link--text ajax-cart__toggle" aria-expanded="false">
+          <span class="">{{ 'general.header.view_cart' | t }}</span>
+        </a>#}{% endcomment %}
+        <a href="/cart" class="nav__link ajax-cart__toggle btn--hover-scale " aria-expanded="false">
+          <span class="btn btn--clear btn--square site-header__cart">
+            {% assign icon = 'icon-header-' | append: section.settings.icon %}
+            {% include icon %}
+          </span>
+          <span class="cart__count site-header__cart-bubble{% if cart.item_count > 0 %} site-header__cart-bubble--visible{% endif %}">{{ cart.item_count }}</span>
+        </a>
       </nav>
+      <div class="grid__content nav__link nav__link--burger site-header__section site-header__section--button nav--mobile">
+        <button class="site-header__navigation btn btn--clear btn--square" aria-expanded="false" role="navigation">
+          <span class="burger-icon burger-icon--top"></span>
+          <span class="burger-icon burger-icon--mid"></span>
+          <span class="burger-icon burger-icon--bottom"></span>
+          <span class="icon__fallback-text">{{ 'general.header.expand_navigation' | t }}</span>
+        </button>
+      </div>
     </div>
   
   </header>

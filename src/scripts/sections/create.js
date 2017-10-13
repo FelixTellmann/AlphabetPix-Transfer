@@ -8,19 +8,6 @@
 
 theme.Create = (function () {
 
-  /*var selectors = {
-   addToCart: '[data-add-to-cart]',
-   addToCartText: '[data-add-to-cart-text]',
-   comparePrice: '[data-compare-price]',
-   comparePriceText: '[data-compare-text]',
-   originalSelectorId: '[data-product-select]',
-   priceWrapper: '[data-price-wrapper]',
-   productFeaturedImage: '[data-product-featured-image]',
-   productJson: '[data-product-json]',
-   productPrice: '[data-product-price]',
-   productThumbs: '[data-product-single-thumbnail]',
-   singleOptionSelector: '[data-single-option-selector]'
-   };*/
 
   /**
    * Create section constructor. Runs on page load as well as Theme Editor
@@ -32,364 +19,270 @@ theme.Create = (function () {
     this.settings = {};
     this.namespace = '.create';
 
-
     /**
      * Collect section Variables required for cart input & information transfer
      * Required: section.id -> block.id -> block.theme -> block.input -> block.input.position -> block.input.position.letter
      *
      * */
-    const sectionId = this.$container.attr('data-section-id');
-    let blockIds = [];
-    let blockInput = [];
-    let blockTheme = [];
-    let blockImgLinks = [];
-    let lastValue = "";
-    let modal = $("#create__modal");
-    let modalContainer = $("#create__modal .modal__body");
-    let modalLink = $(".modal__link");
-    let letterData = [];
-    let frameData = {};
-    let cartData = [];
-    window.updatedData = [];
-    window.inProgress = false;
-    window.customImages = [];
+
+
+    /*============================================================================
+      #Variables
+        - Constants
+        - Objects
+        - Base Items
+        - Window Items
+        - SessionStorage
+    ==============================================================================*/
+    const section_id = this.$container.attr('data-section-id');
+    const preload_container = $('#create__preload-images');
+
+
+    let previous_data = [];
+
+    let create = {
+      slider: $('.create__slider'),
+      process_steps: $('.process__item'),
+
+      step_1: $('.create__step-1'),
+      next_button_1: $('.create__step-1 button.button--next'),
+
+      step_2: $('.create__step-2'),
+      prev_button_2: $('.create__step-2 button.button--prev'),
+      next_button_2: $('.create__step-2 button.button--next'),
+
+      step_3: $('.create__step-3'),
+      prev_button_3: $('.create__step-3 button.button--prev'),
+      next_button_3: $('.create__step-3 button.button--next'),
+
+      step_5: $('.create__step-4'),
+      prev_button_4: $('.create__step-4 button.button--prev'),
+      next_button_4: $('.create__step-4 button.button--next')
+    };
+
+    let input = {
+      container: $('#frame__input')
+    };
+
+    let frame = {
+      container: $('#frame'),
+      image_array: $('.frame__letter')
+    };
+
+
     window.onTimeout = [];
-    window.customImageCount = 0;
+
+    /*============================================================================
+      #Functions
+        - preload_images(preload_container, theme)
+        - append_image(image_container, position, letter_id)
+        - resize_frame(input_data)
+
+    ==============================================================================*/
 
 
-    /**
-     *  CREATE Data FOR EACH BLOCK
-     *  Wrap everything below into the function below, making sure that each block runs independently
-     *
-     * */
-    $(".create__block[data-section-id='" + sectionId + "'").each(function (i) {
-      blockIds[i] = $(this).attr('data-block-id');
-    });
-    $.each(blockIds, function (i, v) {
-      blockInput[i] = $("#create__input--" + v);
-      blockTheme[i] = blockInput[i].attr('data-theme-style');
-      blockImgLinks[i] = $("#create__image-wrapper--" + v + " .create__image");
-      onTimeout[i] = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
-
-
-      /**
-       * CUSTOM IMAGE - ADD TO PRELOAD CONTAINER & ADD TO CURRENT MODAL
-       *
-       *
-       * */
-      window.addCustomImage = function (id, img) {
-        let letter = $('.modal__body').attr('data-letter-class');
-        let letterPosition = $('.modal__body').attr('data-letter-position');
-        preloadContainer.append('<img data-letter-class="' + letter + '" data-variant-id="' + id + '" data-theme-style="all" id="' + letter + '--custom-letter--' + customImageCount + '" class="' + letter + '" src="' + img + '" data-letter-id="' + letter + '--custom-letter--' + customImageCount + '" data-custom-letter="true" data-variant-sku="' + letter + '--custom-letter--' + customImageCount + '">');
-        updateModal(letterPosition, letter, blockTheme[i]);
-      };
-
-
-      /**
-       * Functions
-       *
-       * */
-      let updateModal = function (letterPosition, letter, theme) {
-        let preloadedImgArr = $('[id^="' + letter + '-"][data-theme-style^="' + theme + '"]:not([id*="custom-letter"]), [id^="' + letter + '-"][data-theme-style^="all"]:not([id*="custom-letter"])');
-        if (!preloadedImgArr.get(0)) {
-          preloadedImgArr = $('[id^="' + letter + '-"]:not([id*="custom-letter"])');
-        }
-        let customImgArr = $('[id*="custom-letter"]');
-        modalContainer.empty().attr('data-letter-position', letterPosition).attr('data-letter-class', letter);
-        $.each(preloadedImgArr, function (i, v) {
-          modalContainer.append('<a class="modal__link" href="#" data-selector-id="' + $(this).attr('id') + '" data-letter-position="' + letterPosition + '" data-letter-id="' + $(this).attr('data-letter-id') + '">' + $(this).clone(false).removeAttr('id').wrap("<div />").parent().html() + '</a>');
-        });
-        $.each(customImgArr, function () {
-          modalContainer.prepend('<a class="modal__link" href="#" data-selector-id="' + $(this).attr('id') + '" data-letter-position="' + letterPosition + '" data-letter-id="' + $(this).attr('data-letter-id') + '">' + $(this).clone(false).removeAttr('id').wrap("<div />").parent().html() + '</a>');
-        });
-
-        /* on IMG in MODAL CLICK - Select image and add to image wrapper at right position */
-        modalLink = $(".modal__link");
-        modalLink.on('click', function (e) {
-          e.preventDefault();
-          let selectorId = $(this).attr('data-selector-id');
-          let letterPosition = $(this).attr('data-letter-position');
-          replaceCharacter(letterPosition, selectorId, true);
-          modal.modal('toggle');
-          modalContainer.empty().removeAttr('data-letter-position').removeAttr('data-letter-class');
-        });
-      };
-
-      let resizeFrame = function (blockId, length, spacing) {
-        $('.data__frame[data-block-id="' + blockId + '"]').attr('disabled', 'disabled');
-        let frameInput = $("#data__frame--" + blockId + "--" + length);
-        /* Screen size above 1200px width - fixed frame size */
-        if (window.innerWidth >= 1200 && length > 2) {
-          frameInput.removeAttr('disabled');
-          frameData = {
-            id: frameInput.attr('value'),
-            quantity: 1,
-            properties: {
-              "data-frame-size": frameInput.attr('data-frame-size'),
-              "data-prototype": true,
-              "data-block-id": frameInput.attr('data-block-id'),
-              "data-frame-content": $("#create__input--" + blockId).val()
+    /*================ preload_images(preload_container, theme) ================*/
+    let preload_images = function (preload_container, theme = 'all', limit = 1) {
+      $.each(window.products, function (i, v) {
+        let product = this;
+        $.each(this.variants, function (i, v) {
+          let variant = this;
+          let v_img = '';
+          v_img = '<img src="' + variant.featured_image.src + '" alt="' + product.title + '" ' +
+            'class="preload-image" ' +
+            'data-variant-id="' + variant.id + '" ' +
+            'data-letter-id="' + product.handle.replace('letter-', '') + '" ' +
+            'data-letter-theme="' + variant.option1 + '">';
+          if (theme === 'all') {
+            preload_container.append(v_img);
+            if (limit !== 0 && i >= limit - 1) {
+              return false;
             }
-          };
-          $('figure.frame[data-block-id="' + blockId + '"').css('width', 'calc(114px * ' + (length + spacing) + ' + 114px)')
-        } else if (window.innerWidth >= 1200 && length <= 2) {
-          $('figure.frame[data-block-id="' + blockId + '"').css('width', 'calc(114px * ' + 7 + ' + 114px)')
-        } else if (window.innerWidth < 1200 && length > 2) {
-          /* Screen size below 1200px width - flexible frame size */
-          frameInput.removeAttr('disabled');
-          frameData = {
-            id: frameInput.attr('value'),
-            quantity: 1,
-            properties: {
-              "data-frame-size": frameInput.attr('data-frame-size'),
-              "data-prototype": true,
-              "data-block-id": frameInput.attr('data-block-id'),
-              "data-frame-content": $("#create__input--" + blockId).val()
+          } else if (variant.option1 === theme) {
+            preload_container.append(v_img);
+            if (limit !== 0 && i >= limit - 1) {
+              return false;
             }
-          };
-          $('figure.frame[data-block-id="' + blockId + '"').css('width', 'calc(9.5vw * ' + (length + spacing) + ' + 9.5vw)')
-        } else if (window.innerWidth < 1200 && length <= 2) {
-          $('figure.frame[data-block-id="' + blockId + '"').css('width', 'calc(9.5vw * ' + 7 + ' + 9.5vw)')
-        }
-      };
-
-      let insertImageAt = function (i, char, container = []) {
-        container.empty().removeAttr('style').removeAttr('data-custom-selection');
-        let dataLetterContainer = $("#data__letter--" + blockIds[i] + "--" + (i));
-        dataLetterContainer.attr('disabled', 'disabled').attr('value', '');
-        $.each(products, function (k, v) {
-          let title = this.title;
-          if (title.replace('letter', '').replace('-', '') === char) {
-            replaceCharacter(i, title);
-          } else if (char === '*' && title.includes('star')) {
-            replaceCharacter(i, title)
-          } else if (char === '&' && title.includes('ampersand')) {
-            replaceCharacter(i, title)
-          } else if (char === '#' && title.includes('hash')) {
-            replaceCharacter(i, title)
-          } else if (char === '!' && title.includes('exclaim')) {
-            replaceCharacter(i, title)
-          } else if (char === '-' && title.includes('dash')) {
-            replaceCharacter(i, title)
-          } else if (char === '@' && title.includes('heart')) {
-            replaceCharacter(i, title)
-          } else if (char === ' ' && title.includes('whitespace')) {
-            replaceCharacter(i, title)
           }
         });
-      };
+      });
+    };
 
-      let replaceCharacter = function (j, title, customSelection = false) {
-        let characterArrayTest = blockInput[i].val().toLowerCase().split('');
-        let imgContainer = $("#create__image--" + blockIds[i] + "--" + (j));
+    /*================ change_letter_image(position, letter, variant_id = false) ================*/
+    let change_letter_image = function (position, letter = false, variant_id = false, custom_image = false) {
+      let image = '';
 
-        if (customSelection) {
-          imgContainer.attr('data-custom-selection', 'true');
-          imgContainer.empty().removeAttr('style');
-        } else {
-          imgContainer.removeAttr('data-custom-selection');
-        }
+      switch (letter) {
+        case '*':
+          letter = 'symbol-star';
+          break;
+        case '&':
+          letter = 'symbol-ampersand';
+          break;
+        case '#':
+          letter = 'symbol-hash';
+          break;
+        case '!':
+          letter = 'symbol-exclaim';
+          break;
+        case '-':
+          letter = 'symbol-dash';
+          break;
+        case '@':
+          letter = 'symbol-heart';
+          break;
+        case ' ':
+          letter = 'symbol-star';
+          break;
+      }
 
-        let preloadedImg = $(($('[id^="' + title + '"][data-theme-style^="' + blockTheme[i] + '"]'))[0]);
-        if (!preloadedImg.get(0)) {
-          preloadedImg = $(($('[id^="' + title + '"]'))[i]);
-        }
+      if (variant_id) {
+        image = $('.preload-image[data-variant-id="' + variant_id + '"]').clone(false)[0];
+      } else if (custom_image) {
+        image = $('.preload-image[data-custom-id="' + custom_image + '"]').clone(false);
+      } else if (letter) {
+        image = $('.preload-image[data-letter-id="' + letter + '"]').clone(false);
+      }
+      $(frame.image_array[position]).empty().append(image[0]);
+    };
 
-        let dataLetterContainer = $("#data__letter--" + blockIds[i] + "--" + (j));
-        dataLetterContainer.removeAttr('disabled').attr('value', preloadedImg.attr('data-variant-sku')); /* preloadedImg.attr('data-letter-class') + '||' + preloadedImg.attr('data-variant-id') + '||' +  */
+    /*================ resize_frame(length, spacing = 0) ================*/
+    let resize_frame = function (length, spacing = 0) {
+      if (window.innerWidth >= 1200) {
+        frame.container.css('width', 'calc(114px * ' + (length + spacing) + ' + 114px)');
+      } else if (window.innerWidth < 1200) {
+        frame.container.css('width', 'calc(9.5vw * ' + (length + spacing) + ' + 9.5vw)');
+      }
+    };
 
-        if (j === onTimeout[i][j]) {
-          return true;
-        } else {
-          if (j === characterArrayTest.length - 1 && characterArrayTest.length > lastValue.length) {
-            onTimeout[i][j] = j;
+    /*================ update_process_bar(target_step) ================*/
+
+    let update_process_bar = function (target_step) {
+      create.process_steps.removeClass('process__item--active');
+      $(create.process_steps[target_step - 1]).addClass('process__item--active');
+    };
+
+
+    /*================ change_steps(target_step) ================*/
+
+    let change_steps = function (target_step) {
+      create.step_1.attr('style', 'margin-left: ' + -(target_step -  1) * 100  + 'vw');
+    };
+
+    /*============================================================================
+      # Events
+        - input_container
+            .on('input')
+            .on('focus')
+            .on('blur')
+        - create_button_1
+            .on('click')
+    ==============================================================================*/
+
+    /*================ input_container.on('input') ================*/
+    input.container.on('input', function () {
+      input.data = input.container.val().toLowerCase().split('');
+      input.length = input.data.length;
+
+      /* Resize frame once reached 3 letters, leaving space for 1 letter input */
+      if (input.length > 2) {
+        input.resize_length = input.length;
+        resize_frame(input.resize_length, 1);
+      } else {
+        input.resize_length = 7;
+        resize_frame(input.resize_length);
+      }
+
+
+      /* Remove images at positions larger than input */
+      for (let i = input.length; i < 9; i++) {
+        change_letter_image(i);
+      }
+
+      /* Add images if the input changed */
+      for (let letter_position = 0; letter_position < 9; letter_position++) {
+        if (input.data[letter_position] !== previous_data[letter_position]) {
+          if (onTimeout[letter_position]) {
+            return true;
+          } else {
+            onTimeout[letter_position] = true;
             setTimeout(function () {
-              preloadedImg.clone(false).removeAttr('id').attr('data-letter-position', imgContainer.attr('data-letter-position')).appendTo(imgContainer);
-              imgContainer.css('height', '100%');
-              onTimeout[i][j] = -1;
-            }, 600)
-          } else {
-            preloadedImg.clone(false).removeAttr('id').attr('data-letter-position', imgContainer.attr('data-letter-position')).appendTo(imgContainer);
-            imgContainer.css('height', '100%');
+              change_letter_image(letter_position, input.data[letter_position]);
+              onTimeout[letter_position] = false;
+            }, 600);
           }
         }
-      };
+      }
+      previous_data = input.data;
+    });
 
+    /*================ input.container.on('focus') ================*/
+    input.container.on('focus', function () {
+      resize_frame(input.resize_length, 1);
+    });
 
-      let updateCart = function () {
-        cartData = [];
-        $.each(cart.items, function () {
-          let thisItem = this;
-          let prototype = false;
-          $.each(thisItem.properties, function (k, v) {
-            if (k === "data-prototype") {
-              prototype = true;
-            }
-          });
-          if (!prototype) {
-            cartData.push(thisItem);
-          }
-        });
-        updatedData = letterData;
-        updatedData.push(frameData);
-        updatedData = updatedData.concat(cartData);
-        if (inProgress === false) {
-          inProgress = true;
-          $.post('/cart/clear.js', updatedData, function (e) {
-            addToCartMultiple(updatedData);
-          }, 'json');
-        }
-      };
+    /*================ input.container.on('blur') ================*/
+    input.container.on('blur', function () {
+      resize_frame(input.resize_length);
+    });
 
-      /**
-       * Event Triggers
-       *
-       * */
-      /* on IMG CLICk - open Modal to select letter images*/
-      blockImgLinks[i].on('click', function (e) {
-        e.preventDefault();
-        let letter = $(this).children('img').attr('data-letter-class');
-        let letterPosition = $(this).attr('data-letter-position');
-        updateModal(letterPosition, letter, blockTheme[i]);
-        /* OPEN MODAL */
-        modal.modal('toggle');
-      });
+    /*================ Navigation.on('click') ================*/
 
-      /* CHANGE FRAME SIZE ON BLUR */
-      blockInput[i].on('blur', function () {
-        let characterArray = blockInput[i].val().toLowerCase().split('');
-        resizeFrame(blockIds[i], characterArray.length, 0);
+    /*Step-1*/
+    create.next_button_1.on('click', function () {
+      change_steps(2);
+      update_process_bar(2);
+    });
 
-        /*Update Cart with Current Cart items & prototype frame*/
-        /*if (characterArray.length > 2) {
-          updateCart();
-        }*/
-      });
+    /*Step-2*/
+    create.prev_button_2.on('click', function () {
+      change_steps(1);
+      update_process_bar(1);
+    });
 
+    create.next_button_2.on('click', function () {
+      change_steps(3);
+      update_process_bar(3);
+    });
 
-      /* CHANGE FRAME SIZE ON FOCUS */
-      blockInput[i].on('focus', function () {
-        let characterArray = blockInput[i].val().toLowerCase().split('');
-        resizeFrame(blockIds[i], characterArray.length, 1)
-      });
+    /*Step-3*/
+    create.prev_button_3.on('click', function () {
+      change_steps(2);
+      update_process_bar(2);
+    });
 
-      /* ON TEXT INPUT - LOAD DEFAULT OR PRESELECTED IMAGE FOR EACH CHAR*/
-      /* CHANGE FRAME SIZE ACCORDING TO INPUT */
-      blockInput[i].on('input', function () {
-        let characterArray = blockInput[i].val().toLowerCase().split('');
-        resizeFrame(blockIds[i], characterArray.length, 1);
+    create.next_button_3.on('click', function () {
+      change_steps(4);
+      update_process_bar(4);
+    });
 
-        /* LIMIT INPUT TO 9 CHARACTERS */
-        if (blockInput[i].val().length > 9) {
-          blockInput[i].val(blockInput[i].val().slice(0, 9));
-        }
-
-        /* IDENTIFY CHARACTER & APPEND IMAGE TO LETTER */
-        for (let k = 0; k <= 9; k++) {
-          let customTitle = '';
-          let imgContainer = $("#create__image--" + blockIds[i] + "--" + (k));
-          if (imgContainer.attr('data-custom-selection') === 'true' && blockInput[i].val().length > imgContainer.attr('data-letter-position') && characterArray[k] === lastValue[k]) {
-            customTitle = $('[id^="letter"][data-letter-id="' + imgContainer.children('img').attr('data-letter-id') + '"]').attr('id');
-            replaceCharacter(k, customTitle, true)
-          } else {
-            insertImageAt(k, characterArray[k], imgContainer);
-          }
-        }
-        /* SAVE ENTRY FOR COMPARISON */
-        lastValue = blockInput[i].val().toLowerCase().split('');
-
-        /* Save Cart Prototype data in Data Array for addToCartMultiple() function  - SETTIMEOUT becase of slowly loading images! CSS transition as alternative option ??*/
-        setTimeout(function () {
-          let imgDataArray = $("#create__image-wrapper--" + blockIds[i] + " a.create__image img");
-          $.each(imgDataArray, function (j, v) {
-            letterData[j] = {
-              id: $(this).attr('data-variant-id'),
-              quantity: 1,
-              properties: {
-                "data-letter-position": $(this).attr('data-letter-position'),
-                "data-letter-id": $(this).attr('data-letter-id'),
-                "data-prototype": true,
-                "data-custom-letter": $(this).attr('data-custom-letter'),
-                "data-image-url": $(this).attr('src')
-              }
-            }
-          });
-          while (letterData.length > imgDataArray.length) {
-            letterData.pop();
-          }
-        }, 650)
-      });
-
-      /**
-       * UPDATE FRAME ON PAGE LOAD TO PROTOTYPE CART ITEMS
-       *
-       * */
-
-      window.loadFrame = function (e) {
-
-        $.each(cart.items, function (i, v) {
-          let thisItem = this;
-          let prototype = false;
-          let frame = 0;
-          let letter = "";
-          let letterPosition = 0;
-          let blockId = 0;
-          let content = "";
-          $.each(thisItem.properties, function (k, v) {
-            if (k === "data-prototype") {
-              prototype = v;
-            }
-            if (k === "data-letter-id") {
-              letter = v;
-            }
-            if (k === "data-letter-position") {
-              letterPosition = v;
-            }
-            if (k === "data-frame-size") {
-              frame = parseInt(v);
-            }
-            if (k === "data-frame-content") {
-              content = v;
-            }
-            if (k === "data-block-id") {
-              blockId = v;
-            }
-          });
-          if (prototype) {
-            if (frame) {
-              setTimeout(function () {
-                $("#create__input--" + blockId).val(content);
-                lastValue = content.split('');
-                resizeFrame(blockIds[i], frame, 1);
-              }, 500);
-            }
-            if (letter) {
-              setTimeout(function () {
-                replaceCharacter(letterPosition, letter, true)
-              }, 700);
-            }
-          }
-        });
-      };
+    /*Step-4*/
+    create.prev_button_4.on('click', function () {
+      change_steps(3);
+      update_process_bar(3);
+    });
+    create.next_button_4.on('click', function () {
+      change_steps(4);
+      update_process_bar(4);
     });
 
 
-    /**
-     * SETUP IMAGES PRELOADED VISUALLY HIDDEN TO COPY DEFAULT IMAGES
-     * Preload images based on available variants within products
-     * attach images to preload container for easy access
-     * */
-    let preloadContainer = $('#create__image-preloader--' + sectionId);
-    $.each(products, function (i, v) {
-      let product_this = this;
-      $.each(this.variants, function (i, v) {
-        preloadContainer.append('<img data-letter-class="' + product_this.title + '" data-variant-id="' + this.id + '" data-variant-sku="' + this.sku + '" data-letter-id="' + product_this.title + "-" + i + '" data-theme-style="' + this.title.replace(/[\d\s\/]/g, "") + '" id="' + product_this.title + "-" + i + '" class="' + product_this.title + '" src="' + this.featured_image.src + '" alt="' + product_this.title + '">')
-      });
+    /*================ process_steps.on('click') ================*/
+
+    create.process_steps.on('click', function () {
+      let target = $(this).attr('data-step-id');
+      change_steps(target);
+      update_process_bar(target);
     });
 
 
+    /*============================================================================
+      #Create Initialization
+        - preload_images()
 
-    /*loadFrame();*/
+    ==============================================================================*/
+
+    preload_images(preload_container, window.create_section.theme, 1);
 
 
   }

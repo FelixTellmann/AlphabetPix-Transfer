@@ -48,18 +48,11 @@
             }
           </style>
           {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-          <img class="slideshow__image slideshow__image--{{ block.id }} lazyload"
-               src="{{ block.settings.image | img_url: '1000x' }}"
-               data-src="{{ img_url }}"
-               data-widths="[540, 900, 1512, 2048]"
-               data-aspectratio="{{ block.settings.image.aspect_ratio }}"
-               data-sizes="auto"
-               data-parent-fit="cover"
-               alt="{{ block.settings.image.alt | escape }}">
-          
-          
+          <img class="slideshow__image slideshow__image--{{ block.id }}" src="{{ block.settings.image | img_url: '2000x' }}" alt="{{ block.settings.image.alt | escape }}">
+  
+  
           <label for="create__input--{{ block.id }}" class="create__label text-center">{{ block.settings.label }}</label>
-          <figure class="frame fadeIn scroll" data-scroll-delay="0.2s" data-block-id="{{ block.id }}">
+          <figure class="frame" data-block-id="{{ block.id }}">
             <div class="frame__wrapper frame__img--{{ block.id }} tada scroll" data-scroll-delay="4s">
               <div class="frame__input">
                 <input id="create__input--{{ block.id }}" name="create__input--{{ block.id }}" type="text" class="create__input" placeholder="{{ block.settings.placeholder }}" maxlength="10" data-theme-style="{{ block.settings.theme }}" autocomplete="off">
@@ -72,7 +65,7 @@
             </div>
             <div class="frame__button">
               <div class="frame__wrapper">
-                <a href="{{ block.settings.button_link }}" class="button">{{ block.settings.button }}</a>
+                <button href="{{ block.settings.button_link }}" class="button button--moema button--text-thick button--text-upper button--size-s">{{ block.settings.button }}</button>
               </div>
             </div>
             <form action="/cart/add" enctype="multipart/form-data" method="post" data-block-id="{{ block.id }}">
