@@ -36,16 +36,16 @@
     <div class="create__slider">
       <!-- ================  STEP 1 ================ -->
       <div class="create__step-1">
-        <label for="frame__input" class="frame__label">{{ section.settings.label }}</label>
-        <div id="frame" class="frame__position frame__size">
-          <figure class="frame tada scroll" data-scroll-delay="4s">
+        <div id="frame" class="frame frame--position frame--size">
+          <figure class="frame__wrapper tada scroll" data-scroll-delay="4s">
+            <label for="frame__input" class="frame__label">{{ section.settings.label }}</label>
             <div class="frame__background">
               <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
               <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
               <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
               <div class="frame__image--mat" style="background-color: {{ section.settings.mat_color }}"></div>
             </div>
-            <input id="frame__input" name="frame__input" type="text" class="frame__input" placeholder="{{ section.settings.placeholder }}" maxlength="9" autocomplete="off" data-section-id="{{ section.id }}">
+            <input id="frame__input" name="frame__input" type="text" class="frame__input" placeholder="{{ section.settings.placeholder }}" maxlength="9"  data-section-id="{{ section.id }}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
             <div id="frame__image-container" class="frame__letter-wrapper">
               {% for i in (0..8) %}
                 <a class="frame__letter" href="#" data-letter-position="{{ i }}"></a>
@@ -53,6 +53,7 @@
             </div>
           </figure>
           <nav class="create__button">
+            <button class="button button--reset button--moema">Reset</button>
             <button class="button button--next button--moema">{{ section.settings.action-1 }}</button>
           </nav>
         </div>
@@ -60,22 +61,20 @@
       
       <!-- ================  STEP 2 ================ -->
       <div class="create__step-2">
-        <label for="frame__input" class="frame__label">{{ section.settings.label }}</label>
-        <div id="frame" class="frame__position frame__size">
-          <figure class="frame tada scroll" data-scroll-delay="4s">
-            <div class="frame__background">
-              <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
-              <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
-              <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
-              <div class="frame__image--mat" style="background-color: {{ section.settings.mat_color }}"></div>
-            </div>
-            <input id="frame__input" name="frame__input" type="text" class="frame__input" placeholder="{{ section.settings.placeholder }}" maxlength="9" autocomplete="off" data-section-id="{{ section.id }}">
-            <div id="frame__image-container" class="frame__letter-wrapper">
-              {% for i in (0..8) %}
-                <a class="frame__letter" href="#" data-letter-position="{{ i }}"></a>
-              {% endfor %}
-            </div>
-          </figure>
+        
+        <div class="theme theme--position theme--size" data-section-id="{{ section.id }}">
+          <div class="theme__wrapper">
+            {% for block in section.blocks %}
+              {% assign theme = collections[block.settings.theme]  %}
+              <div class="theme__item {% if forloop.first %}theme__selected{% endif %}" data-block-id="{{ block.id }}" data-theme-id="{{ block.settings.theme }}" {{ block.shopify_attributes }}>
+                <img src="{{ theme.image | img_url: '300x' }}" alt="{{ block.settings.image.alt }}" class="theme__image">
+                <div class="theme__content">
+                  <h4 class="theme__heading">{{ theme.title }}</h4>
+                  <div class="theme__description">{{ theme.description }}</div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
           <nav class="create__button">
             <button class="button button--prev button--moema">Previous Step</button>
             <button class="button button--next button--moema">{{ section.settings.action-1 }}</button>
@@ -86,9 +85,9 @@
       
       <!-- ================  STEP 3 ================ -->
       <div class="create__step-3">
-        <label for="frame__input" class="frame__label">{{ section.settings.label }}</label>
-        <div id="frame" class="frame__position frame__size">
-          <figure class="frame tada scroll" data-scroll-delay="4s">
+        <div id="frame" class="frame frame--position frame--size">
+          <figure class="frame__wrapper tada scroll" data-scroll-delay="4s">
+            <label for="frame__input" class="frame__label">{{ section.settings.label }}</label>
             <div class="frame__background">
               <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
               <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
@@ -111,9 +110,9 @@
       
       <!-- ================  STEP 4 ================ -->
       <div class="create__step-4">
-        <label for="frame__input" class="frame__label">{{ section.settings.label }}</label>
-        <div id="frame" class="frame__position frame__size">
-          <figure class="frame tada scroll" data-scroll-delay="4s">
+        <div id="frame" class="frame frame--position frame--size">
+          <figure class="frame__wrapper tada scroll" data-scroll-delay="4s">
+            <label for="frame__input" class="frame__label">{{ section.settings.label }}</label>
             <div class="frame__background">
               <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
               <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
@@ -226,21 +225,15 @@
     },
     {
       "type": "text",
-      "id": "label",
-      "label": "Title Text",
-      "default": "- SEE YOUR NAME IN PHOTOS NOW! –"
-    },
-    {
-      "type": "text",
       "id": "placeholder",
       "label": "Placeholder Text",
       "default": "TYPE YOUR NAME"
     },
     {
       "type": "text",
-      "id": "text",
+      "id": "label",
       "label": "Subheading",
-      "default": "- SEE YOUR NAME IN PHOTOS NOW! –"
+      "default": "– CREATE YOUR NAME IN PHOTOS IN 3 FUN EASY STEPS – "
     },
     {
       "type": "header",

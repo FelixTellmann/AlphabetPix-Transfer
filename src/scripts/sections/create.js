@@ -17,7 +17,7 @@ theme.Create = (function () {
   function Create(container) {
     this.$container = $(container);
     this.settings = {};
-    this.namespace = '.create';
+    this.namespace = '.create_navigation';
 
     /**
      * Collect section Variables required for cart input & information transfer
@@ -40,11 +40,12 @@ theme.Create = (function () {
 
     let previous_data = [];
 
-    let create = {
+    let create_navigation = {
       slider: $('.create__slider'),
       process_steps: $('.process__item'),
 
       step_1: $('.create__step-1'),
+      reset_button_1: $('.create__step-1 button.button--reset'),
       next_button_1: $('.create__step-1 button.button--next'),
 
       step_2: $('.create__step-2'),
@@ -61,14 +62,20 @@ theme.Create = (function () {
     };
 
     let input = {
-      container: $('#frame__input')
+      container: $('#frame__input'),
+      data: [],
+      length: 0
     };
 
     let frame = {
-      container: $('#frame'),
-      image_array: $('.frame__letter')
+      container: $('.frame'),
+      image_array: $('.frame__letter'),
+      label: $('.frame__label')
     };
 
+    let theme = {
+      item_array: $('.theme__item')
+    };
 
     window.onTimeout = [];
 
@@ -77,6 +84,10 @@ theme.Create = (function () {
         - preload_images(preload_container, theme)
         - append_image(image_container, position, letter_id)
         - resize_frame(input_data)
+        - update_process_bar(target_step)
+        - change_steps(target_step
+        - slide_up_label(input)
+        - change_theme(target_theme, custom_class)
 
     ==============================================================================*/
 
@@ -132,7 +143,7 @@ theme.Create = (function () {
           letter = 'symbol-heart';
           break;
         case ' ':
-          letter = 'symbol-star';
+          letter = 'whitespace';
           break;
       }
 
@@ -158,15 +169,31 @@ theme.Create = (function () {
     /*================ update_process_bar(target_step) ================*/
 
     let update_process_bar = function (target_step) {
-      create.process_steps.removeClass('process__item--active');
-      $(create.process_steps[target_step - 1]).addClass('process__item--active');
+      create_navigation.process_steps.removeClass('process__item--active');
+      $(create_navigation.process_steps[target_step - 1]).addClass('process__item--active');
     };
-
 
     /*================ change_steps(target_step) ================*/
 
     let change_steps = function (target_step) {
-      create.step_1.attr('style', 'margin-left: ' + -(target_step -  1) * 100  + 'vw');
+      create_navigation.step_1.attr('style', 'margin-left: ' + -(target_step - 1) * 100 + 'vw');
+    };
+
+    /*================ slide_up_label(input_length) ================*/
+
+    let slide_up_label = function (input_length) {
+      if (input_length > 0) {
+        frame.label.attr('style', 'opacity: 0;');
+      } else {
+        frame.label.attr('style', '');
+      }
+    };
+
+    /*================ change_theme(target_theme) ================*/
+
+    let change_theme = function (target_theme, custom_class = 'theme__selected') {
+      theme.item_array.removeClass(custom_class);
+      $(target_theme).addClass(custom_class);
     };
 
     /*============================================================================
@@ -177,10 +204,13 @@ theme.Create = (function () {
             .on('blur')
         - create_button_1
             .on('click')
+
+       - theme.item_array
+            .on('click')
     ==============================================================================*/
 
     /*================ input_container.on('input') ================*/
-    input.container.on('input', function () {
+    input.container.on('input change', function () {
       input.data = input.container.val().toLowerCase().split('');
       input.length = input.data.length;
 
@@ -202,17 +232,24 @@ theme.Create = (function () {
       /* Add images if the input changed */
       for (let letter_position = 0; letter_position < 9; letter_position++) {
         if (input.data[letter_position] !== previous_data[letter_position]) {
-          if (onTimeout[letter_position]) {
-            return true;
+          if (letter_position !== input.length - 1) {
+            change_letter_image(letter_position, input.data[letter_position]);
           } else {
-            onTimeout[letter_position] = true;
-            setTimeout(function () {
-              change_letter_image(letter_position, input.data[letter_position]);
-              onTimeout[letter_position] = false;
-            }, 600);
+            if (onTimeout[letter_position]) {
+              return true;
+            } else {
+              onTimeout[letter_position] = true;
+              setTimeout(function () {
+                change_letter_image(letter_position, input.data[letter_position]);
+                onTimeout[letter_position] = false;
+              }, 600);
+            }
           }
         }
       }
+
+      slide_up_label(input.length);
+
       previous_data = input.data;
     });
 
@@ -229,55 +266,64 @@ theme.Create = (function () {
     /*================ Navigation.on('click') ================*/
 
     /*Step-1*/
-    create.next_button_1.on('click', function () {
+    create_navigation.next_button_1.on('click', function () {
       change_steps(2);
       update_process_bar(2);
     });
 
+    create_navigation.reset_button_1.on('click', function () {
+      input.container.val('').trigger('input');
+    });
+
     /*Step-2*/
-    create.prev_button_2.on('click', function () {
+    create_navigation.prev_button_2.on('click', function () {
       change_steps(1);
       update_process_bar(1);
     });
 
-    create.next_button_2.on('click', function () {
+    create_navigation.next_button_2.on('click', function () {
       change_steps(3);
       update_process_bar(3);
     });
 
     /*Step-3*/
-    create.prev_button_3.on('click', function () {
+    create_navigation.prev_button_3.on('click', function () {
       change_steps(2);
       update_process_bar(2);
     });
 
-    create.next_button_3.on('click', function () {
+    create_navigation.next_button_3.on('click', function () {
       change_steps(4);
       update_process_bar(4);
     });
 
     /*Step-4*/
-    create.prev_button_4.on('click', function () {
+    create_navigation.prev_button_4.on('click', function () {
       change_steps(3);
       update_process_bar(3);
     });
-    create.next_button_4.on('click', function () {
+
+    create_navigation.next_button_4.on('click', function () {
       change_steps(4);
       update_process_bar(4);
     });
 
-
     /*================ process_steps.on('click') ================*/
 
-    create.process_steps.on('click', function () {
+    create_navigation.process_steps.on('click', function () {
       let target = $(this).attr('data-step-id');
       change_steps(target);
       update_process_bar(target);
     });
 
+    /*================ theme.item_array.on('click') ================*/
+
+    theme.item_array.on('click', function () {
+      change_theme(this);
+    });
 
     /*============================================================================
-      #Create Initialization
+      #Initialization
         - preload_images()
 
     ==============================================================================*/
@@ -288,17 +334,17 @@ theme.Create = (function () {
   }
 
   Create.prototype = $.extend({}, Create.prototype, {
-    /*
-        initSlider: function (sliderContainer) {
 
-        },
-
-
-        onBlockSelect: function (evt) {
-          this.$container.off(this.namespace);
-          var slideIndex = $('.slick-slide[data-block-id="' + evt.detail.blockId + '"]:not(.slick-cloned)').attr('data-slick-index');
-          $('.slider').attr('data-section-id', evt.detail.sectionId).slick('slickGoTo', slideIndex)
-        }*/
+    onBlockSelect: function (evt) {
+      /*this.$container.off(this.namespace);*/
+      $('.create__step-1').attr('style', 'margin-left: ' + -(2 - 1) * 100 + 'vw');
+      $('.theme__item').removeClass('theme__selected');
+      $('.theme__item[data-block-id="' + evt.detail.blockId + '"]').addClass('theme__selected');
+    },
+    onBlockDeselect: function (evt) {
+      /*this.$container.off(this.namespace);*/
+      $('.create__step-1').attr('style', 'margin-left: ' + -(1 - 1) * 100 + 'vw');
+    }
 
   });
 

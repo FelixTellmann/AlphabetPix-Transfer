@@ -951,11 +951,6 @@ html {
     - create (form)
 ==============================================================================*/
 
-.frame__wrapper {
-  width: 100%;
-  height: 100%;
-}
-
 .frame__input {
   position: absolute;
   top: 0;
@@ -1144,24 +1139,26 @@ html {
   
 }
 
-.frame__position {
+.frame {
+  -webkit-transition: 0.2s all;
+  transition: 0.2s all;
+  -webkit-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+}
+
+.frame--position {
   position: absolute;
   left: 50%;
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  
 }
 
-.frame__size {
+.frame--size {
   width: calc(9.5vw * 7 + 9.5vw);
   height: 25vw;
   max-width: calc(9.5vw * 9 + 9.5vw);
   max-height: 300px;
-  -webkit-transition: 0.2s all;
-  transition: 0.2s all;
-  -webkit-transition-timing-function: ease-in-out;
-  transition-timing-function: ease-in-out;
   
   @include min-size(1200px) {
     width: calc(114px * 7 + 114px);
@@ -1171,7 +1168,7 @@ html {
   }
 }
 
-.frame {
+.frame__wrapper {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -1237,14 +1234,18 @@ html {
 .frame__label {
   position: absolute;
   left: 50%;
-  top: 15%;
+  top: 67%;
   -webkit-transform: translate(-50%, 0);
   transform: translate(-50%, 0);
   margin: 0;
   font-weight: 700;
   font-size: 1.9vw;
   white-space: nowrap;
-  z-index: 1;
+  z-index: 3;
+  opacity: 1;
+  -webkit-transition: 0.1s all;
+  transition: 0.1s all;
+  
   @include min-size(md) {
     font-size: 14px;
   }
@@ -1373,6 +1374,10 @@ input[type='text'].frame__input {
   }
 }
 
+.create__step-1 .frame__letter {
+  pointer-events: none;
+}
+
 .create__button {
   position: absolute;
   bottom: -120px;
@@ -1397,9 +1402,16 @@ input[type='text'].frame__input {
   top: 17%;
   right: 0;
   padding: 0 100px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-flow: row nowrap;;
-  justify-content: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;;
+  -webkit-box-pack: center;;
+      -ms-flex-pack: center;;
+          justify-content: center;
   z-index: 1;
   
   .process__item {
@@ -1413,6 +1425,7 @@ input[type='text'].frame__input {
     font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.1px;
+    -webkit-transition: 0.2s all;
     transition: 0.2s all;
     
     &:hover {
@@ -1437,13 +1450,19 @@ input[type='text'].frame__input {
     background: #fff;
     z-index: 2;
     top: 10px;
-    transform: translate(-50%, 0);
+    -webkit-transform: translate(-50%, 0);
+            transform: translate(-50%, 0);
     border-radius: 50%;
     border: 1px solid #808080b0;
+    -webkit-transition: 0.3s all;
     transition: 0.3s all;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: center;
-    letter-spacing:0;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    letter-spacing: 0;
     color: $color__text;
   }
   
@@ -1479,6 +1498,99 @@ input[type='text'].frame__input {
   .process__item--active:before {
     background-color: $color__primary;
     color: $color__background;
+  }
+}
+
+/*============================================================================
+  #Step 2 - Theme Selection
+    - 
+==============================================================================*/
+
+
+.theme {
+  -webkit-transition: 0.2s all;
+  transition: 0.2s all;
+  -webkit-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+}
+
+.theme--position {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.theme--size {
+  width: 1200px;
+  max-width: 100%;
+  padding: 0 15px;
+}
+
+.theme__wrapper {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row;
+          flex-flow: row;
+  margin-top: 50px;
+  
+}
+
+.theme__item {
+  padding: 0 35px;
+  text-align: center;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 25%;
+          flex: 0 0 25%;
+    
+  .theme__image {
+    padding: 15px;
+    background: #fff;
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+  }
+  
+  .theme__content {
+    padding: 15px 10px;
+    background: transparent;
+    border-radius: 15px;
+    margin-top: 15px;
+    transition: 0.2s all;
+    cursor: pointer;
+  }
+  
+  .theme__heading {
+    font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 1.8rem;
+    margin: 0 0 10px;
+  }
+  
+  .theme__description p {
+    margin: 0 0 5px;
+    font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+  }
+}
+
+.theme__item.theme__selected {
+  .theme__content {
+    background: #fff;
   }
 }
 /*
