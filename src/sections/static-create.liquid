@@ -2,6 +2,15 @@
   .create {
     background: url('{{ section.settings.bg_image | img_url: '2000x' }}') center center/cover no-repeat;
   }
+  .frame--size {
+    width: calc(9.5vw * {{ section.settings.default_frame_size }} + 9.5vw);
+  }
+  @media (min-width: 1200px) {
+    .frame--size {
+      width: calc(114px * {{ section.settings.default_frame_size }} + 114px);
+    }
+  }
+  
 </style>
 
 <script>
@@ -48,12 +57,12 @@
             <input id="frame__input" name="frame__input" type="text" class="frame__input" placeholder="{{ section.settings.placeholder }}" maxlength="9"  data-section-id="{{ section.id }}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
             <div id="frame__image-container" class="frame__letter-wrapper">
               {% for i in (0..8) %}
-                <a class="frame__letter" href="#" data-letter-position="{{ i }}"></a>
+                <div class="frame__letter" data-letter-position="{{ i }}"></div>
               {% endfor %}
             </div>
           </figure>
           <nav class="create__button">
-            <button class="button button--reset button--moema">Reset</button>
+            <button class="button button--reset button--moema button--hidden">Reset</button>
             <button class="button button--next button--moema">{{ section.settings.action-1 }}</button>
           </nav>
         </div>
@@ -86,18 +95,17 @@
       <!-- ================  STEP 3 ================ -->
       <div class="create__step-3">
         <div id="frame" class="frame frame--position frame--size">
-          <figure class="frame__wrapper tada scroll" data-scroll-delay="4s">
-            <label for="frame__input" class="frame__label">{{ section.settings.label }}</label>
+          <h4 class="frame__instructions">{{ section.settings.instruction }}</h4>
+          <figure class="frame__wrapper">
             <div class="frame__background">
               <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
               <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
               <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
               <div class="frame__image--mat" style="background-color: {{ section.settings.mat_color }}"></div>
             </div>
-            <input id="frame__input" name="frame__input" type="text" class="frame__input" placeholder="{{ section.settings.placeholder }}" maxlength="9" autocomplete="off" data-section-id="{{ section.id }}">
-            <div id="frame__image-container" class="frame__letter-wrapper">
+            <div id="frame__image-container--step-2" class="frame__letter-wrapper">
               {% for i in (0..8) %}
-                <a class="frame__letter" href="#" data-letter-position="{{ i }}"></a>
+                <button class="frame__letter" data-letter-position="{{ i }}"></button>
               {% endfor %}
             </div>
           </figure>
@@ -176,8 +184,9 @@
     <img data-letter-id="whitespace" id="whitespace" class="preload-image visually-hidden">
   
   </div>
-  
-  {% comment %}{#<!--@formatter:off-->#}{% endcomment %}
+</div>
+
+{% comment %}{#<!--@formatter:off-->#}{% endcomment %}
 {% schema %}
 {
   "name": "Create Your Photo",
@@ -211,6 +220,17 @@
       "type": "product",
       "id": "frame",
       "label": "Frame Selection"
+    },
+    {
+      "type": "range",
+      "id": "default_frame_size",
+      "label": "Frame Selection",
+      "min": 3,
+      "max": 9,
+      "step": 1,
+      "unit": " x",
+      "label": "Default Frame Size",
+      "default": 7
     },
     {
       "type": "color",
@@ -274,6 +294,12 @@
       "id": "action-3",
       "label": "Next Button",
       "default": "NEXT:  SELECT YOUR FRAME & MAT"
+    },
+    {
+      "type": "text",
+      "id": "instruction",
+      "label": "User Instructions",
+      "default": "Click on the letter to change the letter"
     },
     {
       "type": "text",

@@ -17,6 +17,11 @@
 // =require vendor/dom-to-image.min.js
 
 
+/*!
+ * jquery.cookie.js
+ */
+
+// =require vendor/jquery.cookie.js
 
 // Attempts to preserve comments that likely contain licensing information,
 // even if the comment does not have directives such as `@license` or `/*!`.

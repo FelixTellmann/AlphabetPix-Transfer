@@ -1291,22 +1291,31 @@ theme.Create = (function () {
      *
      * */
 
+    /*============================================================================
+      #Settings
+        -  $.cookie.json = true;
+
+    ==============================================================================*/
+
+    $.cookie.json = true;
 
     /*============================================================================
       #Variables
         - Constants
-        - Objects
-        - Base Items
         - Window Items
-        - SessionStorage
+
     ==============================================================================*/
+
     const section_id = this.$container.attr('data-section-id');
     const preload_container = $('#create__preload-images');
+    const input_container = $('#frame__input');
 
+    const modal = {
+      container: $("#create__modal"),
+      content: $("#create__modal .modal__body")
+    };
 
-    let previous_data = [];
-
-    let create_navigation = {
+    const create_navigation = {
       slider: $('.create__slider'),
       process_steps: $('.process__item'),
 
@@ -1327,28 +1336,36 @@ theme.Create = (function () {
       next_button_4: $('.create__step-4 button.button--next')
     };
 
-    let input = {
-      container: $('#frame__input'),
-      data: [],
-      length: 0
-    };
-
-    let frame = {
+    const frame = {
       container: $('.frame'),
-      image_array: $('.frame__letter'),
+      image_array_1: $('.create__step-1 .frame__letter'),
+      image_array_2: $('.create__step-3 .frame__letter'),
       label: $('.frame__label')
     };
 
-    let theme = {
+    const theme = {
       item_array: $('.theme__item')
     };
 
+
     window.onTimeout = [];
+
+    let create_data = $.cookie('create_data') || {
+      input: [],
+      input_array: [],
+      previous_input_array: [],
+      resize_length: window.create_section.default_frame_size,
+      frame: window.create_section.frame,
+      theme: window.create_section.theme
+    };
+
+    window.create_data = create_data;
+
 
     /*============================================================================
       #Functions
         - preload_images(preload_container, theme)
-        - append_image(image_container, position, letter_id)
+        - change_letter_image(position, letter, variant_id, custom_image)
         - resize_frame(input_data)
         - update_process_bar(target_step)
         - change_steps(target_step
@@ -1359,7 +1376,7 @@ theme.Create = (function () {
 
 
     /*================ preload_images(preload_container, theme) ================*/
-    let preload_images = function (preload_container, theme = 'all', limit = 1) {
+    let preload_images = function (preload_container, theme = 'all', limit = 0) {
       $.each(window.products, function (i, v) {
         let product = this;
         $.each(this.variants, function (i, v) {
@@ -1369,7 +1386,7 @@ theme.Create = (function () {
             'class="preload-image" ' +
             'data-variant-id="' + variant.id + '" ' +
             'data-letter-id="' + product.handle.replace('letter-', '') + '" ' +
-            'data-letter-theme="' + variant.option1 + '">';
+            'data-theme-id="' + variant.option1 + '">';
           if (theme === 'all') {
             preload_container.append(v_img);
             if (limit !== 0 && i >= limit - 1) {
@@ -1385,9 +1402,11 @@ theme.Create = (function () {
       });
     };
 
-    /*================ change_letter_image(position, letter, variant_id = false) ================*/
-    let change_letter_image = function (position, letter = false, variant_id = false, custom_image = false) {
+    /*================ change_letter_image(position, letter, variant_id, custom_image) ================*/
+    let change_letter_image = function (position, letter = false, theme_data, variant_id = false, custom_image = false) {
+
       let image = '';
+      let image_2 = '';
 
       switch (letter) {
         case '*':
@@ -1415,12 +1434,51 @@ theme.Create = (function () {
 
       if (variant_id) {
         image = $('.preload-image[data-variant-id="' + variant_id + '"]').clone(false)[0];
+        image_2 = $('.preload-image[data-variant-id="' + variant_id + '"]').clone(false)[0];
       } else if (custom_image) {
         image = $('.preload-image[data-custom-id="' + custom_image + '"]').clone(false);
+        image_2 = $('.preload-image[data-custom-id="' + custom_image + '"]').clone(false);
       } else if (letter) {
-        image = $('.preload-image[data-letter-id="' + letter + '"]').clone(false);
+        image = $('.preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_data + '"]').clone(false);
+        image_2 = $('.preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_data + '"]').clone(false);
       }
-      $(frame.image_array[position]).empty().append(image[0]);
+
+
+      frame.image_array_1.eq(position).empty().append(image[0]);
+      frame.image_array_2.eq(position).empty().append(image_2[0]);
+
+
+    };
+
+    /*================ update_frame_images(input_data, theme_data, custom_image)  ================*/
+    let update_frame_images = function (input_data, theme_data = create_data.theme, custom_image = false) {
+
+      /* Remove images at positions larger than input */
+      for (let i = input_data.length; i < 9; i++) {
+        change_letter_image(i);
+      }
+
+
+      /* Add images if the input changed */
+      for (let pos = 0; pos < 9; pos++) {
+        if (input_data[pos] !== create_data.previous_input_array[pos]) {
+          if (pos !== input_data.length - 1) {
+            change_letter_image(pos, input_data[pos], theme_data);
+          } else {
+            if (onTimeout[pos]) {
+              return true;
+            } else {
+              onTimeout[pos] = true;
+              setTimeout(function () {
+                change_letter_image(pos, input_data[pos], theme_data);
+                onTimeout[pos] = false;
+              }, 600);
+            }
+          }
+        } else {
+          change_letter_image(pos, input_data[pos], theme_data);
+        }
+      }
     };
 
     /*================ resize_frame(length, spacing = 0) ================*/
@@ -1433,20 +1491,21 @@ theme.Create = (function () {
     };
 
     /*================ update_process_bar(target_step) ================*/
-
     let update_process_bar = function (target_step) {
       create_navigation.process_steps.removeClass('process__item--active');
       $(create_navigation.process_steps[target_step - 1]).addClass('process__item--active');
+
+      if (target_step === 3) {
+        frame.image_array_2.eq(0).children().addClass('tada animated');
+      }
     };
 
     /*================ change_steps(target_step) ================*/
-
     let change_steps = function (target_step) {
       create_navigation.step_1.attr('style', 'margin-left: ' + -(target_step - 1) * 100 + 'vw');
     };
 
     /*================ slide_up_label(input_length) ================*/
-
     let slide_up_label = function (input_length) {
       if (input_length > 0) {
         frame.label.attr('style', 'opacity: 0;');
@@ -1455,12 +1514,46 @@ theme.Create = (function () {
       }
     };
 
-    /*================ change_theme(target_theme) ================*/
+    /*================ show_reset_button(input_length) ================*/
+    let show_reset_button = function (input_length) {
+      if (input_length > 0) {
+        create_navigation.reset_button_1.removeClass('button--hidden');
+      } else {
+        create_navigation.reset_button_1.addClass('button--hidden');
+      }
+    };
 
+    /*================ change_theme(target_theme) ================*/
     let change_theme = function (target_theme, custom_class = 'theme__selected') {
       theme.item_array.removeClass(custom_class);
       $(target_theme).addClass(custom_class);
     };
+
+    /*================ collect_input_cart_data(input) ================*/
+    let collect_input_cart_data = function (input_array = create_data.input_array, variant_id = false, theme_data = create_data.theme, frame_data = create_data.frame) {
+      create_data.input_array = input_array;
+      create_data.theme = theme_data;
+      create_data.frame = frame_data;
+
+      $.each(input_array, function (i, v) {
+        create_data.input[i] = {
+          position: i + 1,
+          letter: v
+        };
+        if (variant_id) {
+
+        } else {
+          setTimeout(function () {
+            create_data.input[i]['variant-id'] = frame.image_array_1.eq(i).children().attr('data-variant-id');
+          }, 800);
+        }
+      });
+      for (let i = input_array.length; i < 9; i++) {
+        create_data.input[i] = {};
+      }
+
+    };
+
 
     /*============================================================================
       # Events
@@ -1476,69 +1569,45 @@ theme.Create = (function () {
     ==============================================================================*/
 
     /*================ input_container.on('input') ================*/
-    input.container.on('input change', function () {
-      input.data = input.container.val().toLowerCase().split('');
-      input.length = input.data.length;
+    input_container.on('input change', function () {
+      create_data.input_array = input_container.val().toLowerCase().split('');
+
 
       /* Resize frame once reached 3 letters, leaving space for 1 letter input */
-      if (input.length > 2) {
-        input.resize_length = input.length;
-        resize_frame(input.resize_length, 1);
+      if (create_data.input_array.length > 2) {
+        create_data.resize_length = create_data.input_array.length;
+        resize_frame(create_data.resize_length, 1);
       } else {
-        input.resize_length = 7;
-        resize_frame(input.resize_length);
+        create_data.resize_length = 7;
+        resize_frame(create_data.resize_length);
       }
 
+      update_frame_images(create_data.input_array);
+      slide_up_label(create_data.input_array.length);
+      show_reset_button(create_data.input_array.length);
+      collect_input_cart_data(create_data.input_array);
 
-      /* Remove images at positions larger than input */
-      for (let i = input.length; i < 9; i++) {
-        change_letter_image(i);
-      }
-
-      /* Add images if the input changed */
-      for (let letter_position = 0; letter_position < 9; letter_position++) {
-        if (input.data[letter_position] !== previous_data[letter_position]) {
-          if (letter_position !== input.length - 1) {
-            change_letter_image(letter_position, input.data[letter_position]);
-          } else {
-            if (onTimeout[letter_position]) {
-              return true;
-            } else {
-              onTimeout[letter_position] = true;
-              setTimeout(function () {
-                change_letter_image(letter_position, input.data[letter_position]);
-                onTimeout[letter_position] = false;
-              }, 600);
-            }
-          }
-        }
-      }
-
-      slide_up_label(input.length);
-
-      previous_data = input.data;
+      create_data.previous_input = create_data.input_array;
     });
 
-    /*================ input.container.on('focus') ================*/
-    input.container.on('focus', function () {
-      resize_frame(input.resize_length, 1);
+    /*================ input_container.on('focus') ================*/
+    input_container.on('focus', function () {
+      resize_frame(create_data.resize_length, 1);
     });
 
-    /*================ input.container.on('blur') ================*/
-    input.container.on('blur', function () {
-      resize_frame(input.resize_length);
+    /*================ input_container.on('blur') ================*/
+    input_container.on('blur', function () {
+      resize_frame(create_data.resize_length);
     });
 
     /*================ Navigation.on('click') ================*/
-
     /*Step-1*/
     create_navigation.next_button_1.on('click', function () {
       change_steps(2);
       update_process_bar(2);
     });
-
     create_navigation.reset_button_1.on('click', function () {
-      input.container.val('').trigger('input');
+      input_container.val('').trigger('input');
     });
 
     /*Step-2*/
@@ -1546,7 +1615,6 @@ theme.Create = (function () {
       change_steps(1);
       update_process_bar(1);
     });
-
     create_navigation.next_button_2.on('click', function () {
       change_steps(3);
       update_process_bar(3);
@@ -1557,7 +1625,6 @@ theme.Create = (function () {
       change_steps(2);
       update_process_bar(2);
     });
-
     create_navigation.next_button_3.on('click', function () {
       change_steps(4);
       update_process_bar(4);
@@ -1568,14 +1635,12 @@ theme.Create = (function () {
       change_steps(3);
       update_process_bar(3);
     });
-
     create_navigation.next_button_4.on('click', function () {
       change_steps(4);
       update_process_bar(4);
     });
 
     /*================ process_steps.on('click') ================*/
-
     create_navigation.process_steps.on('click', function () {
       let target = $(this).attr('data-step-id');
       change_steps(target);
@@ -1583,9 +1648,10 @@ theme.Create = (function () {
     });
 
     /*================ theme.item_array.on('click') ================*/
-
     theme.item_array.on('click', function () {
       change_theme(this);
+      update_frame_images(create_data.input_array, $(this).attr('data-theme-id'));
+      collect_input_cart_data(create_data.input_array, false, $(this).attr('data-theme-id'));
     });
 
     /*============================================================================
@@ -1594,7 +1660,8 @@ theme.Create = (function () {
 
     ==============================================================================*/
 
-    preload_images(preload_container, window.create_section.theme, 1);
+    preload_images(preload_container, 'all', 0);
+    $.cookie('create_data', create_data);
 
 
   }
