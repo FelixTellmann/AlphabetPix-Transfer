@@ -2,15 +2,17 @@
   .create {
     background: url('{{ section.settings.bg_image | img_url: '2000x' }}') center center/cover no-repeat;
   }
+  
   .frame--size {
-    width: calc(9.5vw * {{ section.settings.default_frame_size }} + 9.5vw);
-  }
-  @media (min-width: 1200px) {
-    .frame--size {
-      width: calc(114px * {{ section.settings.default_frame_size }} + 114px);
-    }
+    width: calc(9.5vw * {{ section.settings.default_frame_size }}+9.5vw);
   }
   
+  @media (min-width: 1200px) {
+    .frame--size {
+      width: calc(114px * {{ section.settings.default_frame_size }}+114px);
+    }
+  }
+
 </style>
 
 <script>
@@ -54,7 +56,7 @@
               <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
               <div class="frame__image--mat" style="background-color: {{ section.settings.mat_color }}"></div>
             </div>
-            <input id="frame__input" name="frame__input" type="text" class="frame__input" placeholder="{{ section.settings.placeholder }}" maxlength="9"  data-section-id="{{ section.id }}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <input id="frame__input" name="frame__input" type="text" class="frame__input" placeholder="{{ section.settings.placeholder }}" maxlength="9" data-section-id="{{ section.id }}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
             <div id="frame__image-container" class="frame__letter-wrapper">
               {% for i in (0..8) %}
                 <div class="frame__letter" data-letter-position="{{ i }}"></div>
@@ -74,7 +76,7 @@
         <div class="theme theme--position theme--size" data-section-id="{{ section.id }}">
           <div class="theme__wrapper">
             {% for block in section.blocks %}
-              {% assign theme = collections[block.settings.theme]  %}
+              {% assign theme = collections[block.settings.theme] %}
               <div class="theme__item {% if forloop.first %}theme__selected{% endif %}" data-block-id="{{ block.id }}" data-theme-id="{{ block.settings.theme }}" {{ block.shopify_attributes }}>
                 <img src="{{ theme.image | img_url: '300x' }}" alt="{{ block.settings.image.alt }}" class="theme__image">
                 <div class="theme__content">
@@ -153,36 +155,30 @@
           <h5 class="modal-title">Select your Photo</h5>
           <iframe frameborder="0" scrolling="no" id="create__product-data__custom-image" class="modal__image-upload" src="/pages/image-upload/">
           </iframe>
-          
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal__body">
-          ...
+          <img data-letter-id="whitespace" id="whitespace" class="preload-image visually-hidden">
         </div>
         <div class="modal-footer">
-          {% for p in item.properties %}
-            {% unless p.last == blank %}
-              <div class="line-item-property">
-                {{ p.first }}:
-                {% if p.last contains '/uploads/' %}
-                  <span class="value"><a href="{{ p.last }}">Link</a></span>
-                {% else %}
-                  <span class="value">{{ p.last }}</span>
-                {% endif %}
+          <div class="modal__theme-selection">
+            {% for block in section.blocks %}
+              <div class="modal__theme-input">
+                <input id="modal__theme-input--{{ block.settings.theme }}" type="checkbox" data-theme-id="{{ block.settings.theme }}">
+                <label for="modal__theme-input--{{ block.settings.theme }}">{{ block.settings.theme | capitalize }}</label>
               </div>
-            {% endunless %}
-          {% endfor %}
+            {% endfor %}
+            <div class="modal__theme-input">
+              <input id="modal__theme-input--all" type="checkbox" class="modal__theme-input" data-theme-id="all">
+              <label for="modal__theme-input--all">All</label>
+            </div>
+          </div>
         </div>
       
       </div>
     </div>
-  </div>
-  
-  <div id="create__preload-images" class="visually-hidden">
-    <img data-letter-id="whitespace" id="whitespace" class="preload-image visually-hidden">
-  
   </div>
 </div>
 

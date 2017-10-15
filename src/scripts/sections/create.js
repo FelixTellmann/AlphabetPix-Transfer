@@ -41,12 +41,12 @@ theme.Create = (function () {
     ==============================================================================*/
 
     const section_id = this.$container.attr('data-section-id');
-    const preload_container = $('#create__preload-images');
     const input_container = $('#frame__input');
 
-    const modal = {
-      container: $("#create__modal"),
-      content: $("#create__modal .modal__body")
+    let modal = {
+      container: $('#create__modal'),
+      content: $('#create__modal .modal__body'),
+      checkbox_array: $('.modal__theme-input input')
     };
 
     const create_navigation = {
@@ -90,7 +90,11 @@ theme.Create = (function () {
       previous_input_array: [],
       resize_length: window.create_section.default_frame_size,
       frame: window.create_section.frame,
-      theme: window.create_section.theme
+      theme: window.create_section.theme,
+      modal: {
+        theme_array: [window.create_section.theme],
+        current_letter: ''
+      }
     };
 
     window.create_data = create_data;
@@ -120,7 +124,8 @@ theme.Create = (function () {
             'class="preload-image" ' +
             'data-variant-id="' + variant.id + '" ' +
             'data-letter-id="' + product.handle.replace('letter-', '') + '" ' +
-            'data-theme-id="' + variant.option1 + '">';
+            'data-theme-id="' + variant.option1 + '" ' +
+            'data-selection-type="preload">';
           if (theme === 'all') {
             preload_container.append(v_img);
             if (limit !== 0 && i >= limit - 1) {
@@ -167,20 +172,18 @@ theme.Create = (function () {
       }
 
       if (variant_id) {
-        image = $('.preload-image[data-variant-id="' + variant_id + '"]').clone(false)[0];
-        image_2 = $('.preload-image[data-variant-id="' + variant_id + '"]').clone(false)[0];
+        image = $('.preload-image[data-variant-id="' + variant_id + '"]').clone(false).attr('data-selection-type', 'selected');
+        image_2 = $('.preload-image[data-variant-id="' + variant_id + '"]').clone(false).attr('data-selection-type', 'selected');
       } else if (custom_image) {
-        image = $('.preload-image[data-custom-id="' + custom_image + '"]').clone(false);
-        image_2 = $('.preload-image[data-custom-id="' + custom_image + '"]').clone(false);
+        image = $('.preload-image[data-custom-id="' + custom_image + '"]').clone(false).attr('data-selection-type', 'custom');
+        image_2 = $('.preload-image[data-custom-id="' + custom_image + '"]').clone(false).attr('data-selection-type', 'custom');
       } else if (letter) {
-        image = $('.preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_data + '"]').clone(false);
-        image_2 = $('.preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_data + '"]').clone(false);
+        image = $('.preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_data + '"]').clone(false).attr('data-selection-type', 'auto');
+        image_2 = $('.preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_data + '"]').clone(false).attr('data-selection-type', 'auto');
       }
-
 
       frame.image_array_1.eq(position).empty().append(image[0]);
       frame.image_array_2.eq(position).empty().append(image_2[0]);
-
 
     };
 
@@ -226,17 +229,21 @@ theme.Create = (function () {
 
     /*================ update_process_bar(target_step) ================*/
     let update_process_bar = function (target_step) {
-      create_navigation.process_steps.removeClass('process__item--active');
-      $(create_navigation.process_steps[target_step - 1]).addClass('process__item--active');
+      if (target_step === 1 || target_step > 1 && create_data.input_array.length >= 3) {
+        create_navigation.process_steps.removeClass('process__item--active');
+        $(create_navigation.process_steps[target_step - 1]).addClass('process__item--active');
 
-      if (target_step === 3) {
-        frame.image_array_2.eq(0).children().addClass('tada animated');
+        if (target_step === 3) {
+          frame.image_array_2.eq(0).children().addClass('tada animated');
+        }
       }
     };
 
     /*================ change_steps(target_step) ================*/
     let change_steps = function (target_step) {
-      create_navigation.step_1.attr('style', 'margin-left: ' + -(target_step - 1) * 100 + 'vw');
+      if (target_step === 1 || target_step > 1 && create_data.input_array.length >= 3) {
+        create_navigation.step_1.attr('style', 'margin-left: ' + -(target_step - 1) * 100 + 'vw');
+      }
     };
 
     /*================ slide_up_label(input_length) ================*/
@@ -267,6 +274,7 @@ theme.Create = (function () {
     let collect_input_cart_data = function (input_array = create_data.input_array, variant_id = false, theme_data = create_data.theme, frame_data = create_data.frame) {
       create_data.input_array = input_array;
       create_data.theme = theme_data;
+      create_data.modal.theme_array = [theme_data];
       create_data.frame = frame_data;
 
       $.each(input_array, function (i, v) {
@@ -288,6 +296,24 @@ theme.Create = (function () {
 
     };
 
+    /*================ add_theme_image_to_modal(theme_data) ================*/
+    let add_images_to_modal = function (letter, theme_array) {
+      create_data.modal.current_letter = letter;
+      /*default back to invisible*/
+      modal.checkbox_array.prop('checked', false);
+      $('.preload-image[data-selection-type="modal"]').attr('data-selection-type', 'preload');
+
+      /*change images state for each theme*/
+      $.each(theme_array, function (i, v) {
+        if (theme_array[i] === 'all') {
+          $('.preload-image[data-letter-id="' + letter + '"][data-selection-type="preload"]').attr('data-selection-type', 'modal');
+        } else {
+          $('.preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_array[i] + '"][data-selection-type="preload"]').attr('data-selection-type', 'modal');
+        }
+
+        modal.checkbox_array.filter('[data-theme-id="' + theme_array[i] + '"]').prop('checked', true);
+      });
+    };
 
     /*============================================================================
       # Events
@@ -376,7 +402,7 @@ theme.Create = (function () {
 
     /*================ process_steps.on('click') ================*/
     create_navigation.process_steps.on('click', function () {
-      let target = $(this).attr('data-step-id');
+      let target = parseInt($(this).attr('data-step-id'));
       change_steps(target);
       update_process_bar(target);
     });
@@ -388,13 +414,37 @@ theme.Create = (function () {
       collect_input_cart_data(create_data.input_array, false, $(this).attr('data-theme-id'));
     });
 
+    /*================ frame.image_array_2.on('click') ================*/
+    frame.image_array_2.on('click', function (e) {
+      e.preventDefault();
+      add_images_to_modal($(this).children().attr('data-letter-id'), [create_data.theme]);
+      modal.container.modal('toggle');
+    });
+
+    modal.checkbox_array.on('click', function () {
+      if ($(this).prop('checked') === true) {
+        if ($(this).attr('data-theme-id') === 'all') {
+          create_data.modal.theme_array = ['antique', 'classic','shoreline','frontier', 'all']
+        } else {
+          create_data.modal.theme_array = create_data.modal.theme_array.concat($(this).attr('data-theme-id'));
+        }
+        add_images_to_modal(create_data.modal.current_letter, create_data.modal.theme_array);
+      } else if ($(this).prop('checked') === false) {
+        if ($(this).attr('data-theme-id') === 'all') {
+          create_data.modal.theme_array = [create_data.theme]
+        } else {
+          create_data.modal.theme_array.splice(create_data.modal.theme_array.indexOf($(this).attr('data-theme-id')), 1);
+        }
+        add_images_to_modal(create_data.modal.current_letter, create_data.modal.theme_array);
+      }
+    });
     /*============================================================================
       #Initialization
         - preload_images()
 
     ==============================================================================*/
 
-    preload_images(preload_container, 'all', 0);
+    preload_images(modal.content, 'all', 0);
     $.cookie('create_data', create_data);
 
 
