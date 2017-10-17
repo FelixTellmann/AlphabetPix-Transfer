@@ -47,8 +47,8 @@
     <div class="create__slider">
       <!-- ================  STEP 1 ================ -->
       <div class="create__step-1">
-        <div id="frame" class="frame frame--position frame--size">
-          <figure class="frame__wrapper tada scroll" data-scroll-delay="4s">
+        <div class="frame frame--position frame--size" data-frame-size="{{ section.settings.default_frame_size }}">
+          <figure id="frame" class="frame__wrapper tada scroll" data-scroll-delay="4s">
             <label for="frame__input" class="frame__label">{{ section.settings.label }}</label>
             <div class="frame__background">
               <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
@@ -96,7 +96,7 @@
       
       <!-- ================  STEP 3 ================ -->
       <div class="create__step-3">
-        <div id="frame" class="frame frame--position frame--size">
+        <div class="frame frame--position frame--size" data-frame-size="{{ section.settings.default_frame_size }}">
           <h4 class="frame__instructions">{{ section.settings.instruction }}</h4>
           <figure class="frame__wrapper">
             <div class="frame__background">
@@ -111,6 +111,17 @@
               {% endfor %}
             </div>
           </figure>
+          <div class="theme-change__wrapper">
+            {% for block in section.blocks %}
+              {% assign frame = all_products[block.settings.frame] %}
+              {% for image in frame.images %}
+                {% if image.src contains 'corner' %}{% assign frame_corner = image.src %}{% endif %}
+              {% endfor %}
+              <button class="theme-change__item" data-theme-id="{{ block.settings.frame }}">
+                <img src="{{ frame_corner | img_url: '150x' }}" alt="" class="theme-change__image">
+              </button>
+            {% endfor %}
+          </div>
           <nav class="create__button">
             <button class="button button--prev button--moema">Previous Step</button>
             <button class="button button--next button--moema">{{ section.settings.action-1 }}</button>
@@ -120,32 +131,37 @@
       
       <!-- ================  STEP 4 ================ -->
       <div class="create__step-4">
-        <div id="frame" class="frame frame--position frame--size">
-          <figure class="frame__wrapper tada scroll" data-scroll-delay="4s">
-            <label for="frame__input" class="frame__label">{{ section.settings.label }}</label>
-            <div class="frame__background">
-              <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
-              <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
-              <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
-              <div class="frame__image--mat" style="background-color: {{ section.settings.mat_color }}"></div>
-            </div>
-            <input id="frame__input" name="frame__input" type="text" class="frame__input" placeholder="{{ section.settings.placeholder }}" maxlength="9" autocomplete="off" data-section-id="{{ section.id }}">
-            <div id="frame__image-container" class="frame__letter-wrapper">
-              {% for i in (0..8) %}
-                <a class="frame__letter" href="#" data-letter-position="{{ i }}"></a>
-              {% endfor %}
-            </div>
+        <div class="frame frame--position frame--size" data-frame-size="9">
+          <figure id="final-artwork" class="frame__wrapper">
           </figure>
           <nav class="create__button">
             <button class="button button--prev button--moema">Previous Step</button>
-            <button class="button button--next button--moema">{{ section.settings.action-1 }}</button>
+            <button class="button button--next button--moema">NEXT: SELECT COLLECTION</button>
           </nav>
         </div>
       </div>
-    
-    
     </div>
   </div>
+  
+  <!-- ================ Frame for screenshot - pushed out of screen - max size for quality ================ -->
+  <div class="create__artwork-to-image">
+    <div class="frame frame--position frame--size" data-frame-size="{{ section.settings.default_frame_size }}">
+      <figure id="frame_to_image" class="frame__wrapper">
+        <div class="frame__background">
+          <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
+          <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
+          <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
+          <div class="frame__image--mat" style="background-color: {{ section.settings.mat_color }}"></div>
+        </div>
+        <div id="frame__image-container--step-2" class="frame__letter-wrapper">
+          {% for i in (0..8) %}
+            <button class="frame__letter" data-letter-position="{{ i }}"></button>
+          {% endfor %}
+        </div>
+      </figure>
+    </div>
+  </div>
+  
   
   <!-- Modal -->
   <div class="modal fade" id="create__modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -153,8 +169,6 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Select your Photo</h5>
-          <iframe frameborder="0" scrolling="no" id="create__product-data__custom-image" class="modal__image-upload" src="/pages/image-upload/">
-          </iframe>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -163,6 +177,8 @@
           <img data-letter-id="whitespace" id="whitespace" class="preload-image visually-hidden">
         </div>
         <div class="modal-footer">
+          <iframe frameborder="0" scrolling="no" id="create__product-data__custom-image" class="modal__image-upload" src="/pages/image-upload/">
+          </iframe>
           <div class="modal__theme-selection">
             {% for block in section.blocks %}
               <div class="modal__theme-input">

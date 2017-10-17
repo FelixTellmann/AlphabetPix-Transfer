@@ -1,5 +1,4 @@
-{% layout 'cart' %}
-
+{% layout 'image-upload' %}
 
 <script>
   $(function () {
@@ -8,8 +7,7 @@
     
     $("#custom-image__properties").on('change',function (e) {
       
-  
-      setTimeout(function() {
+        setTimeout(function() {
         $('.custom-image__label').remove();
         $('.upload-progress').removeClass('visually-hidden');
       }, 100);
@@ -17,7 +15,6 @@
       let bar = $('.upload-progress__bar');
       let percent = $('.upload-progress__percent');
       let percentVal = 0;
-
 
       function addPercent() {
         bar.width(percentVal + '%');
@@ -31,21 +28,20 @@
     })
   });
  
-  
-  
 </script>
-<div class="custom-image"> <!-- TODO Add visually-hidden after development  -->
+
+<div class="custom-image">
   <form id="custom-image__form" action="/cart/add" enctype="multipart/form-data" method="post" class="custom-image__form">
     <div class="upload-progress visually-hidden">
       <div class="upload-progress__bar"></div>
       <div class="upload-progress__percent">0%</div>
     </div>
-    <label for="custom-image__properties" class="custom-image__label">
-      {% include 'icon-upload' %}
-      <span>Upload your own Image</span>
+    <label for="custom-image__properties" class="button button--naira-up button--naira custom-image__label">
+      <i class="button__icon">{% include 'icon-upload' %}</i>
+      <span>Upload</span>
     </label>
     <input id="custom-image__input"  type="hidden" name="id" value="{{ all_products['custom-image'].variants[0].id }}">
-    <input id="custom-image__properties" class="visually-hidden" type="file" accept="image/*" name="properties[custom_image]">
+    <input id="custom-image__properties" class="visually-hidden" type="file" accept="image/*" name="properties[custom_image_upload]">
     <input type="hidden" name="return_to" value="pages/image-upload-success"/>
     <button class="visually-hidden" id="custom-image__submit" type="submit" name="add">Submit</button>
   </form>

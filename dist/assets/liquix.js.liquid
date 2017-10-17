@@ -1308,11 +1308,14 @@ theme.Create = (function () {
 
     const section_id = this.$container.attr('data-section-id');
     const input_container = $('#frame__input');
+    const fixed_size_frame = $('#frame_to_image');
+    const final_artwork = $('#final-artwork');
 
     let modal = {
       container: $('#create__modal'),
       content: $('#create__modal .modal__body'),
-      checkbox_array: $('.modal__theme-input input')
+      checkbox_array: $('.modal__theme-input input'),
+      active_image_array: $('.preload-image[data-selection-type="modal"]')
     };
 
     const create_navigation = {
@@ -1340,11 +1343,18 @@ theme.Create = (function () {
       container: $('.frame'),
       image_array_1: $('.create__step-1 .frame__letter'),
       image_array_2: $('.create__step-3 .frame__letter'),
-      label: $('.frame__label')
+      image_array_3: $('.create__artwork-to-image .frame__letter'),
+      label: $('.frame__label'),
+      background: {
+        left: $('.frame__image.frame__image--left'),
+        center: $('.frame__image.frame__image--center'),
+        right: $('.frame__image.frame__image--right')
+      }
     };
 
     const theme = {
-      item_array: $('.theme__item')
+      item_array: $('.theme__item'),
+      frame_change: $('.theme-change__item')
     };
 
 
@@ -1357,13 +1367,32 @@ theme.Create = (function () {
       resize_length: window.create_section.default_frame_size,
       frame: window.create_section.frame,
       theme: window.create_section.theme,
+      artwork_image_src: '',
       modal: {
         theme_array: [window.create_section.theme],
-        current_letter: ''
-      }
+        current_letter: '',
+        position: 0,
+        custom_image_array: []
+      },
+      frame_images: {}
     };
 
-    window.create_data = create_data;
+    $.each(window.product_frames, function (i, v) {
+      let frame = window.product_frames[i];
+      let handle = frame.handle;
+      create_data.frame_images[handle] = {};
+      $.each(frame.images, function (i, img) {
+        if (frame.images[i].indexOf('left') >= 0) {
+          create_data.frame_images[handle]['left'] = img;
+        } else if (frame.images[i].indexOf('center') >= 0) {
+          create_data.frame_images[handle]['center'] = img;
+        } else if (frame.images[i].indexOf('right') >= 0) {
+          create_data.frame_images[handle]['right'] = img;
+        } else if (frame.images[i].indexOf('corner') >= 0) {
+          create_data.frame_images[handle]['corner'] = img;
+        }
+      });
+    });
 
 
     /*============================================================================
@@ -1380,13 +1409,12 @@ theme.Create = (function () {
 
 
     /*================ preload_images(preload_container, theme) ================*/
-    let preload_images = function (preload_container, theme = 'all', limit = 0) {
+    let preload_images = function (preload_container = modal.content, theme = 'all', limit = 0) {
       $.each(window.products, function (i, v) {
         let product = this;
         $.each(this.variants, function (i, v) {
           let variant = this;
-          let v_img = '';
-          v_img = '<img src="' + variant.featured_image.src + '" alt="' + product.title + '" ' +
+          let v_img = '<img src="' + variant.featured_image.src + '" alt="' + product.title + '" ' +
             'class="preload-image" ' +
             'data-variant-id="' + variant.id + '" ' +
             'data-letter-id="' + product.handle.replace('letter-', '') + '" ' +
@@ -1407,11 +1435,36 @@ theme.Create = (function () {
       });
     };
 
-    /*================ change_letter_image(position, letter, variant_id, custom_image) ================*/
-    let change_letter_image = function (position, letter = false, theme_data, variant_id = false, custom_image = false) {
+    /*================ preload_frame_images(preload_container, frames) ================*/
+    let preload_frame_images = function (preload_container, frames) {
+      $.each(frames, function (k1, v1) {
+        $.each(frames[k1], function (k2, v2) {
+          let frame_img = '<img src="' + v2 + '" class="preload-frame visually-hidden" alt="' + k1 + '">';
+          preload_container.append(frame_img);
+        });
+      });
+    };
 
-      let image = '';
+    /*================ preload_custom_images(preload_container, image_file) ================*/
+    let preload_custom_image = function (variant_id, image_file) {
+      let v_img = '<img src="' + image_file + '" ' +
+        'class="preload-image" ' +
+        'data-variant-id="' + variant_id + '" ' +
+        'data-letter-id="custom" ' +
+        'data-theme-id="all" ' +
+        'data-custom-id="image_file" ' +
+        'data-selection-type="preload">';
+
+      modal.content.prepend(v_img);
+      add_images_to_modal();
+    };
+
+    /*================ change_letter_image(position, letter, variant_id, custom_image) ================*/
+    let change_letter_image = function (position, letter = false, theme_data, variant_id = false) {
+
+      let image_1 = '';
       let image_2 = '';
+      let image_3 = '';
 
       switch (letter) {
         case '*':
@@ -1438,35 +1491,35 @@ theme.Create = (function () {
       }
 
       if (variant_id) {
-        image = $('.preload-image[data-variant-id="' + variant_id + '"]').clone(false).attr('data-selection-type', 'selected');
-        image_2 = $('.preload-image[data-variant-id="' + variant_id + '"]').clone(false).attr('data-selection-type', 'selected');
-      } else if (custom_image) {
-        image = $('.preload-image[data-custom-id="' + custom_image + '"]').clone(false).attr('data-selection-type', 'custom');
-        image_2 = $('.preload-image[data-custom-id="' + custom_image + '"]').clone(false).attr('data-selection-type', 'custom');
+        image_1 = $('#create__modal .preload-image[data-variant-id="' + variant_id + '"]').clone(false).attr('data-selection-type', 'selected');
+        image_2 = $('#create__modal .preload-image[data-variant-id="' + variant_id + '"]').clone(false).attr('data-selection-type', 'selected');
+        image_3 = $('#create__modal .preload-image[data-variant-id="' + variant_id + '"]').clone(false).attr('data-selection-type', 'selected');
       } else if (letter) {
-        image = $('.preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_data + '"]').clone(false).attr('data-selection-type', 'auto');
-        image_2 = $('.preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_data + '"]').clone(false).attr('data-selection-type', 'auto');
+        image_1 = $('#create__modal .preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_data + '"]').clone(false).attr('data-selection-type', 'auto');
+        image_2 = $('#create__modal .preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_data + '"]').clone(false).attr('data-selection-type', 'auto');
+        image_3 = $('#create__modal .preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_data + '"]').clone(false).attr('data-selection-type', 'auto');
       }
 
-      frame.image_array_1.eq(position).empty().append(image[0]);
+      frame.image_array_1.eq(position).empty().append(image_1[0]);
       frame.image_array_2.eq(position).empty().append(image_2[0]);
-
+      frame.image_array_3.eq(position).empty().append(image_3[0]);
     };
 
     /*================ update_frame_images(input_data, theme_data, custom_image)  ================*/
-    let update_frame_images = function (input_data, theme_data = create_data.theme, custom_image = false) {
-
+    let update_frame_images = function (input_data, theme_data = create_data.theme) {
       /* Remove images at positions larger than input */
       for (let i = input_data.length; i < 9; i++) {
         change_letter_image(i);
       }
 
-
       /* Add images if the input changed */
       for (let pos = 0; pos < 9; pos++) {
+        let img = frame.image_array_1.eq(pos).children();
+        let variant_id = false;
+
         if (input_data[pos] !== create_data.previous_input_array[pos]) {
           if (pos !== input_data.length - 1) {
-            change_letter_image(pos, input_data[pos], theme_data);
+            change_letter_image(pos, input_data[pos], theme_data, variant_id);
           } else {
             if (onTimeout[pos]) {
               return true;
@@ -1479,17 +1532,26 @@ theme.Create = (function () {
             }
           }
         } else {
-          change_letter_image(pos, input_data[pos], theme_data);
+          switch (img.attr('data-selection-type')) {
+            case 'auto':
+              variant_id = false;
+              break;
+            case 'selected':
+              variant_id = img.attr('data-variant-id');
+              break;
+          }
+          change_letter_image(pos, input_data[pos], theme_data, variant_id);
         }
       }
     };
 
     /*================ resize_frame(length, spacing = 0) ================*/
     let resize_frame = function (length, spacing = 0) {
+      if (length >= 9) {
+        spacing = 0;
+      }
       if (window.innerWidth >= 1200) {
-        frame.container.css('width', 'calc(114px * ' + (length + spacing) + ' + 114px)');
-      } else if (window.innerWidth < 1200) {
-        frame.container.css('width', 'calc(9.5vw * ' + (length + spacing) + ' + 9.5vw)');
+        frame.container.attr('data-frame-size', (length + spacing));
       }
     };
 
@@ -1537,20 +1599,22 @@ theme.Create = (function () {
     };
 
     /*================ collect_input_cart_data(input) ================*/
-    let collect_input_cart_data = function (input_array = create_data.input_array, variant_id = false, theme_data = create_data.theme, frame_data = create_data.frame) {
+    let collect_input_cart_data = function (input_array = create_data.input_array, variant_id = false, theme_data = create_data.theme, frame_data = create_data.frame, artwork_image_src = create_data.artwork_image_src) {
       create_data.input_array = input_array;
       create_data.theme = theme_data;
       create_data.modal.theme_array = [theme_data];
       create_data.frame = frame_data;
+      create_data.artwork_image_src = artwork_image_src;
 
       $.each(input_array, function (i, v) {
         create_data.input[i] = {
           position: i + 1,
           letter: v
         };
-        if (variant_id) {
-
+        if (variant_id[0] === i) {
+          create_data.input[i]['variant-id'] = variant_id[1];
         } else {
+          create_data.input[i]['variant-id'] = frame.image_array_1.eq(i).children().attr('data-variant-id');
           setTimeout(function () {
             create_data.input[i]['variant-id'] = frame.image_array_1.eq(i).children().attr('data-variant-id');
           }, 800);
@@ -1563,23 +1627,134 @@ theme.Create = (function () {
     };
 
     /*================ add_theme_image_to_modal(theme_data) ================*/
-    let add_images_to_modal = function (letter, theme_array) {
+    let add_images_to_modal = function (position = create_data.modal.position, letter = create_data.modal.current_letter, theme_array = create_data.modal.theme_array) {
       create_data.modal.current_letter = letter;
+      create_data.modal.position = position;
       /*default back to invisible*/
       modal.checkbox_array.prop('checked', false);
-      $('.preload-image[data-selection-type="modal"]').attr('data-selection-type', 'preload');
+      $('.preload-image[data-selection-type="modal"]').attr('data-selection-type', 'preload').attr('data-letter-position', '');
 
       /*change images state for each theme*/
       $.each(theme_array, function (i, v) {
         if (theme_array[i] === 'all') {
-          $('.preload-image[data-letter-id="' + letter + '"][data-selection-type="preload"]').attr('data-selection-type', 'modal');
+          $('.preload-image[data-letter-id="' + letter + '"][data-selection-type="preload"], .preload-image[data-custom-id][data-selection-type="preload"]').attr('data-selection-type', 'modal').attr('data-letter-position', position);
         } else {
-          $('.preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_array[i] + '"][data-selection-type="preload"]').attr('data-selection-type', 'modal');
+          $('.preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_array[i] + '"][data-selection-type="preload"], .preload-image[data-custom-id][data-selection-type="preload"]').attr('data-selection-type', 'modal').attr('data-letter-position', position);
         }
-
         modal.checkbox_array.filter('[data-theme-id="' + theme_array[i] + '"]').prop('checked', true);
       });
+      modal.active_image_array = $('.preload-image[data-selection-type="modal"]');
     };
+
+    /*================ change_frame(frame_data) ================*/
+    let change_frame = function (frame_handle) {
+      $.each(frame.background, function (k, v) {
+        frame.background[k].attr('src', create_data.frame_images[frame_handle][k]);
+      });
+    };
+
+    /*================ create_final_artwork() ================*/
+    let create_final_artwork = function () {
+      if (create_data.input_array.length >= 3) {
+        final_artwork.empty();
+        let img = new Image();
+        domtoimage.toJpeg(fixed_size_frame[0], { quality: 0.8 }).then(function (dataUrl) {
+          img.src = dataUrl;
+          final_artwork.append(img);
+          collect_input_cart_data(create_data.input_array, false, create_data.theme, create_data.frame, img.src);
+          create_data.artwork_image_blob = dataURItoBlob(img.src);
+          postImageToFacebook("EAAFEyUKxbkMBADE2HTXZAZALfOpHnjM5ZAF08AUFPM34jF7wNedf2vKBzvHY8jFPyNZA7GmCZABBtTQ3M2KGBVrix0wP2FX2ulUCge6dGbjodMhGTZA7Xe7v40ABLxZC3pZAVmvikOFHDV6gCwMtRAASWVUvEc2bJxrwzvQPNHWnkEJS6SgKItB8", "Canvas to Facebook/Twitter", "image/png", create_data.artwork_image_blob, window.location.href);
+        });
+
+        /*Response Code Expires in 60 Days
+        * https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=357106174750275&client_secret=02aa10066d5dd3b0f42276ed2b5842f5&fb_exchange_token=EAAFEyUKxbkMBAOEKZBVYGfzXJiidjq4usmfUyX4TNE6rplJcTJfM04EWrXcFBKFYZAxkl6U6Ds11muGl0bq3Dj1aYzM2Q7VQXQUy69LCOtH5ZAoorlpK5rWLzlJdYfVAfyOhR6VZC1kQpIeZCjJYTd1KsWXGtVerczZAwYVIgH8kc5fKNdEx28
+        *
+        * */
+
+        /* FB.getLoginStatus(function (response) {
+           console.log(response);
+           if (response.status === "connected") {
+             postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
+           } else if (response.status === "not_authorized") {
+             FB.login(function (response) {
+               postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
+             }, {scope: "publish_actions"});
+           } else {
+             FB.login(function (response) {
+               postImageToFacebook(response.authResponse.accessToken, "Canvas to Facebook/Twitter", "image/png", blob, window.location.href);
+             }, {scope: "publish_actions"});
+           }
+         });*/
+
+      }
+    };
+
+    /*================ dataURItoBlob(dataURI) ================ Create_image_blob for facebook upload*/
+    let dataURItoBlob = function (dataURI) {
+      let byteString = atob(dataURI.split(',')[1]);
+      let ab = new ArrayBuffer(byteString.length);
+      let ia = new Uint8Array(ab);
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+      return new Blob([ab], {type: 'image/jpeg'});
+    };
+
+    /*================ postImageToFacebook(token, filename, mimeType, imageData, message) ================*/
+    let postImageToFacebook = function (token, filename, mimeType, imageData, message) {
+      let fd = new FormData();
+      fd.append("access_token", token);
+      fd.append("source", imageData);
+      fd.append("no_story", true);
+
+      // Upload image to facebook without story(post to feed)
+      $.ajax({
+        url: "https://graph.facebook.com/me/photos?access_token=" + token,
+        type: "POST",
+        data: fd,
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function (data) {
+          // Get image source url
+          FB.api(
+            "/" + data.id + "?fields=images&access_token=" + token,
+            function (response) {
+              if (response && !response.error) {
+                //console.log(response.images[0].source);
+                create_data.artwork_image_url = response.images[0].source;
+                // Create facebook post using image
+                FB.api(
+                  "/me/photos",
+                  "POST",
+                  {
+                    "picture": response.images[0].source,
+                    "link": window.location.href,
+                    "name": 'Look at the cute panda!'
+                  },
+                  function (response) {
+                    if (response && !response.error) {
+                      /* handle the result */
+                      console.log(response);
+                    }
+                  }
+                );
+              } else {
+                console.log(response.error);
+              }
+            }
+          );
+        },
+        error: function (shr, status, data) {
+          console.log("error " + data + " Status " + shr.status);
+        },
+        complete: function (data) {
+          //console.log('Post to facebook Complete');
+          console.log(create_data.artwork_image_url)
+        }
+      });
+    };
+
 
     /*============================================================================
       # Events
@@ -1590,8 +1765,17 @@ theme.Create = (function () {
         - create_button_1
             .on('click')
 
-       - theme.item_array
+       - theme
+          .item_array
             .on('click')
+       - frame
+          .image_array_2
+              .on('click')
+       - modal
+          .checkbox_array
+              .on('click')
+          .active_image_array
+              .on('click')
     ==============================================================================*/
 
     /*================ input_container.on('input') ================*/
@@ -1613,7 +1797,7 @@ theme.Create = (function () {
       show_reset_button(create_data.input_array.length);
       collect_input_cart_data(create_data.input_array);
 
-      create_data.previous_input = create_data.input_array;
+      create_data.previous_input_array = create_data.input_array;
     });
 
     /*================ input_container.on('focus') ================*/
@@ -1654,6 +1838,7 @@ theme.Create = (function () {
     create_navigation.next_button_3.on('click', function () {
       change_steps(4);
       update_process_bar(4);
+      create_final_artwork();
     });
 
     /*Step-4*/
@@ -1664,6 +1849,7 @@ theme.Create = (function () {
     create_navigation.next_button_4.on('click', function () {
       change_steps(4);
       update_process_bar(4);
+      create_final_artwork();
     });
 
     /*================ process_steps.on('click') ================*/
@@ -1671,39 +1857,74 @@ theme.Create = (function () {
       let target = parseInt($(this).attr('data-step-id'));
       change_steps(target);
       update_process_bar(target);
+      if (target === 4) {
+        create_final_artwork();
+      }
     });
 
     /*================ theme.item_array.on('click') ================*/
     theme.item_array.on('click', function () {
+      let theme_id = $(this).attr('data-theme-id');
       change_theme(this);
-      update_frame_images(create_data.input_array, $(this).attr('data-theme-id'));
-      collect_input_cart_data(create_data.input_array, false, $(this).attr('data-theme-id'));
+      update_frame_images(create_data.input_array, theme_id);
+      collect_input_cart_data(create_data.input_array, false, theme_id, theme_id);
+      change_frame(theme_id);
+      theme.frame_change.removeClass('theme-change__item--active');
+      $('.theme-change__item[data-theme-id="' + theme_id + '"]').addClass('theme-change__item--active');
+    });
+
+    /*================ theme.frame_change.on('click') ================*/
+    theme.frame_change.on('click', function (e) {
+      let theme_id = $(this).attr('data-theme-id');
+      e.preventDefault();
+      theme.frame_change.removeClass('theme-change__item--active');
+      collect_input_cart_data(create_data.input_array, false, create_data.theme, theme_id);
+      change_frame(theme_id);
+      $(this).addClass('theme-change__item--active');
     });
 
     /*================ frame.image_array_2.on('click') ================*/
     frame.image_array_2.on('click', function (e) {
       e.preventDefault();
-      add_images_to_modal($(this).children().attr('data-letter-id'), [create_data.theme]);
+      add_images_to_modal($(this).attr('data-letter-position'), $(this).children().attr('data-letter-id'), [create_data.theme]);
       modal.container.modal('toggle');
     });
 
+    /*================ modal.checkbox_array.on('click') ================*/
     modal.checkbox_array.on('click', function () {
       if ($(this).prop('checked') === true) {
         if ($(this).attr('data-theme-id') === 'all') {
-          create_data.modal.theme_array = ['antique', 'classic','shoreline','frontier', 'all']
+          create_data.modal.theme_array = ['antique', 'classic', 'shoreline', 'frontier', 'all'];
         } else {
           create_data.modal.theme_array = create_data.modal.theme_array.concat($(this).attr('data-theme-id'));
         }
-        add_images_to_modal(create_data.modal.current_letter, create_data.modal.theme_array);
+        add_images_to_modal(create_data.modal.position, create_data.modal.current_letter, create_data.modal.theme_array);
       } else if ($(this).prop('checked') === false) {
         if ($(this).attr('data-theme-id') === 'all') {
-          create_data.modal.theme_array = [create_data.theme]
+          create_data.modal.theme_array = [create_data.theme];
         } else {
           create_data.modal.theme_array.splice(create_data.modal.theme_array.indexOf($(this).attr('data-theme-id')), 1);
         }
-        add_images_to_modal(create_data.modal.current_letter, create_data.modal.theme_array);
+        add_images_to_modal(create_data.modal.position, create_data.modal.current_letter, create_data.modal.theme_array);
       }
     });
+
+    /*================ modal.active_image_array.on('click') ================*/
+    modal.content.on('click', modal.active_image_array, function (e) {
+
+      let img = $(e.target);
+      let position = img.attr('data-letter-position');
+      let theme_data = img.attr('data-theme-id');
+      let letter = img.attr('data-letter-id');
+      let variant_id = img.attr('data-variant-id');
+
+      change_letter_image(position, letter, theme_data, variant_id);
+      collect_input_cart_data(create_data.input_array, [position, variant_id]);
+
+      modal.container.modal('toggle');
+    });
+
+
     /*============================================================================
       #Initialization
         - preload_images()
@@ -1711,8 +1932,10 @@ theme.Create = (function () {
     ==============================================================================*/
 
     preload_images(modal.content, 'all', 0);
+    preload_frame_images(modal.content, create_data.frame_images);
+    window.create_data = create_data;
     $.cookie('create_data', create_data);
-
+    window.preload_custom_image = preload_custom_image;
 
   }
 
@@ -1732,7 +1955,8 @@ theme.Create = (function () {
   });
 
   return Create;
-})();
+})
+();
 
 
 

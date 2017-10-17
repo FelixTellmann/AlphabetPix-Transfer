@@ -89,8 +89,10 @@
   {% comment %}{#DATA DUMP#}{% endcomment %}
   <script>
     window.products = {{ collections['letters'].products | json }};
+    window.product_frames = {{ collections['frames'].products | json }};
+    window.collections = {{ collections | json }};
     window.cart = {{ cart | json }};
-    window.cart_backup = {{ cart | json }};
+    window.settings = {{ settings | json }};
     window.stopAjaxRequest = false;
     window.inProgress = false;
 
@@ -185,13 +187,33 @@
       $('span.cart__count').empty().append(totalCount)
     };
     
+    
     $(function() {
       $('input[id^="quantity_').on('change', function() {
         setTimeout(function() {
           getCart();
         },1500);
       })
-    })
+    });
+
+    /* Facebook APP SDK */
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '357106174750275',
+        xfbml      : true,
+        version    : 'v2.10'
+      });
+      FB.AppEvents.logPageView();
+    };
+
+    (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
     
   </script>
 </head>
