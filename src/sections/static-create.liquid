@@ -131,8 +131,25 @@
       
       <!-- ================  STEP 4 ================ -->
       <div class="create__step-4">
-        <div class="frame frame--position frame--size" data-frame-size="9">
-          <figure id="final-artwork" class="frame__wrapper">
+        <div class="frame frame--position" data-frame-size="9">
+          <figure id="final-artwork" class="frame__wrapper final-artwork__wrapper">
+            <div class="final-artwork__info-wrapper">
+              <div class="final-artwork__info">
+                <p class="final-artwork__word">Word: <span id="final-artwork__word"></span></p>
+                <p class="final-artwork__format">Format: <span id="final-artwork__format"></span></p>
+                <p class="final-artwork__size">Size: <span id="final-artwork__size"></span></p>
+                <p class="final-artwork__frame">Frame: <span id="final-artwork__frame"></span></p>
+                <p class="final-artwork__price">Price: <span id="final-artwork__price"></span></p>
+                <div class="final-artwork__input">
+                  <label for="final-artwork__giftwrap">Gift Wrap: </label><input id="final-artwork__giftwrap" type="checkbox" class="final-artwork__giftwrap">
+      
+                </div>
+                <div class="final-artwork__input">
+                  <label for="final-artwork__message">Gift Message: </label>
+                  <textarea type="" id="final-artwork__message" class="final-artwork__message" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
           </figure>
           <nav class="create__button">
             <button class="button button--prev button--moema">Previous Step</button>

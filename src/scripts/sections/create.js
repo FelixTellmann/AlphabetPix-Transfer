@@ -43,7 +43,16 @@ theme.Create = (function () {
     const section_id = this.$container.attr('data-section-id');
     const input_container = $('#frame__input');
     const fixed_size_frame = $('#frame_to_image');
-    const final_artwork = $('#final-artwork');
+    const final_artwork = {
+      container: $('#final-artwork'),
+      word: $('#final-artwork__word'),
+      format: $('#final-artwork__format'),
+      size: $('#final-artwork__size'),
+      frame: $('#final-artwork__frame'),
+      price: $('#final-artwork__price'),
+      giftwrap_input: $('#final-artwork__giftwrap'),
+      gift_message_input: $('#final-artwork__message')
+    };
 
     let modal = {
       container: $('#create__modal'),
@@ -390,11 +399,11 @@ theme.Create = (function () {
     /*================ create_final_artwork() ================*/
     let create_final_artwork = function () {
       if (create_data.input_array.length >= 3) {
-        final_artwork.empty();
+        final_artwork.container.children('img').remove();
         let img = new Image();
-        domtoimage.toJpeg(fixed_size_frame[0], { quality: 0.8 }).then(function (dataUrl) {
+        domtoimage.toJpeg(fixed_size_frame[0], {quality: 0.8}).then(function (dataUrl) {
           img.src = dataUrl;
-          final_artwork.append(img);
+          final_artwork.container.prepend(img);
           collect_input_cart_data(create_data.input_array, false, create_data.theme, create_data.frame, img.src);
           create_data.artwork_image_blob = dataURItoBlob(img.src);
           postImageToFacebook("EAAFEyUKxbkMBADE2HTXZAZALfOpHnjM5ZAF08AUFPM34jF7wNedf2vKBzvHY8jFPyNZA7GmCZABBtTQ3M2KGBVrix0wP2FX2ulUCge6dGbjodMhGTZA7Xe7v40ABLxZC3pZAVmvikOFHDV6gCwMtRAASWVUvEc2bJxrwzvQPNHWnkEJS6SgKItB8", "Canvas to Facebook/Twitter", "image/png", create_data.artwork_image_blob, window.location.href);
@@ -420,6 +429,10 @@ theme.Create = (function () {
            }
          });*/
 
+        final_artwork.word.html(create_data.input_array.join(''));
+        final_artwork.format.html(create_data.resize_length);
+        final_artwork.size.html(create_data.resize_length);
+        final_artwork.frame.html(create_data.frame);
       }
     };
 
@@ -484,7 +497,7 @@ theme.Create = (function () {
         },
         complete: function (data) {
           //console.log('Post to facebook Complete');
-          console.log(create_data.artwork_image_url)
+          console.log(create_data.artwork_image_url);
         }
       });
     };
