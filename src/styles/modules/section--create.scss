@@ -895,7 +895,10 @@ input[type='text'].frame__input {
     border: 1px solid black;
     background-color: rgba(234,234,234,0.7);
     margin: 30px;
-    flex-flow: row wrap;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: row wrap;
+            flex-flow: row wrap;
   }
   
   
@@ -909,7 +912,9 @@ input[type='text'].frame__input {
     display: block;
     padding: 15px;
     &.final-artwork__info--full-width {
-      flex: 0 0 100%;
+      -webkit-box-flex: 0;
+          -ms-flex: 0 0 100%;
+              flex: 0 0 100%;
       padding-top: 0;
       .final-artwork__link {
         width:20%;

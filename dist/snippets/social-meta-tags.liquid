@@ -2,7 +2,7 @@
 {% comment %}
 Open graph tags
 {% endcomment %}
-<meta property="og:updated_time" content="{{ 'now' | date: "%Y-%m-%d %H:%M:%S %z" }}"/>
+<meta property="og:updated_time" content="{{ 'now' | date: "%s" }}"/>
 {% if template.name == 'index' %}
   <meta property="fb:app_id" content="357106174750275">
   <meta property="og:title" content="{{ page_title }}">

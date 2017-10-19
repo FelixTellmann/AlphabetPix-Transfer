@@ -1,5 +1,54 @@
 {% comment %}
-  The contents of the cart.liquid template can be found in /sections/cart-template/
+The contents of the cart.liquid template can be found in /sections/cart-template/
 {% endcomment %}
+
+<script>
+  /*getCart();
+
+  $(function () {
+
+    console.log(create_data);
+    console.log(cart);
+
+    /!*================ initiate_cart_items(cart_data) ================*!/
+    /!* Update line item property for all images to hide data on checkout *!/
+    let initiate_cart_items = function (cart_data) {
+      let frames = [];
+      let images = [];
+      let count = 0;
+
+      $.each(cart_data.items, function (i, v) {
+        if ('id' in v.properties && typeof(v.properties.id) === "object" && v.product_type === "Frame") {
+          frames[count] = {
+            id: v.properties.id[0]
+          };
+          count++;
+        }
+      });
+
+      let cart_data_array = [];
+      $.each(frames, function (i1, v1) {
+        $.each(cart_data.items, function (i2, v2) {
+          if ('id' in v2.properties && typeof(v2.properties.id) === "string" && v2.product_type === "Image" && v2.properties.id == frames[i1].id) {
+            let frame_id = [];
+            frame_id[0] = frames[i1].id;
+            cart_data_array.push({
+              quantity: 1,
+              id: v2.id,
+              properties: {
+                'id': frame_id[0]
+              }
+            });
+
+          }
+        });
+      });
+      updateCartMultiple(cart_data_array);
+
+    };
+  });*/
+
+
+</script>
 
 {% section 'cart-template' %}

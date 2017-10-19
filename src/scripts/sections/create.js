@@ -25,13 +25,6 @@ theme.Create = (function () {
      *
      * */
 
-    /*============================================================================
-      #Settings
-        -  $.cookie.json = true;
-
-    ==============================================================================*/
-
-    $.cookie.json = true;
 
     /*============================================================================
       #Variables
@@ -104,6 +97,21 @@ theme.Create = (function () {
       sharing_link: $('#final-artwork__link')
     };
 
+    const cart_form = {
+      form: $('#add-to-cart__form'),
+      frame: $('#add-to-cart__frame'),
+      properties: $('#add-to-cart__properties'),
+      letter_0: $('#add-to-cart__letter-0'),
+      letter_1: $('#add-to-cart__letter-1'),
+      letter_2: $('#add-to-cart__letter-2'),
+      letter_3: $('#add-to-cart__letter-3'),
+      letter_4: $('#add-to-cart__letter-4'),
+      letter_5: $('#add-to-cart__letter-5'),
+      letter_6: $('#add-to-cart__letter-6'),
+      letter_7: $('#add-to-cart__letter-7'),
+      letter_8: $('#add-to-cart__letter-8')
+    };
+
 
     window.url_values = {
       image_url: window.image_url || ''
@@ -115,7 +123,7 @@ theme.Create = (function () {
 
     window.onTimeout = [];
 
-    let create_data = $.cookie('create_data') || {
+    let create_data = {
       input: [],
       input_array: [],
       previous_input_array: [],
@@ -131,7 +139,9 @@ theme.Create = (function () {
         position: 0,
         custom_image_array: []
       },
-      frame_images: {}
+      frame_images: {},
+      gift_wrapping: false,
+      gift_message: ''
     };
 
     $.each(window.product_frames, function (i, v) {
@@ -174,6 +184,7 @@ theme.Create = (function () {
           let v_img = '<img src="' + variant.featured_image.src + '" alt="' + product.title + '" ' +
             'class="preload-image" ' +
             'data-variant-id="' + variant.id + '" ' +
+            'data-variant-sku="' + variant.sku + '" ' +
             'data-letter-id="' + product.handle.replace('letter-', '') + '" ' +
             'data-theme-id="' + variant.option1 + '" ' +
             'data-selection-type="preload">';
@@ -207,6 +218,7 @@ theme.Create = (function () {
       let v_img = '<img src="' + image_file + '" ' +
         'class="preload-image" ' +
         'data-variant-id="' + variant_id + '" ' +
+        'data-variant-sku="custom_image" ' +
         'data-letter-id="custom" ' +
         'data-theme-id="all" ' +
         'data-custom-id="image_file" ' +
@@ -362,7 +374,7 @@ theme.Create = (function () {
       create_data.modal.theme_array = [theme_data];
       create_data.frame = frame_data;
       create_data.artwork_image_src = artwork_image_src;
-
+      create_data.time_id = [new Date().getTime()];
       $.each(product_frames, function (i1, v2) {
         if (product_frames[i1].handle === frame_data) {
           $.each(product_frames[i1].variants, function (i2, v2) {
@@ -373,24 +385,36 @@ theme.Create = (function () {
         }
       });
 
-
       $.each(input_array, function (i, v) {
         create_data.input[i] = {
           position: i + 1,
           letter: v
         };
         if (variant_id[0] === i) {
-          create_data.input[i]['variant-id'] = variant_id[1];
+          create_data.input[i]['variant_id'] = variant_id[1];
+          create_data.input[i]['sku'] = $('.preload-image[data-variant-id="' + variant_id[1] + '"]').attr('data-variant-sku');
+          create_data.input[i]['custom_image'] = $('.frame__letter[data-letter-position="' + i + '"] .preload-image[data-custom-id="image_file"]').attr('src') || '';
         } else {
-          create_data.input[i]['variant-id'] = frame.image_array_1.eq(i).children().attr('data-variant-id');
+          create_data.input[i]['variant_id'] = frame.image_array_1.eq(i).children().attr('data-variant-id');
+          create_data.input[i]['sku'] = frame.image_array_1.eq(i).children().attr('data-variant-sku');
+          create_data.input[i]['custom_image'] = $('.frame__letter[data-letter-position="' + i + '"] .preload-image[data-custom-id="image_file"]').attr('src') || '';
           setTimeout(function () {
-            create_data.input[i]['variant-id'] = frame.image_array_1.eq(i).children().attr('data-variant-id');
-          }, 800);
+            create_data.input[i]['variant_id'] = frame.image_array_1.eq(i).children().attr('data-variant-id');
+            create_data.input[i]['sku'] = frame.image_array_1.eq(i).children().attr('data-variant-sku');
+            create_data.input[i]['custom_image'] = $('.frame__letter[data-letter-position="' + i + '"] .preload-image[data-custom-id="image_file"]').attr('src') || '';
+          }, 650);
         }
       });
+
       for (let i = input_array.length; i < 9; i++) {
         create_data.input[i] = {};
       }
+      create_data.gift_wrap = final_artwork.giftwrap_input.prop('checked') || false;
+      create_data.gift_message = final_artwork.gift_message_input.val() || '';
+
+      window.create_data = create_data;
+      window.sessionStorage.create_data = JSON.stringify(create_data);
+      update_cart_form(create_data);
       create_data.previous_input_array = create_data.input_array;
     };
 
@@ -432,7 +456,7 @@ theme.Create = (function () {
           collect_input_cart_data(create_data.input_array, false, create_data.theme, create_data.frame, img.src);
           create_data.artwork_image_blob = dataURItoBlob(img.src);
           postImageToFacebook("EAAFEyUKxbkMBADE2HTXZAZALfOpHnjM5ZAF08AUFPM34jF7wNedf2vKBzvHY8jFPyNZA7GmCZABBtTQ3M2KGBVrix0wP2FX2ulUCge6dGbjodMhGTZA7Xe7v40ABLxZC3pZAVmvikOFHDV6gCwMtRAASWVUvEc2bJxrwzvQPNHWnkEJS6SgKItB8", "Canvas to Facebook/Twitter", "image/png", create_data.artwork_image_blob, window.location.href);
-          download_link.attr('download', 'My personal frame - ' + create_data.input_array.join('')).attr('href', dataUrl)
+          download_link.attr('download', 'My personal frame - ' + create_data.input_array.join('')).attr('href', dataUrl);
         });
 
         /* TODO Response Code Expires in 60 Days from 17.10.2017 - 17.12.2017 */
@@ -483,7 +507,7 @@ theme.Create = (function () {
         final_artwork.price.html('$' + create_data.frame_variant_details.price / 100);
         let sharing_url = 'https://alphabetpix.myshopify.com/?frame=' + create_data.frame + '&word=' + create_data.input_array.join('');
         $.each(create_data.input_array, function (i) {
-          sharing_url += '&pos-' + i + '=' + create_data.input[i]['variant-id'];
+          sharing_url += '&pos-' + i + '=' + create_data.input[i].variant_id;
         });
 
         facebook_link.attr('href', sharing_url);
@@ -531,7 +555,7 @@ theme.Create = (function () {
                 create_data.prepared_sharing_url = facebook_url + '&image_url=' + prepared_image_url;
                 facebook_link.attr('href', '//www.facebook.com/sharer.php?u=' + create_data.prepared_sharing_url);
                 final_artwork.sharing_link.html('<a href="' + create_data.prepared_sharing_url + '" target="_blank">' + create_data.prepared_sharing_url + '</a>');
-
+                window.sessionStorage.create_data = JSON.stringify(create_data);
                 // Create facebook post using image
                 FB.api(
                   "/me/photos",
@@ -577,6 +601,55 @@ theme.Create = (function () {
           collect_input_cart_data(url_values.word.split(''), [i, url_values['pos-' + i]], url_values.frame, url_values.frame, url_values.image_url);
         }
       }
+    };
+
+    /*================ update_cart_form(create_data) ================*/
+
+    let update_cart_form = function (create_data) {
+      cart_form.frame.attr('value', create_data.frame_variant_details.id).attr('disabled', 'disabled');
+      cart_form.properties.attr('value', create_data.time_id[0]);
+      for (let i = 0; i < 9; i++) {
+        if ('variant_id' in create_data.input[i]) {
+          cart_form['letter_' + i].attr('value', create_data.input[i].variant_id).removeAttr('disabled');
+        } else {
+          cart_form['letter_' + i].attr('value', '').attr('disabled', 'disabled');
+        }
+      }
+    };
+
+    /*================ cart_submit(create_data) ================*/
+    let cart_submit = function (create_data) {
+      let letter_sku_string = '';
+      $.each(create_data.input_array, function (i) {
+        create_data.input[i].sku = create_data.input[i].sku || '';
+        letter_sku_string = letter_sku_string.concat((i + 1) + ': ' + create_data.input[i].sku.replace('horeline', '').replace('rontier', '').replace('lassic', '').replace('ntique', '').toUpperCase() + ' ');
+      });
+
+      let cart_data_array = [];
+      $.each(create_data.input_array, function (i) {
+        cart_data_array.push({
+          quantity: 1,
+          id: create_data.input[i].variant_id,
+          properties: {
+            'id': create_data.time_id
+          }
+        });
+      });
+
+      cart_data_array.push({
+        quantity: 1,
+        id: create_data.frame_variant_details.id,
+        image:  create_data.artwork_image_src,
+        properties: {
+          'id': create_data.time_id,
+          'word': create_data.input_array.join(''),
+          'images': letter_sku_string,
+          'letter_data': create_data.input,
+          'artwork': {image: create_data.artwork_image_src}
+        }
+      });
+      console.log(cart_data_array);
+      addToCartMultiple(cart_data_array);
     };
 
     /*============================================================================
@@ -668,9 +741,7 @@ theme.Create = (function () {
       update_process_bar(3);
     });
     create_navigation.next_button_4.on('click', function () {
-      change_steps(4);
-      update_process_bar(4);
-      create_final_artwork();
+      cart_submit(create_data);
     });
 
     /*================ process_steps.on('click') ================*/
@@ -745,6 +816,15 @@ theme.Create = (function () {
       modal.container.modal('toggle');
     });
 
+    /*================final_artwork.giftwrap_input.on('change input') ================*/
+    final_artwork.giftwrap_input.on('change input', function (e) {
+      collect_input_cart_data();
+    });
+
+    /*================ ================*/
+    final_artwork.gift_message_input.on('change input', function (e) {
+      collect_input_cart_data();
+    });
 
     /*============================================================================
       #Initialization
@@ -755,7 +835,7 @@ theme.Create = (function () {
     preload_images(modal.content, 'all', 0);
     preload_frame_images(modal.content, create_data.frame_images);
     window.create_data = create_data;
-    $.cookie('create_data', create_data);
+    window.sessionStorage.create_data = JSON.stringify(create_data);
     window.preload_custom_image = preload_custom_image;
     preload_artwork(window.url_values);
     change_theme($('.theme__item[data-theme-id="' + create_data.theme + '"]'));

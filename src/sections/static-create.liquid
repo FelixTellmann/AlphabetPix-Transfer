@@ -225,6 +225,15 @@
           
           </div>
         </div>
+        <form  id="add-to-cart__form" action="/cart/add" enctype="multipart/form-data" method="post" class="visually-hidden">
+          <input id="add-to-cart__frame" type="text" name="id[]" value="" disabled="disabled">
+          {% for i in (0..8) %}
+            <input id="add-to-cart__letter-{{ i }}" type="text" name="id[]" value="" data-letter-position="{{ i }}" disabled="disabled">
+          {% endfor %}
+          <input id="add-to-cart__properties" type="text" name="properties[id]" value="{{ 'now' | date: "%s" }}">
+          {% comment %}{#<input type="hidden" name="return_to" value="/"/>#}{% endcomment %}
+          <button id="submit--{{ block.id }}" type="submit" name="add">Submit</button>
+        </form>
         <nav class="create__button">
           <button class="button button--prev button--moema">Previous Step</button>
           <button class="button button--next button--moema">{{ section.settings.action-4 }}</button>

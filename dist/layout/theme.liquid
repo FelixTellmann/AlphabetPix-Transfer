@@ -120,6 +120,10 @@
   
   {% comment %}{#DATA DUMP#}{% endcomment %}
   <script>
+    $(function() {
+    window.create_data = JSON.parse(window.sessionStorage.create_data);
+    });
+    
     window.products = {{ collections['letters'].products | json }};
     window.product_frames = {{ collections['frames'].products | json }};
     window.collections = {{ collections | json }};
@@ -182,6 +186,7 @@
                 window.cart = response;
                 inProgress = false;
                 updateCount(response);
+                redirect_to_handle('cart')
               }, 'json');
             }
           }, 'json');
@@ -274,7 +279,10 @@
       });
     });
 
-
+    window.redirect_to_handle = function (handle) {
+      window.location = "/" + handle;
+    };
+    
     /*================ shareToFacebook(token, filename, mimeType, imageData, message) ================*/
     window.shareToFacebook = function (token, message, image_url = create_data.artwork_image_url, url) {
       FB.ui({
