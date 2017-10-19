@@ -1,21 +1,26 @@
 <!-- /snippets/social-meta-tags.liquid -->
 {% comment %}
-  Open graph tags
+Open graph tags
 {% endcomment %}
+<meta property="og:updated_time" content="{{ 'now' | date: "%Y-%m-%d %H:%M:%S %z" }}"/>
 {% if template.name == 'index' %}
-  <meta property="og:type" content="website">
+  <meta property="fb:app_id" content="357106174750275">
   <meta property="og:title" content="{{ page_title }}">
-  <meta property="og:description" content="{{ page_description }}">
-{% elsif template.name == 'product' %}
   <meta property="og:type" content="product">
-  <meta property="og:title" content="{{ product.title | strip_html | escape }}">
-  {% for image in product.images reversed limit:3 %}
-    <meta property="og:image" content="http:{{ image | img_url: 'grande' }}">
-    <meta property="og:image:secure_url" content="https:{{ image | img_url: 'grande' }}">
-  {% endfor %}
-  <meta property="og:description" content="{{ product.description | strip_html | escape }}">
-  <meta property="og:price:amount" content="{{ product.price | money_without_currency | strip_html | escape }}">
-  <meta property="og:price:currency" content="{{ shop.currency }}">
+  {% if sharing_image != blank %}
+    <meta id="og__image" property="og:image" content="{{ sharing_image | replace: 'https', 'http' }}">
+    <meta id="og__image--secure" property="og:image:secure_url" content="{{ sharing_image }}">
+    <meta property="og:image:width" content="1200px">
+    <meta property="og:image:height" content="330px">
+  {% else %}
+    <meta id="og__image" property="og:image" content="http://cdn.shopify.com/s/files/1/2255/6083/files/logo_a3c60d53-b047-4bb0-afa8-3a9cf37fc092.png?v=1507797463">
+    <meta id="og__image--secure" property="og:image:secure_url" content=https://cdn.shopify.com/s/files/1/2255/6083/files/logo_a3c60d53-b047-4bb0-afa8-3a9cf37fc092.png?v=1507797463">
+    <meta property="og:image:width" content="1200px">
+    <meta property="og:image:height" content="330px">
+  {% endif %}
+  <meta id="og__description" property="og:description" content="{{ page_description | strip_html | escape }}">
+  <meta id="og__price" property="og:price:amount" content="$179.99">
+  <meta id="og__currency" property="og:price:currency" content="USD">
 {% elsif template.name == 'article' %}
   <meta property="og:type" content="article">
   <meta property="og:title" content="{{ article.title | strip_html | escape }}">
@@ -24,23 +29,16 @@
     <meta property="og:image:secure_url" content="https:{{ article | img_url: '1024x1024' }}">
   {% endif %}
   <meta property="og:description" content="{{ article.excerpt_or_content | strip_html | escape }}">
-{% elsif template.name == 'password' %}
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="{{ shop.name | escape }}">
-  <meta property="og:description" content="{% unless shop.description == blank %}{{ shop.description | escape }}{% else %}{{ shop.name | escape }}{% endunless %}">
-{% else %}
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="{{ page_title | escape }}">
 {% endif %}
-{% if template.name == 'password' %}
-  <meta property="og:url" content="{{ shop.url }}">
+{% if sharing_image != blank %}
+  <meta property="og:url" content="https://{{ fullUrl }}">
 {% else %}
   <meta property="og:url" content="{{ canonical_url }}">
 {% endif %}
 <meta property="og:site_name" content="{{ shop.name }}">
 
 {% comment %}
-  Twitter card
+Twitter card
 {% endcomment %}
 {% unless settings.social_twitter_link == blank %}
   <meta name="twitter:site" content="@{{ settings.social_twitter_link | split: 'twitter.com/' | last }}">

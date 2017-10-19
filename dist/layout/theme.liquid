@@ -1,5 +1,5 @@
 {% if template.name == 'blog'or template.name == 'collection'or template.name == 'list-collections'or template.name == 'search' %}
-  {%- assign hide_footer = true -%}
+  {% assign hide_footer = true %}
 {% endif %}
 
 <!doctype html>
@@ -10,8 +10,40 @@
   <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="{{ settings.color_primary }}">
-  <link rel="canonical" href="{{ canonical_url }}">
-
+ 
+  
+  {% comment %}{# SAVE URL VARIABLS #}{% endcomment %}
+  {%- capture contentForQuerystring -%}{{ content_for_header }}{%- endcapture -%}
+  {% assign fullUrl = contentForQuerystring | split:'"pageurl":"' | last | split:'"' | first |  replace:'\/','/' |  replace:'%20',' ' |  replace:'\u0026','&'   %}
+  {%- assign pageUrl = contentForQuerystring | split:'"pageurl":"' | last | split:'"' | first | split:'.myshopify.com' | last |  replace:'\/','/' |  replace:'%20',' ' |  replace:'\u0026','&'  -%}
+<!-- ================ {{ fullUrl }} ================ -->
+  {% assign debug = true %}
+  {%- for i in (1..1) -%}
+    {%- unless pageUrl contains "?" -%}
+      <link rel="canonical" href="{{ canonical_url }}">
+      {% break %}
+    {%- endunless -%}
+    <link rel="canonical" href="https://{{ fullUrl }}">
+    {%- assign pageQuerystring = pageUrl | split:'?' | last -%}
+    {%- assign parts = pageQuerystring | split:'&' -%}
+    {%- for part in parts -%}
+      {%- assign keyAndValue = part | split:'=' -%}
+      {%- if keyAndValue.size > 1 -%}
+        {% if keyAndValue[0] == 'image_url' %}
+           {% assign sharing_image = keyAndValue[1] | replace: '[', '/' | replace: '+','.' | replace: ']',':' | replace: '(','?' | replace: ')','=' | replace: '@','&' %}
+        {% endif %}
+        {%- if debug -%}
+          <!--
+        key: {{ keyAndValue[0] }}<br>
+        value: {{ keyAndValue[1] }}
+      -->
+        {% endif %}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endfor -%}
+  
+  
+  
   {% if settings.favicon != blank %}
     <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
   {% endif %}
@@ -24,10 +56,10 @@
     <meta name="description" content="{{ page_description | escape }}">
   {% endif %}
 
-  {% include 'social-meta-tags' %}
+  {% include 'social-meta-tags', sharing_image = sharing_image, fullUrl = fullUrl %}
 
   {{ content_for_header }}
-
+  
   {% include 'critical-css' %}
   {% include 'google-fonts' %}
   {% include 'load-css' %}
@@ -95,7 +127,13 @@
     window.settings = {{ settings | json }};
     window.stopAjaxRequest = false;
     window.inProgress = false;
-
+    window.og = {
+      image: $('#og__image'),
+      image_secure: $('#og__image--secure'),
+      description: $('#og__description'),
+      price: $('#og__price')
+    };
+    
     window.getCart = function(e)  {
       $.get('/cart.js', function (response) {
         window.cart = response;
@@ -214,14 +252,54 @@
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
-    
+    $(function () {
+      $('.social-sharing__link--facebook').on('click', function (e) {
+        e.preventDefault();
+        let image = create_data.artwork_image_url;
+        let url = create_data.prepared_sharing_url;
+        FB.getLoginStatus(function (response) {
+          console.log(response);
+          if (response.status === "connected") {
+            shareToFacebook(response.authResponse.accessToken, og.description.attr('content'), image, url);
+          } else if (response.status === "not_authorized") {
+            FB.login(function (response) {
+              shareToFacebook(response.authResponse.accessToken, og.description.attr('content'), image, url);
+            }, {scope: "publish_actions"});
+          } else {
+            FB.login(function (response) {
+              shareToFacebook(response.authResponse.accessToken, og.description.attr('content'), image, url);
+            }, {scope: "publish_actions"});
+          }
+        });
+      });
+    });
+
+
+    /*================ shareToFacebook(token, filename, mimeType, imageData, message) ================*/
+    window.shareToFacebook = function (token, message, image_url = create_data.artwork_image_url, url) {
+      FB.ui({
+        method: 'share_open_graph',
+        action_type: 'og.shares',
+        display: 'popup',
+        action_properties: JSON.stringify({
+          object: {
+            'og:url': url || '{{ canonical_url }}',
+            'og:title': 'Hey Look at my Artwork I created',
+            'og:description': message,
+            'og:image': image_url
+          }
+        })
+      }, function (response) {
+      });
+    };
+
   </script>
 </head>
 
 <body id="{{ page_title | handle }}" class="{% if customer %}customer-logged-in {% endif %}template-{{ template | split: '.' | first | handle }} data-animations">
-
+  
   <a class="in-page-link visually-hidden skip-link" href="#MainContent">{{ 'general.accessibility.skip_to_content' | t }}</a>
-
+  
   {% section 'static-header' %}
 
   <div class="main-content" data-drawer-push>

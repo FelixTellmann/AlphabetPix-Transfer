@@ -1309,16 +1309,8 @@ theme.Create = (function () {
     const section_id = this.$container.attr('data-section-id');
     const input_container = $('#frame__input');
     const fixed_size_frame = $('#frame_to_image');
-    const final_artwork = {
-      container: $('#final-artwork'),
-      word: $('#final-artwork__word'),
-      format: $('#final-artwork__format'),
-      size: $('#final-artwork__size'),
-      frame: $('#final-artwork__frame'),
-      price: $('#final-artwork__price'),
-      giftwrap_input: $('#final-artwork__giftwrap'),
-      gift_message_input: $('#final-artwork__message')
-    };
+    const facebook_link = $('.social-sharing__link--facebook');
+    const download_link = $('#final-artwork__sharing--download');
 
     let modal = {
       container: $('#create__modal'),
@@ -1366,6 +1358,26 @@ theme.Create = (function () {
       frame_change: $('.theme-change__item')
     };
 
+    const final_artwork = {
+      container: $('#final-artwork'),
+      word: $('#final-artwork__word'),
+      format: $('#final-artwork__format'),
+      size: $('#final-artwork__size'),
+      frame: $('#final-artwork__frame'),
+      price: $('#final-artwork__price'),
+      giftwrap_input: $('#final-artwork__giftwrap'),
+      gift_message_input: $('#final-artwork__message'),
+      sharing_link: $('#final-artwork__link')
+    };
+
+
+    window.url_values = {
+      image_url: window.image_url || ''
+    };
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+      url_values[key] = value;
+    });
+    url_values.image_url = url_values.image_url.replace(/\[/gi, '/').replace(/\+/gi, '.').replace(/\]/gi, ':').replace(/\(/gi, '?').replace(/\)/gi, '=').replace(/\@/gi, '&');
 
     window.onTimeout = [];
 
@@ -1375,8 +1387,10 @@ theme.Create = (function () {
       previous_input_array: [],
       resize_length: window.create_section.default_frame_size,
       frame: window.create_section.frame,
+      frame_variant_details: product_frames[3].variants[4],
       theme: window.create_section.theme,
       artwork_image_src: '',
+      prepared_sharing_url: window.create_section.prepared_sharing_url,
       modal: {
         theme_array: [window.create_section.theme],
         current_letter: '',
@@ -1411,7 +1425,7 @@ theme.Create = (function () {
         - resize_frame(input_data)
         - update_process_bar(target_step)
         - change_steps(target_step
-        - slide_up_label(input)
+        - hide_label(input)
         - change_theme(target_theme, custom_class)
 
     ==============================================================================*/
@@ -1583,8 +1597,8 @@ theme.Create = (function () {
       }
     };
 
-    /*================ slide_up_label(input_length) ================*/
-    let slide_up_label = function (input_length) {
+    /*================ hide_label(input_length) ================*/
+    let hide_label = function (input_length) {
       if (input_length > 0) {
         frame.label.attr('style', 'opacity: 0;');
       } else {
@@ -1615,6 +1629,17 @@ theme.Create = (function () {
       create_data.frame = frame_data;
       create_data.artwork_image_src = artwork_image_src;
 
+      $.each(product_frames, function (i1, v2) {
+        if (product_frames[i1].handle === frame_data) {
+          $.each(product_frames[i1].variants, function (i2, v2) {
+            if (parseInt(product_frames[i1].variants[i2].option1) === create_data.input_array.length) {
+              create_data.frame_variant_details = product_frames[i1].variants[i2];
+            }
+          });
+        }
+      });
+
+
       $.each(input_array, function (i, v) {
         create_data.input[i] = {
           position: i + 1,
@@ -1632,7 +1657,7 @@ theme.Create = (function () {
       for (let i = input_array.length; i < 9; i++) {
         create_data.input[i] = {};
       }
-
+      create_data.previous_input_array = create_data.input_array;
     };
 
     /*================ add_theme_image_to_modal(theme_data) ================*/
@@ -1665,20 +1690,21 @@ theme.Create = (function () {
     /*================ create_final_artwork() ================*/
     let create_final_artwork = function () {
       if (create_data.input_array.length >= 3) {
-        final_artwork.container.children('img').remove();
+        final_artwork.container.empty();
         let img = new Image();
-        domtoimage.toJpeg(fixed_size_frame[0], {quality: 0.8}).then(function (dataUrl) {
+        domtoimage.toJpeg(fixed_size_frame[0], {quality: 0.4}).then(function (dataUrl) {
           img.src = dataUrl;
           final_artwork.container.prepend(img);
           collect_input_cart_data(create_data.input_array, false, create_data.theme, create_data.frame, img.src);
           create_data.artwork_image_blob = dataURItoBlob(img.src);
           postImageToFacebook("EAAFEyUKxbkMBADE2HTXZAZALfOpHnjM5ZAF08AUFPM34jF7wNedf2vKBzvHY8jFPyNZA7GmCZABBtTQ3M2KGBVrix0wP2FX2ulUCge6dGbjodMhGTZA7Xe7v40ABLxZC3pZAVmvikOFHDV6gCwMtRAASWVUvEc2bJxrwzvQPNHWnkEJS6SgKItB8", "Canvas to Facebook/Twitter", "image/png", create_data.artwork_image_blob, window.location.href);
+          download_link.attr('download', 'My personal frame - ' + create_data.input_array.join('')).attr('href', dataUrl)
         });
 
-        /*Response Code Expires in 60 Days
-        * https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=357106174750275&client_secret=02aa10066d5dd3b0f42276ed2b5842f5&fb_exchange_token=EAAFEyUKxbkMBAOEKZBVYGfzXJiidjq4usmfUyX4TNE6rplJcTJfM04EWrXcFBKFYZAxkl6U6Ds11muGl0bq3Dj1aYzM2Q7VQXQUy69LCOtH5ZAoorlpK5rWLzlJdYfVAfyOhR6VZC1kQpIeZCjJYTd1KsWXGtVerczZAwYVIgH8kc5fKNdEx28
-        *
-        * */
+        /* TODO Response Code Expires in 60 Days from 17.10.2017 - 17.12.2017 */
+        /** https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=357106174750275&client_secret=02aa10066d5dd3b0f42276ed2b5842f5&fb_exchange_token=EAAFEyUKxbkMBAOEKZBVYGfzXJiidjq4usmfUyX4TNE6rplJcTJfM04EWrXcFBKFYZAxkl6U6Ds11muGl0bq3Dj1aYzM2Q7VQXQUy69LCOtH5ZAoorlpK5rWLzlJdYfVAfyOhR6VZC1kQpIeZCjJYTd1KsWXGtVerczZAwYVIgH8kc5fKNdEx28
+         *
+         * */
 
         /* FB.getLoginStatus(function (response) {
            console.log(response);
@@ -1694,11 +1720,39 @@ theme.Create = (function () {
              }, {scope: "publish_actions"});
            }
          });*/
-
-        final_artwork.word.html(create_data.input_array.join(''));
-        final_artwork.format.html(create_data.resize_length);
-        final_artwork.size.html(create_data.resize_length);
+        final_artwork.word.html(create_data.input_array.join('').toUpperCase());
+        final_artwork.format.html(create_data.resize_length + '-window');
+        switch (create_data.resize_length) {
+          case 3:
+            final_artwork.size.html('13.5"h x 20"w');
+            break;
+          case 4:
+            final_artwork.size.html('13.5"h x 24.5"w');
+            break;
+          case 5:
+            final_artwork.size.html('13.5"h x 28.5"w');
+            break;
+          case 6:
+            final_artwork.size.html('13.5"h x 32.75"w');
+            break;
+          case 7:
+            final_artwork.size.html('13.5"h x 37"w');
+            break;
+          case 8:
+            final_artwork.size.html('13.5"h x 41.25"w');
+            break;
+          case 9:
+            final_artwork.size.html('13.5"h x 43.5"w');
+            break;
+        }
         final_artwork.frame.html(create_data.frame);
+        final_artwork.price.html('$' + create_data.frame_variant_details.price / 100);
+        let sharing_url = 'https://alphabetpix.myshopify.com/?frame=' + create_data.frame + '&word=' + create_data.input_array.join('');
+        $.each(create_data.input_array, function (i) {
+          sharing_url += '&pos-' + i + '=' + create_data.input[i]['variant-id'];
+        });
+
+        facebook_link.attr('href', sharing_url);
       }
     };
 
@@ -1734,8 +1788,16 @@ theme.Create = (function () {
             "/" + data.id + "?fields=images&access_token=" + token,
             function (response) {
               if (response && !response.error) {
-                //console.log(response.images[0].source);
+
                 create_data.artwork_image_url = response.images[0].source;
+                og.image.attr('content', create_data.artwork_image_url.replace('https://', 'http://'));
+                og.image_secure.attr('content', create_data.artwork_image_url);
+                let facebook_url = facebook_link.attr('href');
+                let prepared_image_url = create_data.artwork_image_url.replace(/\//gi, '[').replace(/\./gi, '+').replace(/\:/gi, ']').replace(/\?/gi, '(').replace(/\=/gi, ')').replace(/\&/gi, '@');
+                create_data.prepared_sharing_url = facebook_url + '&image_url=' + prepared_image_url;
+                facebook_link.attr('href', '//www.facebook.com/sharer.php?u=' + create_data.prepared_sharing_url);
+                final_artwork.sharing_link.html('<a href="' + create_data.prepared_sharing_url + '" target="_blank">' + create_data.prepared_sharing_url + '</a>');
+
                 // Create facebook post using image
                 FB.api(
                   "/me/photos",
@@ -1764,10 +1826,24 @@ theme.Create = (function () {
         complete: function (data) {
           //console.log('Post to facebook Complete');
           console.log(create_data.artwork_image_url);
+
         }
       });
     };
 
+    /*================   preload_artwork(url_values); ================*/
+    let preload_artwork = function (url_values) {
+      if (Object.keys(url_values).length > 1 && 'frame' in url_values && 'word' in url_values) {
+        change_frame(url_values.frame);
+        input_container.val(url_values.word);
+        resize_frame(url_values.word.length);
+        hide_label(url_values.word.length);
+        for (let i = 0; i < url_values.word.length; i++) {
+          change_letter_image(i, url_values.word.charAt(i), url_values.frame, url_values['pos-' + i]);
+          collect_input_cart_data(url_values.word.split(''), [i, url_values['pos-' + i]], url_values.frame, url_values.frame, url_values.image_url);
+        }
+      }
+    };
 
     /*============================================================================
       # Events
@@ -1806,11 +1882,9 @@ theme.Create = (function () {
       }
 
       update_frame_images(create_data.input_array);
-      slide_up_label(create_data.input_array.length);
+      hide_label(create_data.input_array.length);
       show_reset_button(create_data.input_array.length);
       collect_input_cart_data(create_data.input_array);
-
-      create_data.previous_input_array = create_data.input_array;
     });
 
     /*================ input_container.on('focus') ================*/
@@ -1949,7 +2023,8 @@ theme.Create = (function () {
     window.create_data = create_data;
     $.cookie('create_data', create_data);
     window.preload_custom_image = preload_custom_image;
-
+    preload_artwork(window.url_values);
+    change_theme($('.theme__item[data-theme-id="' + create_data.theme + '"]'));
   }
 
   Create.prototype = $.extend({}, Create.prototype, {

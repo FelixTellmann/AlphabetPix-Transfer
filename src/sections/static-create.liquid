@@ -88,7 +88,7 @@
           </div>
           <nav class="create__button">
             <button class="button button--prev button--moema">Previous Step</button>
-            <button class="button button--next button--moema">{{ section.settings.action-1 }}</button>
+            <button class="button button--next button--moema">{{ section.settings.action-2 }}</button>
           </nav>
         </div>
       </div>
@@ -124,41 +124,115 @@
           </div>
           <nav class="create__button">
             <button class="button button--prev button--moema">Previous Step</button>
-            <button class="button button--next button--moema">{{ section.settings.action-1 }}</button>
+            <button class="button button--next button--moema">{{ section.settings.action-3 }}</button>
           </nav>
         </div>
       </div>
       
       <!-- ================  STEP 4 ================ -->
       <div class="create__step-4">
-        <div class="frame frame--position" data-frame-size="9">
-          <figure id="final-artwork" class="frame__wrapper final-artwork__wrapper">
-            <div class="final-artwork__info-wrapper">
-              <div class="final-artwork__info">
-                <p class="final-artwork__word">Word: <span id="final-artwork__word"></span></p>
-                <p class="final-artwork__format">Format: <span id="final-artwork__format"></span></p>
-                <p class="final-artwork__size">Size: <span id="final-artwork__size"></span></p>
-                <p class="final-artwork__frame">Frame: <span id="final-artwork__frame"></span></p>
-                <p class="final-artwork__price">Price: <span id="final-artwork__price"></span></p>
-                <div class="final-artwork__input">
-                  <label for="final-artwork__giftwrap">Gift Wrap: </label><input id="final-artwork__giftwrap" type="checkbox" class="final-artwork__giftwrap">
-      
-                </div>
-                <div class="final-artwork__input">
-                  <label for="final-artwork__message">Gift Message: </label>
-                  <textarea type="" id="final-artwork__message" class="final-artwork__message" rows="2"></textarea>
-                </div>
-              </div>
+        <div class="final-artwork">
+          <div class="frame final-artwork__size" data-frame-size="{{ section.settings.default_frame_size }}">
+            <figure id="final-artwork" class="frame__wrapper">
+            </figure>
+          </div>
+          <div class="final-artwork__info-wrapper">
+            <div class="final-artwork__info">
+              <table>
+                <tbody>
+                <tr>
+                  <th class="final-artwork__word">Word:</th>
+                  <td id="final-artwork__word"></td>
+                </tr>
+                <tr>
+                  <th class="final-artwork__format">Format:</th>
+                  <td id="final-artwork__format"></td>
+                </tr>
+                <tr>
+                  <th class="final-artwork__size">Size:</th>
+                  <td id="final-artwork__size"></td>
+                </tr>
+                <tr>
+                  <th class="final-artwork__frame">Frame:</th>
+                  <td id="final-artwork__frame"></td>
+                </tr>
+                <tr>
+                  <th class="final-artwork__price">Price:</th>
+                  <td id="final-artwork__price"></td>
+                </tr>
+                </tbody>
+              </table>
             </div>
-          </figure>
-          <nav class="create__button">
-            <button class="button button--prev button--moema">Previous Step</button>
-            <button class="button button--next button--moema">NEXT: SELECT COLLECTION</button>
-          </nav>
+            <div class="final-artwork__info">
+              <table>
+                <tbody>
+                <tr class="final-artwork__input">
+                  <th><label for="final-artwork__giftwrap">Gift Wrap: </label></th>
+                  <td><input id="final-artwork__giftwrap" type="checkbox" class="final-artwork__giftwrap"></td>
+                </tr>
+                <tr class="final-artwork__input">
+                  <th colspan="2"><label for="final-artwork__message">Gift Message: </label></th>
+                </tr>
+                <tr>
+                  <td colspan="2"><textarea type="" id="final-artwork__message" class="final-artwork__message" rows="2"></textarea></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="final-artwork__info final-artwork__info--full-width">
+              <table>
+                <tbody>
+                <tr>
+                  <th class="final-artwork__link">Unique URL:</th>
+                  <td id="final-artwork__link"></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          
+          </div>
+          <div class="final-artwork__sharing">
+            
+            <a id="final-artwork__sharing--download" download="" target="_blank" href="" class="social-sharing__link" tabindex="-1">
+              {% include 'icon-download' %}
+              <span class="icon__fallback-text" aria-hidden="true">Download your Artwork</span>
+              <span class="visually-hidden">Download your Artwork</span>
+            </a>
+            
+            {% if settings.share_facebook %}
+              <a target="_blank" href="//www.facebook.com/sharer.php?u={{ shop.url | append: share_permalink }}" class="social-sharing__link social-sharing__link--facebook" tabindex="-1">
+                {% include 'icon-facebook' %}
+                <span class="icon__fallback-text" aria-hidden="true">{{ 'general.social.share_on_facebook' | t }}</span>
+                <span class="visually-hidden">{{ 'general.social.alt_text.share_on_facebook' | t }}</span>
+              </a>
+            {% endif %}
+            
+            {% if settings.share_twitter %}
+              <a target="_blank" href="//twitter.com/share?text={{ share_title | default: page_description | url_param_escape }}&amp;url={{ shop.url | append: share_permalink }}" class="social-sharing__link" tabindex="-1">
+                {% include 'icon-twitter' %}
+                <span class="icon__fallback-text" aria-hidden="true">{{ 'general.social.share_on_twitter' | t }}</span>
+                <span class="visually-hidden">{{ 'general.social.alt_text.share_on_twitter' | t }}</span>
+              </a>
+            {% endif %}
+            
+            {% if settings.share_pinterest %}
+              <a target="_blank" href="//pinterest.com/pin/create/button/?url={{ shop.url | append: share_permalink }}&amp;media={{ share_image | img_url: '1024x1024' }}&amp;description={{ share_title | default: page_description | url_param_escape }}" class="social-sharing__link" tabindex="-1">
+                {% include 'icon-pinterest' %}
+                <span class="icon__fallback-text" aria-hidden="true">{{ 'general.social.share_on_pinterest' | t }}</span>
+                <span class="visually-hidden">{{ 'general.social.alt_text.share_on_pinterest' | t }}</span>
+              </a>
+            {% endif %}
+          
+          </div>
         </div>
+        <nav class="create__button">
+          <button class="button button--prev button--moema">Previous Step</button>
+          <button class="button button--next button--moema">{{ section.settings.action-4 }}</button>
+        </nav>
       </div>
     </div>
   </div>
+  
   
   <!-- ================ Frame for screenshot - pushed out of screen - max size for quality ================ -->
   <div class="create__artwork-to-image">
@@ -335,6 +409,12 @@
       "id": "step-4",
       "label": "Step 4",
       "default": "Confirm"
+    },
+    {
+      "type": "text",
+      "id": "action-4",
+      "label": "Confirm Button",
+      "default": "Add-to Cart"
     }
   ],
   "blocks": [
