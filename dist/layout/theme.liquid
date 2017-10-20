@@ -120,10 +120,10 @@
   
   {% comment %}{#DATA DUMP#}{% endcomment %}
   <script>
-    $(function() {
-    window.create_data = JSON.parse(window.sessionStorage.create_data);
+    $(function () {
+      window.create_data = JSON.parse(window.sessionStorage.create_data);
     });
-    
+
     window.products = {{ collections['letters'].products | json }};
     window.product_frames = {{ collections['frames'].products | json }};
     window.collections = {{ collections | json }};
@@ -137,56 +137,48 @@
       description: $('#og__description'),
       price: $('#og__price')
     };
-    
-    window.getCart = function(e)  {
+
+    window.getCart = function (e) {
       $.get('/cart.js', function (response) {
         window.cart = response;
         updateCount(response);
+        $('.cart-footer__subtotal').html(slate.Currency.formatMoney(response.total_price, theme.moneyFormat));
       }, 'json');
     };
 
     window.addToCart = function (data) {
       $.post('/cart/add.js', data, function (e) {
-        $.get('/cart.js', function (response) {
-          window.cart = response;
-          updateCount(response);
-        }, 'json');
+        getCart();
       }, 'json');
     };
-    
+
     window.updateCart = function (data) {
       $.post('/cart/update.js', data, function (e) {
-        $.get('/cart.js', function (response) {
-          window.cart = response;
-          updateCount(response);
-        }, 'json');
+        getCart();
       }, 'json');
     };
 
     window.clearCart = function (data, callback) {
       window.cart_backup = cart;
       $.post('/cart/clear.js', data, function (e) {
-        $.get('/cart.js', function (response) {
-          window.cart = response;
-          updateCount(response);
-        }, 'json');
+        getCart();
       }, 'json');
     };
-    
-    window.addToCartMultiple = function (dataArr) {
+
+    window.addToCartMultiple = function (data_array) {
       let count = 0;
       let addToCart = function (array, i) {
         if (stopAjaxRequest === false) {
           $.post('/cart/add.js', array[i], function (response) {
             i++;
             if (i < array.length) {
-              addToCart(array, i)
+              addToCart(array, i);
             } else {
               $.get('/cart.js', function (response) {
                 window.cart = response;
                 inProgress = false;
                 updateCount(response);
-                redirect_to_handle('cart')
+                redirect_to_handle('cart');
               }, 'json');
             }
           }, 'json');
@@ -195,17 +187,17 @@
           stopAjaxRequest = false;
         }
       };
-      addToCart(dataArr, count);
+      addToCart(data_array, count);
     };
-    
-    window.updateCartMultiple = function (dataArr) {
+
+    window.updateCartMultiple = function (data_array) {
       let count = 0;
       let updateCart = function (array, i) {
         if (stopAjaxRequest === false) {
           $.post('/cart/update.js', array[i], function (response) {
             i++;
             if (i < array.length) {
-              updateCart(array, i)
+              updateCart(array, i);
             } else {
               $.get('/cart.js', function (response) {
                 window.cart = response;
@@ -219,40 +211,79 @@
           stopAjaxRequest = false;
         }
       };
-      updateCart(dataArr, count);
+      updateCart(data_array, count);
     };
 
     window.updateCount = function (cart) {
       let totalCount = 0;
-      $.each(cart.items,function (i) {
-        totalCount += this.quantity;
+      $.each(cart.items, function (i, item) {
+        if (item.price > 0) {
+          totalCount += item.quantity;
+        }
       });
-      $('span.cart__count').empty().append(totalCount)
+      $('span.cart__count').empty().append(totalCount);
     };
-    
-    
-    $(function() {
-      $('input[id^="quantity_').on('change', function() {
-        setTimeout(function() {
-          getCart();
-        },1500);
-      })
+
+    window.updateCartQuantity = function (cart, item_id, target_quantity) {
+      let data = {updates: {}};
+      $.each(cart.items, function (i, item) {
+        if ('id' in item.properties && item.properties.id[0] == item_id) {
+          data.updates[item.key] = target_quantity;
+        }
+      });
+      $.post('/cart/update.js', data, function (e) {
+        getCart();
+      }, 'json');
+    };
+
+
+    $(function () {
+      $('input[id^="quantity_').on('change', function () {
+        let quantity_this = $(this);
+        let value = quantity_this.val();
+        
+        setTimeout(function () {
+          let value_changed_test = quantity_this.val();
+          if (value === value_changed_test) {
+            updateCartQuantity(cart, quantity_this.attr('data-item-id'), value);
+          }
+        }, 750);
+
+      });
+
+      $('button[id^="remove_').on('change click', function (e) {
+        e.preventDefault();
+
+        let item_id = $(this).attr('data-item-id');
+        $('.cart-item[data-item-id="' + item_id + '"], .cart-item--details[data-item-id="' + item_id + '"] ')
+          .attr('style', 'opacity: 0;');
+        setTimeout(function () {
+          $('.cart-item[data-item-id="' + item_id + '"], .cart-item--details[data-item-id="' + item_id + '"] ')
+            .remove();
+        }, 210);
+        updateCartQuantity(cart, item_id, 0);
+      });
+
+      updateCount(cart);
     });
 
     /* Facebook APP SDK */
-    window.fbAsyncInit = function() {
+    window.fbAsyncInit = function () {
       FB.init({
-        appId      : '357106174750275',
-        xfbml      : true,
-        version    : 'v2.10'
+        appId: '357106174750275',
+        xfbml: true,
+        version: 'v2.10'
       });
       FB.AppEvents.logPageView();
     };
 
-    (function(d, s, id){
+    (function (d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {return;}
-      js = d.createElement(s); js.id = id;
+      if (d.getElementById(id)) {
+        return;
+      }
+      js = d.createElement(s);
+      js.id = id;
       js.src = "//connect.facebook.net/en_US/sdk.js";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
@@ -263,7 +294,6 @@
         let image = create_data.artwork_image_url;
         let url = create_data.prepared_sharing_url;
         FB.getLoginStatus(function (response) {
-          console.log(response);
           if (response.status === "connected") {
             shareToFacebook(response.authResponse.accessToken, og.description.attr('content'), image, url);
           } else if (response.status === "not_authorized") {
@@ -282,7 +312,7 @@
     window.redirect_to_handle = function (handle) {
       window.location = "/" + handle;
     };
-    
+
     /*================ shareToFacebook(token, filename, mimeType, imageData, message) ================*/
     window.shareToFacebook = function (token, message, image_url = create_data.artwork_image_url, url) {
       FB.ui({
@@ -300,6 +330,7 @@
       }, function (response) {
       });
     };
+
 
   </script>
 </head>

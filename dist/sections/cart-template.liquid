@@ -1,10 +1,10 @@
-<div class="cart page-width{% if cart.items.size == 0%} cart--empty{% endif %}" data-section-id="{{ section.id }}" data-section-type="cart-template" data-cart-token="{{ cart.id }}">
-
-
+<div class="cart page-width{% if cart.items.size == 0 %} cart--empty{% endif %}" data-section-id="{{ section.id }}" data-section-type="cart-template" data-cart-token="{{ cart.id }}">
+  
+  
   <div class="section-header section-header--small text-center">
     <h1 class="section-header__title h2">{{ 'cart.general.title' | t }}</h1>
   </div>
-
+  
   {% comment %}
   Cart no cookies state
   {% endcomment %}
@@ -13,7 +13,7 @@
       <p>{{ 'cart.general.cookies_required' | t }}</p>
     </div>
   </div>
-
+  
   {% comment %}
   Cart Empty State
   {% endcomment %}
@@ -23,95 +23,58 @@
       <p>{{ 'cart.general.continue_browsing_html' | t: classes: 'btn btn--primary' }}</p>
     </div>
   </div>
-
+  
   <form action="/cart" method="post" novalidate class="cart__form">
     <table class="cart__table">
       <thead class="cart__table-header border-bottom">
-        <tr>
-          <th class="text-left">{{ 'cart.label.product' | t }}</th>
-          <th class="text-center">{{ 'cart.label.price' | t }}</th>
-          <th class="text-center">{{ 'cart.label.quantity' | t }}</th>
-          <th class="text-right">{{ 'cart.label.total' | t }}</th>
-        </tr>
+      <tr>
+        <th class="text-left">{{ 'cart.label.product' | t }}</th>
+        <th class="text-center">{{ 'cart.label.price' | t }}</th>
+        <th class="text-center">{{ 'cart.label.quantity' | t }}</th>
+        <th class="text-right">{{ 'cart.label.total' | t }}</th>
+      </tr>
       </thead>
-    
+      
       <tbody data-cart-item-list>
-        {%- assign cartItems = 'template ' | split: ' ' -%}
-        {% if cart.items.size > 0 %}
-          {%- assign cartItems = cart.items -%}
-        {% endif %}
-
-        {% for item in cartItems %}
-          <tr class="cart-item{% if item == 'template' %} ajax-cart__template{% endif %}" data-cart-item data-cart-item-id="{{ item.key }}">
-            <td style="max-width: 810px;"> <!-- ================ CAN CHANGE CLASS ADD FRAME HERE ================ -->
-              
-              
-              {% assign product = item.product %}
-              
-              {% for image in product.images %}
-                {% if image.src contains 'left' %}
-                  {% assign frame_left = image.src  %}
-                {% elsif image.src contains 'center' %}
-                  {% assign frame_center = image.src  %}
-                {% elsif image.src contains 'right' %}
-                  {% assign frame_right = image.src  %}
-                {% endif %}
-              {% endfor %}
-              
-              {% assign number_of_letters = 0 %}
-              {% for p in item.properties %}
-                {% if p.first contains 'Letter' %}
-                  {% assign number_of_letters = number_of_letters | plus: 1 %}
-                {% endif %}
-              {% endfor %}
-  
-              
-              
-              <script>
-                /*$(function () {
-                  setTimeout(function () {
-                    domtoimage.toJpeg($('.cart-item__frame[data-item-id="{{ item.id }}"]')[0], {quality: 0.95})
-                      .then(function (dataUrl) {
-                        let img = new Image();
-                        img.src = dataUrl;
-                        $('.cart-item__frame[data-item-id="{{ item.id }}"]').empty().append(img)
-                      })
-                      .catch(function (error) {
-                        console.error('oops, something went wrong!', error);
-                      });
-                  }, 2800); /!* Timer might need to be adjusted for image load to be completed *!/
-                })*/
-              </script>
-  
-              <style>
-                .cart-item__frame--center[data-item-id="{{ item.id }}"] {
-                  width: calc(3.2vw + (7.6vw * {{ number_of_letters }}));
-                  max-width: calc(38.4px + (91.2px * {{ number_of_letters }}));
-                }
-              </style>
-  
-              <figure class="cart-item__frame" data-item-id="{{ item.id }}">
-                <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="cart-item__frame--left" data-item-id="{{ item.id }}">
-                <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="cart-item__frame--center" data-item-id="{{ item.id }}">
-                <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="cart-item__frame--right" data-item-id="{{ item.id }}">
-                <figure class="cart-item__letters">
-                  {% for p in item.properties %}
-                    {% if p.first contains 'Letter' %}
-                      {% assign value = p.last | split: '-' %}
-                      {% if value[0] contains '_' %}
-                        {% capture productHandle %}letter-symbol-{{ value[0] | replace: '_' }}{% endcapture %}
-                      {% else %}
-                        {% capture productHandle %}letter-{{ value[0] }}{% endcapture %}
-                      {% endif %}
-                      {% assign product = all_products[productHandle] %}
-                      {% for variant in product.variants %}{% if variant.sku == p.last %}<img class="cart-item__letter-img" data-letter-class=" {{ productVariant[0] }}" data-variant-id="{{ variantId }}" src="{{ variant.image.src | product_img_url: '300x' }}" alt="">{% endif %}{% endfor %}
-                    {% endif %}
-                  {% endfor %}
-                </figure>
-              </figure>
-              
+      {%- assign cartItems = 'template ' | split: ' ' -%}
+      {% if cart.items.size > 0 %}
+        {%- assign cartItems = cart.items -%}
+      {% endif %}
+      
+      {% for item in cartItems %}
+        {% if item.price > 0 %}
+          
+          {% assign product = item.product %}
+          
+          {% for image in product.images %}
+            {% if image.src contains 'left' %}
+              {% assign frame_left = image.src %}
+            {% elsif image.src contains 'center' %}
+              {% assign frame_center = image.src %}
+            {% elsif image.src contains 'right' %}
+              {% assign frame_right = image.src %}
+            {% endif %}
+          {% endfor %}
+          
+          {% assign number_of_letters = 0 %}
+          {% for p in item.properties %}
+            {% if p.first contains 'Letter' %}
+              {% assign number_of_letters = number_of_letters | plus: 1 %}
+            {% endif %}
+            {% if p[0] == 'artwork' %}
+              {% assign item_artwork = p[1] %}
+            {% endif %}
+            {% if p[0] =='id' %}
+              {% assign item_id = p[1] %}
+            {% endif %}
+          {% endfor %}
+          
+          
+          <tr class="cart-item" data-item-id="{{ item_id }}">
+            <td rowspan="2">
+              <img src="{{ item_artwork.image }}" alt="My Unique Artwork">
             </td>
-          <!-- ================ USE THE BELOW INFO TO ADD IMPORTANT INFO TO THE FRAME FOR CHANGES i.e. Remove item etc. ================ -->
+            <!-- ================ USE THE BELOW INFO TO ADD IMPORTANT INFO TO THE FRAME FOR CHANGES i.e. Remove item etc. ================ -->
             {% comment %}{#<td class="cart-item__meta small--text-left">
               {% assign itemImage = true %}
               {% if item.image == blank and item.product.featured_image == blank %}
@@ -180,32 +143,64 @@
 
               <p class="cart-item__message" data-item-message></p>
             </td>#}{% endcomment %}
-
-            <td class="cart-item__price-wrapper small--hide">
-              <p>
-                <span class="cart-item__price" data-cart-item-price>{{ item.price | money }}</span>
-                <s class="cart-item__original-price" data-cart-item-original-price>{% if item.price != item.original_price %}{{ item.original_price | money }}{% endif %}</s>
-              </p>
-            </td>
-
-            <td class="cart-item__update-wrapper text-right">
-
-              <div class="cart-item__qty">
-                <label for="quantity_{{ item.key }}" class="cart-item__qty-label" data-cart-item-label-quantity>{{ 'cart.label.quantity' | t }}</label>
-                <input id="quantity_{{ item.key }}" class="cart-item__qty-input" value="{{ item.quantity }}" type="number" pattern="\d*" min="1" name="updates[{{ item.key }}]" data-cart-item-input-quantity>
+            
+            <td class="cart-item__details cart-item__price-wrapper small--hide">
+              <div class="cart-item__details-positioning justify--center">
+                <p>
+                  <span class="cart-item__price" data-cart-item-price>{{ item.price | money }}</span>
+                  <s class="cart-item__original-price" data-cart-item-original-price>{% if item.price != item.original_price %}{{ item.original_price | money }}{% endif %}</s>
+                </p>
               </div>
-
-              <a href="/cart/change?line={{ forloop.index }}&amp;quantity=0" class="btn-link cart-item__remove medium-up--hide" data-cart-item-delete>{{ 'cart.general.remove' | t }}</a>
             </td>
-
-            <td class="text-right small--hide">
+            
+            <td class="cart-item__details cart-item__update-wrapper">
+              <div class="cart-item__details-positioning justify--center">
+                <div class="cart-item__qty">
+                  <label for="quantity_{{ item_id }}" class="cart-item__qty-label">{{ 'cart.label.quantity' | t }}</label>
+                  <input id="quantity_{{ item_id }}" class="cart-item__qty-input" value="{{ item.quantity }}" type="number" pattern="\d*" min="1" data-item-id="{{ item_id }}">
+                </div>
+                <button id="remove_{{ item_id }}" class="btn btn--small" data-item-id="{{ item_id }}">Remove</button>
+              </div>
+            </td>
+            
+            <td class="cart-item__details small--hide">
+              <div class="cart-item__details-positioning justify--fe">
                 <span class="cart-item__price" data-cart-item-line-price>{{ item.line_price | money }}</span>
+              </div>
             </td>
           </tr>
-        {% endfor %}
+          
+          <tr class="cart-item" data-item-id="{{ item_id }}">
+            <td colspan="3">
+              <div class="cart-item__info-block">
+                <h5>{{ item.product.handle | capitalize }} Collection ({{ item.variant.title }}-Window Frame)</h5>
+                
+                {% for c in collections %}
+                  {% if item.product.handle == c.handle %}
+                    {{ c.description }}
+                  {% endif %}
+                {% endfor %}
+                
+                {% if item.properties['gift_wrap'] != blank %}
+                  <p><strong>GIFT WRAP: </strong> {{ item.properties['gift_wrap'] }}</p>
+                {% endif %}
+                {% if item.properties['gift_message'] != blank %}
+                  <p><strong>GIFT MESSAGE: </strong> {{ item.properties['gift_message'] }}</p>
+                {% endif %}
+                <p><strong>CUSTOM WORD: </strong> {{ item.properties['word'] | upcase }}</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="cart-item--details cart-item--break" data-item-id="{{ item_id }}">
+            <td colspan="4">
+              <div class="cart-item__padding"></div>
+            </td>
+          </tr>
+        {% endif %}
+      {% endfor %}
       </tbody>
     </table>
-
+    
     <footer class="cart-footer">
       <div class="grid grid__row">
         {% if section.settings.cart_notes_enable %}
@@ -214,7 +209,7 @@
             <textarea name="note" id="CartSpecialInstructions" class="cart-footer__note-input" rows="4" data-cart-note>{{ cart.note }}</textarea>
           </div>
         {% endif %}
-
+        
         <div class="grid__item text-right small--text-center{% if section.settings.cart_notes_enable %} medium-up--one-half{% endif %}">
           <p>
             <span class="cart__subtotal-title h4">{{ 'cart.general.subtotal' | t }}</span>
@@ -239,13 +234,12 @@
 
 
 <script>
-  
-  $(function() {
+
+  $(function () {
     getCart();
   });
 
 </script>
-
 
 
 {% comment %}{#<!--@formatter:off-->#}{% endcomment %}

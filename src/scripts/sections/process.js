@@ -40,7 +40,6 @@ theme.ProcessSlider = (function () {
       sliderPrevArrow: $('.slick-prev').attr('data-section-id', sectionId),
       sliderNextArrow: $('.slick-next').attr('data-section-id', sectionId)
     };
-    console.log(sectionId);
 
 
     this.initSlider(portfolioSelectors);

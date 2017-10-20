@@ -117,7 +117,7 @@ theme.Create = (function () {
       image_url: window.image_url || ''
     };
     var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
-      url_values[key] = value;
+      url_values[decodeURIComponent(key)] = decodeURIComponent(value);
     });
     url_values.image_url = url_values.image_url.replace(/\[/gi, '/').replace(/\+/gi, '.').replace(/\]/gi, ':').replace(/\(/gi, '?').replace(/\)/gi, '=').replace(/\@/gi, '&');
 
@@ -140,7 +140,7 @@ theme.Create = (function () {
         custom_image_array: []
       },
       frame_images: {},
-      gift_wrapping: false,
+      gift_wrap: false,
       gift_message: ''
     };
 
@@ -215,6 +215,11 @@ theme.Create = (function () {
 
     /*================ preload_custom_images(preload_container, image_file) ================*/
     let preload_custom_image = function (variant_id, image_file) {
+
+      if (!(variant_id.indexOf('||') >= 0)) {
+        variant_id = variant_id + "||" + new Date().getTime()
+      }
+
       let v_img = '<img src="' + image_file + '" ' +
         'class="preload-image" ' +
         'data-variant-id="' + variant_id + '" ' +
@@ -507,7 +512,11 @@ theme.Create = (function () {
         final_artwork.price.html('$' + create_data.frame_variant_details.price / 100);
         let sharing_url = 'https://alphabetpix.myshopify.com/?frame=' + create_data.frame + '&word=' + create_data.input_array.join('');
         $.each(create_data.input_array, function (i) {
-          sharing_url += '&pos-' + i + '=' + create_data.input[i].variant_id;
+          if (create_data.input[i].custom_image !== '') {
+            sharing_url += '&pos-' + i + '=' + create_data.input[i].variant_id + '||||' + create_data.input[i].custom_image.replace(/\//gi, '[').replace(/\./gi, '+').replace(/\:/gi, ']').replace(/\?/gi, '(').replace(/\=/gi, ')').replace(/\&/gi, '@');
+          } else {
+            sharing_url += '&pos-' + i + '=' + create_data.input[i].variant_id;
+          }
         });
 
         facebook_link.attr('href', sharing_url);
@@ -568,12 +577,9 @@ theme.Create = (function () {
                   function (response) {
                     if (response && !response.error) {
                       /* handle the result */
-                      console.log(response);
                     }
                   }
                 );
-              } else {
-                console.log(response.error);
               }
             }
           );
@@ -583,8 +589,6 @@ theme.Create = (function () {
         },
         complete: function (data) {
           //console.log('Post to facebook Complete');
-          console.log(create_data.artwork_image_url);
-
         }
       });
     };
@@ -596,13 +600,23 @@ theme.Create = (function () {
         input_container.val(url_values.word);
         resize_frame(url_values.word.length);
         hide_label(url_values.word.length);
+        create_data.resize_length = url_values.word.length;
         for (let i = 0; i < url_values.word.length; i++) {
-          change_letter_image(i, url_values.word.charAt(i), url_values.frame, url_values['pos-' + i]);
-          collect_input_cart_data(url_values.word.split(''), [i, url_values['pos-' + i]], url_values.frame, url_values.frame, url_values.image_url);
+          if (url_values['pos-' + i].indexOf('http') >= 0) {
+            let variant_id = url_values['pos-' + i].split('||||')[0];
+            let custom_image_url = url_values['pos-' + i].split('||||')[1];
+            console.log(variant_id);
+            custom_image_url = custom_image_url.replace(/\[/gi, '/').replace(/\+/gi, '.').replace(/\]/gi, ':').replace(/\(/gi, '?').replace(/\)/gi, '=').replace(/\@/gi, '&');
+            preload_custom_image(variant_id, custom_image_url);
+            change_letter_image(i, url_values.word.charAt(i), url_values.frame, variant_id);
+            collect_input_cart_data(url_values.word.split(''), [i, url_values['pos-' + i]], url_values.frame, url_values.frame, url_values.image_url);
+          } else {
+            change_letter_image(i, url_values.word.charAt(i), url_values.frame, url_values['pos-' + i]);
+            collect_input_cart_data(url_values.word.split(''), [i, url_values['pos-' + i]], url_values.frame, url_values.frame, url_values.image_url);
+          }
         }
       }
     };
-
     /*================ update_cart_form(create_data) ================*/
 
     let update_cart_form = function (create_data) {
@@ -626,29 +640,53 @@ theme.Create = (function () {
       });
 
       let cart_data_array = [];
-      $.each(create_data.input_array, function (i) {
-        cart_data_array.push({
-          quantity: 1,
-          id: create_data.input[i].variant_id,
-          properties: {
-            'id': create_data.time_id
-          }
-        });
-      });
+      create_data.properties = {
+        'id': create_data.time_id,
+        'word': create_data.input_array.join(''),
+        'images': letter_sku_string,
+        'letter_data': create_data.input,
+        'artwork': {image: create_data.artwork_image_src}
+      };
 
-      cart_data_array.push({
-        quantity: 1,
-        id: create_data.frame_variant_details.id,
-        image:  create_data.artwork_image_src,
-        properties: {
-          'id': create_data.time_id,
-          'word': create_data.input_array.join(''),
-          'images': letter_sku_string,
-          'letter_data': create_data.input,
-          'artwork': {image: create_data.artwork_image_src}
+      if (create_data.gift_wrap) {
+        create_data.properties['gift_wrap'] = 'Yes';
+      }
+      if (create_data.gift_message !== '') {
+        create_data.properties['gift_message'] = create_data.gift_message;
+      }
+
+      cart_data_array = [
+        {
+          quantity: 1,
+          id: create_data.frame_variant_details.id,
+          image: create_data.artwork_image_src,
+          properties: create_data.properties
+        }
+      ];
+      $.each(create_data.input_array, function (i) {
+        if (create_data.input[i].custom_image !== '') {
+          cart_data_array.unshift({
+            quantity: 1,
+            id: create_data.input[i].variant_id.split('||')[0],
+            properties: {
+              'id': create_data.time_id,
+              'position': i + 1,
+              'custom_image': create_data.input[i].custom_image
+            }
+          });
+        } else {
+          cart_data_array.unshift({
+            quantity: 1,
+            id: create_data.input[i].variant_id,
+            properties: {
+              'id': create_data.time_id,
+              'position': i + 1
+            }
+          });
         }
       });
-      console.log(cart_data_array);
+
+      cart_data_array.push();
       addToCartMultiple(cart_data_array);
     };
 
@@ -741,6 +779,7 @@ theme.Create = (function () {
       update_process_bar(3);
     });
     create_navigation.next_button_4.on('click', function () {
+      $(this).addClass('btn--loader-active').attr('style','color: transparent !important;');
       cart_submit(create_data);
     });
 
