@@ -1824,7 +1824,7 @@ theme.Create = (function () {
                 create_data.artwork_image_url = response.images[0].source;
                 og.image.attr('content', create_data.artwork_image_url.replace('https://', 'http://'));
                 og.image_secure.attr('content', create_data.artwork_image_url);
-                let facebook_url = facebook_link.attr('href');
+                let facebook_url = facebook_link.attr('href'); /*TODO change link data starting poing*/
                 let prepared_image_url = create_data.artwork_image_url.replace(/\//gi, '[').replace(/\./gi, '+').replace(/\:/gi, ']').replace(/\?/gi, '(').replace(/\=/gi, ')').replace(/\&/gi, '@');
                 create_data.prepared_sharing_url = facebook_url + '&image_url=' + prepared_image_url;
                 facebook_link.attr('href', '//www.facebook.com/sharer.php?u=' + create_data.prepared_sharing_url);
