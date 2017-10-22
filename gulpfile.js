@@ -271,6 +271,14 @@ gulp.task('autoprefix:css', function () {
     })).pipe(gulp.dest('src/styles/'));
 });
 
+gulp.task('babel', () =>
+  gulp.src('src/scripts/sections/*.js')
+    .pipe(babel({
+      presets: ['env']
+    }))
+    .pipe(gulp.dest('src/scripts/babel/'))
+);
+
 
 function preprocessCss() {
     return gulp.src('src/styles/**/*.{css,scss}').pipe(plumber()).pipe(postcss([autoprefixer()], {syntax: require('postcss-scss')})).pipe(size({

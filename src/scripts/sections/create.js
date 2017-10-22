@@ -161,7 +161,6 @@ theme.Create = (function () {
       });
     });
 
-
     /*============================================================================
       #Functions
         - preload_images(preload_container, theme)
