@@ -63,7 +63,7 @@
   {% include 'critical-css' %}
   {% include 'google-fonts' %}
   {% include 'load-css' %}
-
+  
   <script>
     var theme = {
       stylesheet: "{{ 'theme.scss.css' | asset_url }}",
@@ -238,7 +238,7 @@
 
 
     $(function () {
-      $('input[id^="quantity_').on('change', function () {
+      $('input.cart-item__qty-input').on('change', function () {
         let quantity_this = $(this);
         let value = quantity_this.val();
         
@@ -251,7 +251,7 @@
 
       });
 
-      $('button[id^="remove_').on('change click', function (e) {
+      $('button.cart-item__remove-item').on('change click', function (e) {
         e.preventDefault();
 
         let item_id = $(this).attr('data-item-id');

@@ -35,7 +35,7 @@ theme.TestimonialSlider = (function () {
     var sectionId = this.$container.attr('data-section-id');
 
     var TestimonialSelectors = {
-      sliderContainer: $('.slider[data-section-id="' + sectionId + '"'),
+      sliderContainer: $('.slider[data-section-id="' + sectionId + '"]'),
       id: sectionId,
       sliderAutoplay: $('.slider[data-section-id="' + sectionId + '"]').attr('data-autoplay'),
       sliderAutoplaySpeed: $('.slider[data-section-id="' + sectionId + '"]').attr('data-speed')

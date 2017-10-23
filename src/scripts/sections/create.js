@@ -116,8 +116,10 @@ theme.Create = (function () {
     window.url_values = {
       image_url: window.image_url || ''
     };
-    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
-      url_values[decodeURIComponent(key)] = decodeURIComponent(value);
+    let parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+      if(key) {
+        url_values[decodeURIComponent(key)] = decodeURIComponent(value);
+      }
     });
     url_values.image_url = url_values.image_url.replace(/\[/gi, '/').replace(/\+/gi, '.').replace(/\]/gi, ':').replace(/\(/gi, '?').replace(/\)/gi, '=').replace(/\@/gi, '&');
 
@@ -186,7 +188,8 @@ theme.Create = (function () {
             'data-variant-sku="' + variant.sku + '" ' +
             'data-letter-id="' + product.handle.replace('letter-', '') + '" ' +
             'data-theme-id="' + variant.option1 + '" ' +
-            'data-selection-type="preload">';
+            'data-selection-type="preload" ' +
+            'crossorigin="anonymous" >';
           if (theme === 'all') {
             preload_container.append(v_img);
             if (limit !== 0 && i >= limit - 1) {
@@ -206,7 +209,7 @@ theme.Create = (function () {
     let preload_frame_images = function (preload_container, frames) {
       $.each(frames, function (k1, v1) {
         $.each(frames[k1], function (k2, v2) {
-          let frame_img = '<img src="' + v2 + '" class="preload-frame visually-hidden" alt="' + k1 + '">';
+          let frame_img = '<img src="' + v2 + '" class="preload-frame visually-hidden" alt="' + k1 + '" crossorigin="anonymous">';
           preload_container.append(frame_img);
         });
       });
@@ -215,7 +218,7 @@ theme.Create = (function () {
     /*================ preload_custom_images(preload_container, image_file) ================*/
     let preload_custom_image = function (variant_id, image_file) {
 
-      if (!(variant_id.indexOf('||') >= 0)) {
+      if (!(variant_id.toString().indexOf('||') >= 0)) {
         variant_id = variant_id + "||" + new Date().getTime()
       }
 
@@ -226,8 +229,8 @@ theme.Create = (function () {
         'data-letter-id="custom" ' +
         'data-theme-id="all" ' +
         'data-custom-id="image_file" ' +
-        'data-selection-type="preload">';
-
+        'data-selection-type="preload" ' +
+        'crossorigin="anonymous" >';
       modal.content.prepend(v_img);
       add_images_to_modal();
     };
@@ -455,6 +458,13 @@ theme.Create = (function () {
         final_artwork.container.empty();
         let img = new Image();
         domtoimage.toJpeg(fixed_size_frame[0], {quality: 0.4}).then(function (dataUrl) {
+          /*try {
+            b64 = canvas.toDataURL("image/png");
+          } catch (err) {
+            console.log(err);
+            alert(err);
+          }*/
+          /* TODO change code to allow for a SAFARI fallback methods via frame art design... utilise frame-to-screenshot! DOM element!*/
           img.src = dataUrl;
           final_artwork.container.prepend(img);
           collect_input_cart_data(create_data.input_array, false, create_data.theme, create_data.frame, img.src);
@@ -869,8 +879,9 @@ theme.Create = (function () {
         - preload_images()
 
     ==============================================================================*/
-
-    preload_images(modal.content, 'all', 0);
+    setTimeout(function() {
+      preload_images(modal.content, 'all', 0);
+    },200);
     preload_frame_images(modal.content, create_data.frame_images);
     window.create_data = create_data;
     window.sessionStorage.create_data = JSON.stringify(create_data);

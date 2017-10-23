@@ -159,7 +159,7 @@
                   <label for="quantity_{{ item_id }}" class="cart-item__qty-label">{{ 'cart.label.quantity' | t }}</label>
                   <input id="quantity_{{ item_id }}" class="cart-item__qty-input" value="{{ item.quantity }}" type="number" pattern="\d*" min="1" data-item-id="{{ item_id }}">
                 </div>
-                <button id="remove_{{ item_id }}" class="btn btn--small" data-item-id="{{ item_id }}">Remove</button>
+                <button id="remove_{{ item_id }}" class="cart-item__remove-item btn btn--small" data-item-id="{{ item_id }}">Remove</button>
               </div>
             </td>
             

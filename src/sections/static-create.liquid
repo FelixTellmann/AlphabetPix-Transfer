@@ -51,9 +51,9 @@
           <figure id="frame" class="frame__wrapper tada scroll" data-scroll-delay="4s">
             <label for="frame__input" class="frame__label">{{ section.settings.label }}</label>
             <div class="frame__background">
-              <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
-              <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
-              <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
+              <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left" crossorigin="anonymous">
+              <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center" crossorigin="anonymous">
+              <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right" crossorigin="anonymous">
               <div class="frame__image--mat" style="background-color: {{ section.settings.mat_color }}"></div>
             </div>
             <input id="frame__input" name="frame__input" type="text" class="frame__input" placeholder="{{ section.settings.placeholder }}" maxlength="9" data-section-id="{{ section.id }}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
@@ -78,7 +78,7 @@
             {% for block in section.blocks %}
               {% assign theme = collections[block.settings.theme] %}
               <div class="theme__item {% if forloop.first %}theme__selected{% endif %}" data-block-id="{{ block.id }}" data-theme-id="{{ block.settings.theme }}" {{ block.shopify_attributes }}>
-                <img src="{{ theme.image | img_url: '300x' }}" alt="{{ block.settings.image.alt }}" class="theme__image">
+                <img src="{{ theme.image | img_url: '300x' }}" alt="{{ block.settings.image.alt }}" class="theme__image" crossorigin="anonymous">
                 <div class="theme__content">
                   <h4 class="theme__heading">{{ theme.title }}</h4>
                   <div class="theme__description">{{ theme.description }}</div>
@@ -100,9 +100,9 @@
           <h4 class="frame__instructions">{{ section.settings.instruction }}</h4>
           <figure class="frame__wrapper">
             <div class="frame__background">
-              <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
-              <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
-              <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
+              <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left" crossorigin="anonymous">
+              <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center" crossorigin="anonymous">
+              <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right" crossorigin="anonymous">
               <div class="frame__image--mat" style="background-color: {{ section.settings.mat_color }}"></div>
             </div>
             <div id="frame__image-container--step-2" class="frame__letter-wrapper">
@@ -118,7 +118,7 @@
                 {% if image.src contains 'corner' %}{% assign frame_corner = image.src %}{% endif %}
               {% endfor %}
               <button class="theme-change__item" data-theme-id="{{ block.settings.frame }}">
-                <img src="{{ frame_corner | img_url: '150x' }}" alt="" class="theme-change__image">
+                <img src="{{ frame_corner | img_url: '150x' }}" alt="" class="theme-change__image" crossorigin="anonymous">
               </button>
             {% endfor %}
           </div>
@@ -248,12 +248,12 @@
     <div class="frame frame--position frame--size" data-frame-size="{{ section.settings.default_frame_size }}">
       <figure id="frame_to_image" class="frame__wrapper">
         <div class="frame__background">
-          <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
-          <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
-          <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
+          <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left" crossorigin="anonymous">
+          <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center" crossorigin="anonymous">
+          <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right" crossorigin="anonymous">
           <div class="frame__image--mat" style="background-color: {{ section.settings.mat_color }}"></div>
         </div>
-        <div id="frame__image-container--step-2" class="frame__letter-wrapper">
+        <div id="frame__image-container--frame-to-image" class="frame__letter-wrapper">
           {% for i in (0..8) %}
             <button class="frame__letter" data-letter-position="{{ i }}"></button>
           {% endfor %}
@@ -274,7 +274,7 @@
           </button>
         </div>
         <div class="modal__body">
-          <img data-letter-id="whitespace" id="whitespace" class="preload-image visually-hidden">
+          <img data-letter-id="whitespace" id="whitespace" class="preload-image visually-hidden" crossorigin="anonymous">
         </div>
         <div class="modal-footer">
           <iframe frameborder="0" scrolling="no" id="create__product-data__custom-image" class="modal__image-upload" src="/pages/image-upload/">

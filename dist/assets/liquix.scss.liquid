@@ -12550,6 +12550,7 @@ input[type='text'].frame__input {
 
 /*================ Cart Item ================*/
 .cart-item {
+  -webkit-transition: 0.2s all;
   transition: 0.2s all;
   border-bottom: unset !important;
   p {
@@ -12567,6 +12568,7 @@ input[type='text'].frame__input {
 
 .cart-item__details {
   height: 30%;
+  -webkit-transition: 0.2s all;
   transition: 0.2s all;
 }
 
@@ -12651,6 +12653,7 @@ td.cart-item__meta {
   opacity: 0;
   font-size: 14px;
   color: $color-error;
+  -webkit-transition: opacity 0.25s ease-out;
   transition: opacity 0.25s ease-out;
   
   .ajax-cart--error & {
@@ -12738,8 +12741,12 @@ input.cart-item__qty-input {
 }
 
 .cart-item__details-positioning {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .cart-item__update-wrapper {
@@ -12803,6 +12810,7 @@ input.cart-item__qty-input {
 
 .cart-footer__message-container {
   opacity: 0;
+  -webkit-transition: opacity 0.25s ease-out;
   transition: opacity 0.25s ease-out;
   
   .ajax-cart--error & {
@@ -12830,10 +12838,10 @@ input.cart-item__qty-input {
 
 .cart-item__info-block {
   height: 100%;
-  background: #12312322;
+  background: rgba(18, 49, 35, 0.13334);
   margin: 15px;
   padding: 15px;
-  border: 1px solid #00000066;
+  border: 1px solid rgba(0, 0, 0, 0.4);
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 300;
   font-size: 14px;
