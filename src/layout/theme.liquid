@@ -126,6 +126,7 @@
 
     window.products = {{ collections['letters'].products | json }};
     window.product_frames = {{ collections['frames'].products | json }};
+    window.page_description = '{{ page_description | url_param_escape }}';
     window.collections = {{ collections | json }};
     window.cart = {{ cart | json }};
     window.settings = {{ settings | json }};
@@ -143,6 +144,12 @@
         window.cart = response;
         updateCount(response);
         $('.cart-footer__subtotal').html(slate.Currency.formatMoney(response.total_price, theme.moneyFormat));
+        $.each(response.items, function (i, item) {
+          if(item.product_type ===  "Frame") {
+            $('.cart-item__price--total[data-item-id="' + item.properties.id[0] + '"]').html(slate.Currency.formatMoney(item.line_price, theme.moneyFormat));
+            console.log(item.line_price);
+          }
+        });
       }, 'json');
     };
 

@@ -58,21 +58,48 @@
           
           {% assign number_of_letters = 0 %}
           {% for p in item.properties %}
-            {% if p.first contains 'Letter' %}
-              {% assign number_of_letters = number_of_letters | plus: 1 %}
-            {% endif %}
-            {% if p[0] == 'artwork' %}
-              {% assign item_artwork = p[1] %}
-            {% endif %}
             {% if p[0] =='id' %}
               {% assign item_id = p[1] %}
+            {% endif %}
+            {% if p[0] == 'letter_data' %}
+              {% assign item_letters = p[1] %}
             {% endif %}
           {% endfor %}
           
           
           <tr class="cart-item" data-item-id="{{ item_id }}">
             <td rowspan="2">
-              <img src="{{ item_artwork.image }}" alt="My Unique Artwork">
+              <div class="cart__frame cart__frame--position cart__frame--size" data-frame-size="{{ item_letters.size }}">
+                <figure id="frame" class="frame__wrapper">
+                  <div class="frame__background">
+                    <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
+                    <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
+                    <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
+                    <div class="frame__image--mat" style="background-color: #ffffff"></div>
+                  </div>
+                  <div id="frame__image-container" class="frame__letter-wrapper">
+                    {% for letter in item_letters %}
+                      {% assign letter_image = "" %}
+                      {% assign custom_image = letter[1]['custom_image'] | strip %}
+                      {% if custom_image contains 'http' %}
+                        {% assign letter_image = custom_image %}
+                      {% else %}
+                        {% for letter_item in cart.items %}
+                          {% assign letter_id = letter_item.variant_id | strip %}
+                          {% assign letter_id2 = letter[1]['variant_id'] | strip %}
+                          {% if letter_id == letter_id2 %}
+                            {% assign letter_image = letter_item.variant.image.src | product_img_url: '150x' %}
+                            {% break %}
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                      <div class="frame__letter">
+                        <img src="{{ letter_image }}">
+                      </div>
+                    {% endfor %}
+                  </div>
+                </figure>
+              </div>
             </td>
             <!-- ================ USE THE BELOW INFO TO ADD IMPORTANT INFO TO THE FRAME FOR CHANGES i.e. Remove item etc. ================ -->
             {% comment %}{#<td class="cart-item__meta small--text-left">
@@ -147,7 +174,7 @@
             <td class="cart-item__details cart-item__price-wrapper small--hide">
               <div class="cart-item__details-positioning justify--center">
                 <p>
-                  <span class="cart-item__price" data-cart-item-price>{{ item.price | money }}</span>
+                  <span class="cart-item__price"  data-cart-item-price>{{ item.price | money }}</span>
                   <s class="cart-item__original-price" data-cart-item-original-price>{% if item.price != item.original_price %}{{ item.original_price | money }}{% endif %}</s>
                 </p>
               </div>
@@ -165,7 +192,7 @@
             
             <td class="cart-item__details small--hide">
               <div class="cart-item__details-positioning justify--fe">
-                <span class="cart-item__price" data-cart-item-line-price>{{ item.line_price | money }}</span>
+                <span class="cart-item__price cart-item__price--total" data-item-id="{{ item_id }}" data-cart-item-line-price>{{ item.line_price | money }}</span>
               </div>
             </td>
           </tr>

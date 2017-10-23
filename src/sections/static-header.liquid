@@ -88,7 +88,7 @@
       
       <nav class="nav__list grid__row justify--fe align--center">
         {% for link in linklists[section.settings.primary_navigation].links %}
-          <a class="nav__link grid__content{% if link.active %} active{% endif %}" href="{{ link.url }}" tabindex="-1">{{ link.title }}</a>
+          <a class="nav__link grid__content{% if link.active %} active{% endif %}" href="{{ link.url }}" tabindex="0">{{ link.title }}</a>
         {% endfor %}
         {% comment %}{# - Is the Cart Really needed here twice? }#
         <a href="/cart" class="grid__content nav__link nav__link--text ajax-cart__toggle" aria-expanded="false">

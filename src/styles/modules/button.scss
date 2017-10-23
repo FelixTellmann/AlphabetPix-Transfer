@@ -625,23 +625,29 @@
   transform: scale3d(0.7, 0.5, 1);
 }
 
-.button--moema:hover {
-  -webkit-transition: background-color 0.1s 0.3s, color 0.1s 0.3s;
-  transition: background-color 0.1s 0.3s, color 0.1s 0.3s;
-  color: $color__button;
-  background-color: lighten($color__primary, 5%);
-  -webkit-animation: anim-moema-1 0.3s forwards;
-  animation: anim-moema-1 0.3s forwards;
+.button--moema {
+  @include hover-focus-active {
+    -webkit-transition: background-color 0.1s 0.3s, color 0.1s 0.3s;
+    transition: background-color 0.1s 0.3s, color 0.1s 0.3s;
+    color: $color__button;
+    background-color: lighten($color__primary, 5%);
+    -webkit-animation: anim-moema-1 0.3s forwards;
+    animation: anim-moema-1 0.3s forwards;
+  }
+  @include focus-active {
+    border: 1px solid #404041;
+  }
+  &::before {
+    @include hover-focus-active {
+      -webkit-animation: anim-moema-2 0.3s 0.3s forwards;
+      animation: anim-moema-2 0.3s 0.3s forwards;
+    }
+  }
 }
 
 .button--moema.button--inverted:hover {
   color: #eceff1;
   background-color: #7986cb;
-}
-
-.button--moema:hover::before {
-  -webkit-animation: anim-moema-2 0.3s 0.3s forwards;
-  animation: anim-moema-2 0.3s 0.3s forwards;
 }
 
 @-webkit-keyframes anim-moema-1 {

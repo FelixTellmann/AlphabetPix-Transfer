@@ -8873,7 +8873,7 @@ html {
   max-width: 100%;
   max-height: 100%;
   padding: 0 !important;
-  margin:0 !important;
+  margin: 0 !important;
 }
 
 #image-upload {
@@ -9052,6 +9052,7 @@ html {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
+  position: relative;
 }
 
 .frame__background {
@@ -9242,6 +9243,12 @@ input[type='text'].frame__input {
     padding: calc(100% / 114);
     height: calc(100% - (100% / 114));
   }
+  
+  @include focus-active {
+    transform: scale(1.1);
+    border: 1px solid #fff;
+    outline: none;
+  }
 }
 
 /* Frame sizes 3 - 9*/
@@ -9256,6 +9263,7 @@ input[type='text'].frame__input {
       height: 300px;
     }
   }
+  
   [data-frame-size="#{$i}"].final-artwork__size {
     width: calc(7.125vw * #{$i} + 7.125vw);
     height: 18.75vw;
@@ -9491,6 +9499,9 @@ input[type='text'].frame__input {
   -webkit-box-flex: 0;
   -ms-flex: 0 0 25%;
   flex: 0 0 25%;
+  background: none;
+  border: none;
+  -webkit-appearance: none;
   
   .theme__image {
     padding: 15px;
@@ -9528,11 +9539,15 @@ input[type='text'].frame__input {
   }
 }
 
-.theme__item:hover {
-  .theme__content {
-    background: rgba(255, 255, 255, 0.7);
-    -webkit-box-shadow: 3px 4px 15px 8px rgba(0, 0, 0, 0.3);
-    box-shadow: 3px 4px 15px 8px rgba(0, 0, 0, 0.3);
+.theme__item {
+  @include hover-focus-active {
+    outline: none;
+    .theme__content {
+      background: rgba(255, 255, 255, 0.7);
+      -webkit-box-shadow: 3px 4px 15px 8px rgba(0, 0, 0, 0.3);
+      box-shadow: 3px 4px 15px 8px rgba(0, 0, 0, 0.3);
+      
+    }
   }
 }
 
@@ -9668,6 +9683,10 @@ input[type='text'].frame__input {
   }
 }
 
+.final-artwork__size {
+  position: relative;
+}
+
 .final-artwork {
   position: relative;
   margin: 0 auto;
@@ -9679,14 +9698,14 @@ input[type='text'].frame__input {
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-      -ms-flex-flow: column;
-          flex-flow: column;
+  -ms-flex-flow: column;
+  flex-flow: column;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   
   .final-artwork__info-wrapper {
     display: -webkit-box;
@@ -9694,36 +9713,35 @@ input[type='text'].frame__input {
     display: flex;
     width: 80%;
     -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
     border: 1px solid black;
-    background-color: rgba(234,234,234,0.7);
+    background-color: rgba(234, 234, 234, 0.7);
     margin: 30px;
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
-        -ms-flex-flow: row wrap;
-            flex-flow: row wrap;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
   }
-  
   
   .final-artwork__info {
     margin: 0;
     -webkit-box-flex: 0;
-        -ms-flex: 0 0 50%;
-            flex: 0 0 50%;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
     width: 100%;
     height: 100%;
     display: block;
     padding: 15px;
     &.final-artwork__info--full-width {
       -webkit-box-flex: 0;
-          -ms-flex: 0 0 100%;
-              flex: 0 0 100%;
+      -ms-flex: 0 0 100%;
+      flex: 0 0 100%;
       padding-top: 0;
-      .final-artwork__link {
-        width:20%;
+      .final-artwork__link-heading {
+        width: 20%;
       }
-      #final-artwork__link {
+      .final-artwork__link-data {
         max-width: 80%;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -9734,7 +9752,7 @@ input[type='text'].frame__input {
       table-layout: fixed;
     }
     th {
-      width:35%;
+      width: 35%;
     }
     p {
       display: block;
@@ -10416,23 +10434,29 @@ input[type='text'].frame__input {
   transform: scale3d(0.7, 0.5, 1);
 }
 
-.button--moema:hover {
-  -webkit-transition: background-color 0.1s 0.3s, color 0.1s 0.3s;
-  transition: background-color 0.1s 0.3s, color 0.1s 0.3s;
-  color: $color__button;
-  background-color: lighten($color__primary, 5%);
-  -webkit-animation: anim-moema-1 0.3s forwards;
-  animation: anim-moema-1 0.3s forwards;
+.button--moema {
+  @include hover-focus-active {
+    -webkit-transition: background-color 0.1s 0.3s, color 0.1s 0.3s;
+    transition: background-color 0.1s 0.3s, color 0.1s 0.3s;
+    color: $color__button;
+    background-color: lighten($color__primary, 5%);
+    -webkit-animation: anim-moema-1 0.3s forwards;
+    animation: anim-moema-1 0.3s forwards;
+  }
+  @include focus-active {
+    border: 1px solid #404041;
+  }
+  &::before {
+    @include hover-focus-active {
+      -webkit-animation: anim-moema-2 0.3s 0.3s forwards;
+      animation: anim-moema-2 0.3s 0.3s forwards;
+    }
+  }
 }
 
 .button--moema.button--inverted:hover {
   color: #eceff1;
   background-color: #7986cb;
-}
-
-.button--moema:hover::before {
-  -webkit-animation: anim-moema-2 0.3s 0.3s forwards;
-  animation: anim-moema-2 0.3s 0.3s forwards;
 }
 
 @-webkit-keyframes anim-moema-1 {
@@ -12463,6 +12487,24 @@ input[type='text'].frame__input {
   }
 }
 
+.cart__frame--position {
+  position: relative;
+  margin: 25px;
+}
+
+@for $i from 3 through 9 {
+  [data-frame-size="#{$i}"].cart__frame--size {
+    width: calc(6.3333vw * #{$i} + 6.3333vw);
+    height: 16.6667vw;
+    
+    @include min-size(1200px) {
+      width: calc(76px * #{$i} + 76px);
+      height: 200px;
+    }
+  }
+}
+
+
 /*================ Cart Template ================*/
 .cart__empty {
   display: none;
@@ -12504,7 +12546,7 @@ input[type='text'].frame__input {
     th:first-of-type {
       width: 60%;
     }
-    td img {
+   /* td img {
       width: auto;
       height: auto;
       max-width: 100%;
@@ -12513,7 +12555,7 @@ input[type='text'].frame__input {
       text-align: center;
       display: block;
       padding: 0 30px 0 0;
-    }
+    }*/
   }
   
   th,
@@ -12522,7 +12564,7 @@ input[type='text'].frame__input {
   }
   
   td {
-    
+    position: relative;
     vertical-align: center;
   }
   
@@ -16850,9 +16892,9 @@ button.close {
 
 /* TEMPORARY FIX FOR DEVELOPMENT */
 
-.create {
+/*.create {
   height: 1000px !important;
-}
+}*/
 
 .testing {
   height: 200px;

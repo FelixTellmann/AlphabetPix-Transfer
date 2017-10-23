@@ -1302,6 +1302,8 @@ theme.Create = (function () {
     const input_container = $('#frame__input');
     const fixed_size_frame = $('#frame_to_image');
     const facebook_link = $('.social-sharing__link--facebook');
+    const twitter_link = $('.social-sharing__link--twitter');
+    const pinterest_link = $('.social-sharing__link--pinterest');
     const download_link = $('#final-artwork__sharing--download');
 
     let modal = {
@@ -1337,6 +1339,7 @@ theme.Create = (function () {
       image_array_1: $('.create__step-1 .frame__letter'),
       image_array_2: $('.create__step-3 .frame__letter'),
       image_array_3: $('.create__artwork-to-image .frame__letter'),
+      image_array_4: $('.create__step-4 .frame__letter'),
       label: $('.frame__label'),
       background: {
         left: $('.frame__image.frame__image--left'),
@@ -1382,11 +1385,10 @@ theme.Create = (function () {
       image_url: window.image_url || ''
     };
     let parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
-      if(key) {
+      if (key) {
         url_values[decodeURIComponent(key)] = decodeURIComponent(value);
       }
     });
-    url_values.image_url = url_values.image_url.replace(/\[/gi, '/').replace(/\+/gi, '.').replace(/\]/gi, ':').replace(/\(/gi, '?').replace(/\)/gi, '=').replace(/\@/gi, '&');
 
     window.onTimeout = [];
 
@@ -1399,7 +1401,9 @@ theme.Create = (function () {
       frame_variant_details: product_frames[3].variants[4],
       theme: window.create_section.theme,
       artwork_image_src: '',
-      prepared_sharing_url: window.create_section.prepared_sharing_url,
+      facebook_sharing_url: '',
+      twitter_sharing_url: '',
+      pinterest_sharing_url: '',
       modal: {
         theme_array: [window.create_section.theme],
         current_letter: '',
@@ -1484,7 +1488,7 @@ theme.Create = (function () {
     let preload_custom_image = function (variant_id, image_file) {
 
       if (!(variant_id.toString().indexOf('||') >= 0)) {
-        variant_id = variant_id + "||" + new Date().getTime()
+        variant_id = variant_id + "||" + new Date().getTime();
       }
 
       let v_img = '<img src="' + image_file + '" ' +
@@ -1506,6 +1510,7 @@ theme.Create = (function () {
       let image_1 = '';
       let image_2 = '';
       let image_3 = '';
+      let image_4 = '';
 
       switch (letter) {
         case '*':
@@ -1535,15 +1540,18 @@ theme.Create = (function () {
         image_1 = $('#create__modal .preload-image[data-variant-id="' + variant_id + '"]').clone(false).attr('data-selection-type', 'selected');
         image_2 = $('#create__modal .preload-image[data-variant-id="' + variant_id + '"]').clone(false).attr('data-selection-type', 'selected');
         image_3 = $('#create__modal .preload-image[data-variant-id="' + variant_id + '"]').clone(false).attr('data-selection-type', 'selected');
+        image_4 = $('#create__modal .preload-image[data-variant-id="' + variant_id + '"]').clone(false).attr('data-selection-type', 'selected');
       } else if (letter) {
         image_1 = $('#create__modal .preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_data + '"]').clone(false).attr('data-selection-type', 'auto');
         image_2 = $('#create__modal .preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_data + '"]').clone(false).attr('data-selection-type', 'auto');
         image_3 = $('#create__modal .preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_data + '"]').clone(false).attr('data-selection-type', 'auto');
+        image_4 = $('#create__modal .preload-image[data-letter-id="' + letter + '"][data-theme-id="' + theme_data + '"]').clone(false).attr('data-selection-type', 'auto');
       }
 
       frame.image_array_1.eq(position).empty().append(image_1[0]);
       frame.image_array_2.eq(position).empty().append(image_2[0]);
       frame.image_array_3.eq(position).empty().append(image_3[0]);
+      frame.image_array_4.eq(position).empty().append(image_4[0]);
     };
 
     /*================ update_frame_images(input_data, theme_data, custom_image)  ================*/
@@ -1591,9 +1599,7 @@ theme.Create = (function () {
       if (length >= 9) {
         spacing = 0;
       }
-      if (window.innerWidth >= 1200) {
-        frame.container.attr('data-frame-size', (length + spacing));
-      }
+      frame.container.attr('data-frame-size', (length + spacing));
     };
 
     /*================ update_process_bar(target_step) ================*/
@@ -1615,6 +1621,18 @@ theme.Create = (function () {
       }
     };
 
+    /*================ update_tabindex(2) ================*/
+    let update_tabindex = function(target_step) {
+      $('.create__step-' + target_step).focus();
+      $('.create__slider [tabindex]').attr('tabindex', '-1');
+      $('.create__step-' + target_step + ' [tabindex]').attr('tabindex', '0');
+      $.each($('button.frame__letter[tabindex]'), function(i, letter_container) {
+        if(letter_container.innerHTML.length === 0) {
+          $(letter_container).attr('tabindex', '-1');
+        }
+      });
+    };
+
     /*================ hide_label(input_length) ================*/
     let hide_label = function (input_length) {
       if (input_length > 0) {
@@ -1627,9 +1645,9 @@ theme.Create = (function () {
     /*================ show_reset_button(input_length) ================*/
     let show_reset_button = function (input_length) {
       if (input_length > 0) {
-        create_navigation.reset_button_1.removeClass('button--hidden');
+        create_navigation.reset_button_1.removeClass('button--hidden').attr('tabindex','0');
       } else {
-        create_navigation.reset_button_1.addClass('button--hidden');
+        create_navigation.reset_button_1.addClass('button--hidden').attr('tabindex','-1');
       }
     };
 
@@ -1642,6 +1660,7 @@ theme.Create = (function () {
     /*================ collect_input_cart_data(input) ================*/
     let collect_input_cart_data = function (input_array = create_data.input_array, variant_id = false, theme_data = create_data.theme, frame_data = create_data.frame, artwork_image_src = create_data.artwork_image_src) {
       create_data.input_array = input_array;
+      create_data.input_word = input_array.join('');
       create_data.theme = theme_data;
       create_data.modal.theme_array = [theme_data];
       create_data.frame = frame_data;
@@ -1684,10 +1703,33 @@ theme.Create = (function () {
       create_data.gift_wrap = final_artwork.giftwrap_input.prop('checked') || false;
       create_data.gift_message = final_artwork.gift_message_input.val() || '';
 
+      create_data.sharing_url = 'https://alphabetpix.myshopify.com/?frame=' + create_data.frame + '&word=' + create_data.input_array.join('');
+      $.each(create_data.input_array, function (i) {
+        if (create_data.input[i].custom_image !== '') {
+          create_data.sharing_url += '&pos-' + i + '=' + create_data.input[i].variant_id + '||||' + encodeURIComponent(create_data.input[i].custom_image);
+        } else {
+          create_data.sharing_url += '&pos-' + i + '=' + create_data.input[i].variant_id;
+        }
+      });
+
+      update_sharing_links();
+
       window.create_data = create_data;
       window.sessionStorage.create_data = JSON.stringify(create_data);
       update_cart_form(create_data);
       create_data.previous_input_array = create_data.input_array;
+    };
+
+    /*================Update_sharing_links(create_data) ================*/
+    let update_sharing_links = function () {
+      create_data.facebook_sharing_url = '//www.facebook.com/sharer.php?u=' + create_data.sharing_url;
+      create_data.twitter_sharing_url = '//twitter.com/share?text=' + window.page_description + '&amp;url=' + create_data.sharing_url;
+      create_data.pinterest_sharing_url = '//pinterest.com/pin/create/button/?url=' + create_data.sharing_url + '&amp;media=' + create_data.artwork_image_url + '&amp;description=' + window.page_description;
+
+      final_artwork.sharing_link.attr('href', create_data.sharing_url).html(create_data.sharing_url);
+      facebook_link.attr('href', create_data.facebook_sharing_url);
+      twitter_link.attr('href', create_data.twitter_sharing_url);
+      pinterest_link.attr('href', create_data.pinterest_sharing_url);
     };
 
     /*================ add_theme_image_to_modal(theme_data) ================*/
@@ -1720,23 +1762,21 @@ theme.Create = (function () {
     /*================ create_final_artwork() ================*/
     let create_final_artwork = function () {
       if (create_data.input_array.length >= 3) {
-        final_artwork.container.empty();
-        let img = new Image();
-        domtoimage.toJpeg(fixed_size_frame[0], {quality: 0.4}).then(function (dataUrl) {
-          /*try {
-            b64 = canvas.toDataURL("image/png");
-          } catch (err) {
-            console.log(err);
-            alert(err);
-          }*/
-          /* TODO change code to allow for a SAFARI fallback methods via frame art design... utilise frame-to-screenshot! DOM element!*/
-          img.src = dataUrl;
-          final_artwork.container.prepend(img);
-          collect_input_cart_data(create_data.input_array, false, create_data.theme, create_data.frame, img.src);
-          create_data.artwork_image_blob = dataURItoBlob(img.src);
-          postImageToFacebook("EAAFEyUKxbkMBADE2HTXZAZALfOpHnjM5ZAF08AUFPM34jF7wNedf2vKBzvHY8jFPyNZA7GmCZABBtTQ3M2KGBVrix0wP2FX2ulUCge6dGbjodMhGTZA7Xe7v40ABLxZC3pZAVmvikOFHDV6gCwMtRAASWVUvEc2bJxrwzvQPNHWnkEJS6SgKItB8", "Canvas to Facebook/Twitter", "image/png", create_data.artwork_image_blob, window.location.href);
-          download_link.attr('download', 'My personal frame - ' + create_data.input_array.join('')).attr('href', dataUrl);
-        });
+        collect_input_cart_data(create_data.input_array, false, create_data.theme, create_data.frame);
+
+        try {
+          domtoimage.toJpeg(fixed_size_frame[0], {quality: 0.4}).then(function (dataUrl) {
+            final_artwork.container.html('<img src="' + dataUrl + '" alt="Your Unique Artwork - ' + create_data.input_word + '">');
+            collect_input_cart_data(create_data.input_array, false, create_data.theme, create_data.frame, dataUrl);
+            postImageToFacebook("EAAFEyUKxbkMBADE2HTXZAZALfOpHnjM5ZAF08AUFPM34jF7wNedf2vKBzvHY8jFPyNZA7GmCZABBtTQ3M2KGBVrix0wP2FX2ulUCge6dGbjodMhGTZA7Xe7v40ABLxZC3pZAVmvikOFHDV6gCwMtRAASWVUvEc2bJxrwzvQPNHWnkEJS6SgKItB8", "Canvas to Facebook/Twitter", "image/png", dataURItoBlob(dataUrl), window.location.href);
+            download_link.attr('download', 'My personal frame - ' + create_data.input_array.join('')).attr('href', dataUrl).removeClass('visually-hidden');
+          });
+        }
+        catch (err) {
+          console.log('image not created');
+          console.log(err);
+        }
+
 
         /* TODO Response Code Expires in 60 Days from 17.10.2017 - 17.12.2017 */
         /** https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=357106174750275&client_secret=02aa10066d5dd3b0f42276ed2b5842f5&fb_exchange_token=EAAFEyUKxbkMBAOEKZBVYGfzXJiidjq4usmfUyX4TNE6rplJcTJfM04EWrXcFBKFYZAxkl6U6Ds11muGl0bq3Dj1aYzM2Q7VQXQUy69LCOtH5ZAoorlpK5rWLzlJdYfVAfyOhR6VZC1kQpIeZCjJYTd1KsWXGtVerczZAwYVIgH8kc5fKNdEx28
@@ -1784,16 +1824,7 @@ theme.Create = (function () {
         }
         final_artwork.frame.html(create_data.frame);
         final_artwork.price.html('$' + create_data.frame_variant_details.price / 100);
-        let sharing_url = 'https://alphabetpix.myshopify.com/?frame=' + create_data.frame + '&word=' + create_data.input_array.join('');
-        $.each(create_data.input_array, function (i) {
-          if (create_data.input[i].custom_image !== '') {
-            sharing_url += '&pos-' + i + '=' + create_data.input[i].variant_id + '||||' + create_data.input[i].custom_image.replace(/\//gi, '[').replace(/\./gi, '+').replace(/\:/gi, ']').replace(/\?/gi, '(').replace(/\=/gi, ')').replace(/\&/gi, '@');
-          } else {
-            sharing_url += '&pos-' + i + '=' + create_data.input[i].variant_id;
-          }
-        });
 
-        facebook_link.attr('href', sharing_url);
       }
     };
 
@@ -1831,13 +1862,11 @@ theme.Create = (function () {
               if (response && !response.error) {
 
                 create_data.artwork_image_url = response.images[0].source;
+                /*================Create facebook sharing link ================*/
                 og.image.attr('content', create_data.artwork_image_url.replace('https://', 'http://'));
                 og.image_secure.attr('content', create_data.artwork_image_url);
-                let facebook_url = facebook_link.attr('href'); /*TODO change link data starting poing*/
-                let prepared_image_url = create_data.artwork_image_url.replace(/\//gi, '[').replace(/\./gi, '+').replace(/\:/gi, ']').replace(/\?/gi, '(').replace(/\=/gi, ')').replace(/\&/gi, '@');
-                create_data.prepared_sharing_url = facebook_url + '&image_url=' + prepared_image_url;
-                facebook_link.attr('href', '//www.facebook.com/sharer.php?u=' + create_data.prepared_sharing_url);
-                final_artwork.sharing_link.html('<a href="' + create_data.prepared_sharing_url + '" target="_blank">' + create_data.prepared_sharing_url + '</a>');
+                create_data.sharing_url = create_data.sharing_url + '&image_url=' + encodeURIComponent(create_data.artwork_image_url);
+                update_sharing_links();
                 window.sessionStorage.create_data = JSON.stringify(create_data);
                 // Create facebook post using image
                 FB.api(
@@ -1846,7 +1875,7 @@ theme.Create = (function () {
                   {
                     "picture": response.images[0].source,
                     "link": window.location.href,
-                    "name": 'Look at the cute panda!'
+                    "name": 'My Unique Artwork'
                   },
                   function (response) {
                     if (response && !response.error) {
@@ -1874,13 +1903,13 @@ theme.Create = (function () {
         input_container.val(url_values.word);
         resize_frame(url_values.word.length);
         hide_label(url_values.word.length);
+        show_reset_button(url_values.word.length);
         create_data.resize_length = url_values.word.length;
         for (let i = 0; i < url_values.word.length; i++) {
           if (url_values['pos-' + i].indexOf('http') >= 0) {
             let variant_id = url_values['pos-' + i].split('||||')[0];
             let custom_image_url = url_values['pos-' + i].split('||||')[1];
             console.log(variant_id);
-            custom_image_url = custom_image_url.replace(/\[/gi, '/').replace(/\+/gi, '.').replace(/\]/gi, ':').replace(/\(/gi, '?').replace(/\)/gi, '=').replace(/\@/gi, '&');
             preload_custom_image(variant_id, custom_image_url);
             change_letter_image(i, url_values.word.charAt(i), url_values.frame, variant_id);
             collect_input_cart_data(url_values.word.split(''), [i, url_values['pos-' + i]], url_values.frame, url_values.frame, url_values.image_url);
@@ -1918,8 +1947,8 @@ theme.Create = (function () {
         'id': create_data.time_id,
         'word': create_data.input_array.join(''),
         'images': letter_sku_string,
-        'letter_data': create_data.input,
-        'artwork': {image: create_data.artwork_image_src}
+        'letter_data': create_data.input
+        /*'artwork': {image: create_data.artwork_image_src}*/
       };
 
       if (create_data.gift_wrap) {
@@ -1990,7 +2019,6 @@ theme.Create = (function () {
     input_container.on('input change', function () {
       create_data.input_array = input_container.val().toLowerCase().split('');
 
-
       /* Resize frame once reached 3 letters, leaving space for 1 letter input */
       if (create_data.input_array.length > 2) {
         create_data.resize_length = create_data.input_array.length;
@@ -2021,6 +2049,7 @@ theme.Create = (function () {
     create_navigation.next_button_1.on('click', function () {
       change_steps(2);
       update_process_bar(2);
+      update_tabindex(2);
     });
     create_navigation.reset_button_1.on('click', function () {
       input_container.val('').trigger('input');
@@ -2030,20 +2059,24 @@ theme.Create = (function () {
     create_navigation.prev_button_2.on('click', function () {
       change_steps(1);
       update_process_bar(1);
+      update_tabindex(1);
     });
     create_navigation.next_button_2.on('click', function () {
       change_steps(3);
       update_process_bar(3);
+      update_tabindex(3);
     });
 
     /*Step-3*/
     create_navigation.prev_button_3.on('click', function () {
       change_steps(2);
       update_process_bar(2);
+      update_tabindex(2);
     });
     create_navigation.next_button_3.on('click', function () {
       change_steps(4);
       update_process_bar(4);
+      update_tabindex(4);
       create_final_artwork();
     });
 
@@ -2051,9 +2084,11 @@ theme.Create = (function () {
     create_navigation.prev_button_4.on('click', function () {
       change_steps(3);
       update_process_bar(3);
+      update_tabindex(3);
     });
+
     create_navigation.next_button_4.on('click', function () {
-      $(this).addClass('btn--loader-active').attr('style','color: transparent !important;');
+      $(this).addClass('btn--loader-active').attr('style', 'color: transparent !important;');
       cart_submit(create_data);
     });
 
@@ -2144,9 +2179,8 @@ theme.Create = (function () {
         - preload_images()
 
     ==============================================================================*/
-    setTimeout(function() {
-      preload_images(modal.content, 'all', 0);
-    },200);
+
+    preload_images(modal.content, 'all', 0);
     preload_frame_images(modal.content, create_data.frame_images);
     window.create_data = create_data;
     window.sessionStorage.create_data = JSON.stringify(create_data);

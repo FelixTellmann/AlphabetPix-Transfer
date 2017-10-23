@@ -38,10 +38,10 @@
   <div id="create-{{ section.id }}" class="create">
     
     <nav class="process">
-      <button data-step-id="1" class="process__item process__step-1 process__item--active">{{ section.settings.step-1 }}</button>
-      <button data-step-id="2" class="process__item process__step-2">{{ section.settings.step-2 }}</button>
-      <button data-step-id="3" class="process__item process__step-3">{{ section.settings.step-3 }}</button>
-      <button data-step-id="4" class="process__item process__step-4">{{ section.settings.step-4 }}</button>
+      <button tabindex="0" data-step-id="1" class="process__item process__step-1 process__item--active">{{ section.settings.step-1 }}</button>
+      <button tabindex="0" data-step-id="2" class="process__item process__step-2">{{ section.settings.step-2 }}</button>
+      <button tabindex="0" data-step-id="3" class="process__item process__step-3">{{ section.settings.step-3 }}</button>
+      <button tabindex="0" data-step-id="4" class="process__item process__step-4">{{ section.settings.step-4 }}</button>
     </nav>
     
     <div class="create__slider">
@@ -51,9 +51,9 @@
           <figure id="frame" class="frame__wrapper tada scroll" data-scroll-delay="4s">
             <label for="frame__input" class="frame__label">{{ section.settings.label }}</label>
             <div class="frame__background">
-              <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left" crossorigin="anonymous">
-              <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center" crossorigin="anonymous">
-              <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right" crossorigin="anonymous">
+              <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
+              <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
+              <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
               <div class="frame__image--mat" style="background-color: {{ section.settings.mat_color }}"></div>
             </div>
             <input id="frame__input" name="frame__input" type="text" class="frame__input" placeholder="{{ section.settings.placeholder }}" maxlength="9" data-section-id="{{ section.id }}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
@@ -64,8 +64,8 @@
             </div>
           </figure>
           <nav class="create__button">
-            <button class="button button--reset button--moema button--hidden">Reset</button>
-            <button class="button button--next button--moema">{{ section.settings.action-1 }}</button>
+            <button tabindex="0" class="button button--reset button--moema button--hidden">Reset</button>
+            <button tabindex="0" class="button button--next button--moema">{{ section.settings.action-1 }}</button>
           </nav>
         </div>
       </div>
@@ -77,18 +77,18 @@
           <div class="theme__wrapper">
             {% for block in section.blocks %}
               {% assign theme = collections[block.settings.theme] %}
-              <div class="theme__item {% if forloop.first %}theme__selected{% endif %}" data-block-id="{{ block.id }}" data-theme-id="{{ block.settings.theme }}" {{ block.shopify_attributes }}>
-                <img src="{{ theme.image | img_url: '300x' }}" alt="{{ block.settings.image.alt }}" class="theme__image" crossorigin="anonymous">
+              <button tabindex="-1" class="theme__item {% if forloop.first %}theme__selected{% endif %}" data-block-id="{{ block.id }}" data-theme-id="{{ block.settings.theme }}" {{ block.shopify_attributes }}>
+                <img src="{{ theme.image | img_url: '300x' }}" alt="{{ block.settings.image.alt }}" class="theme__image">
                 <div class="theme__content">
                   <h4 class="theme__heading">{{ theme.title }}</h4>
                   <div class="theme__description">{{ theme.description }}</div>
                 </div>
-              </div>
+              </button>
             {% endfor %}
           </div>
           <nav class="create__button">
-            <button class="button button--prev button--moema">Previous Step</button>
-            <button class="button button--next button--moema">{{ section.settings.action-2 }}</button>
+            <button tabindex="-1" class="button button--prev button--moema">Previous Step</button>
+            <button tabindex="-1" class="button button--next button--moema">{{ section.settings.action-2 }}</button>
           </nav>
         </div>
       </div>
@@ -100,14 +100,14 @@
           <h4 class="frame__instructions">{{ section.settings.instruction }}</h4>
           <figure class="frame__wrapper">
             <div class="frame__background">
-              <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left" crossorigin="anonymous">
-              <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center" crossorigin="anonymous">
-              <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right" crossorigin="anonymous">
+              <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
+              <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
+              <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
               <div class="frame__image--mat" style="background-color: {{ section.settings.mat_color }}"></div>
             </div>
-            <div id="frame__image-container--step-2" class="frame__letter-wrapper">
+            <div id="frame__image-container--step-3" class="frame__letter-wrapper">
               {% for i in (0..8) %}
-                <button class="frame__letter" data-letter-position="{{ i }}"></button>
+                <button tabindex="-1" class="frame__letter" data-letter-position="{{ i }}"></button>
               {% endfor %}
             </div>
           </figure>
@@ -117,14 +117,14 @@
               {% for image in frame.images %}
                 {% if image.src contains 'corner' %}{% assign frame_corner = image.src %}{% endif %}
               {% endfor %}
-              <button class="theme-change__item" data-theme-id="{{ block.settings.frame }}">
-                <img src="{{ frame_corner | img_url: '150x' }}" alt="" class="theme-change__image" crossorigin="anonymous">
+              <button tabindex="-1" class="theme-change__item" data-theme-id="{{ block.settings.frame }}">
+                <img src="{{ frame_corner | img_url: '150x' }}" alt="" class="theme-change__image">
               </button>
             {% endfor %}
           </div>
           <nav class="create__button">
-            <button class="button button--prev button--moema">Previous Step</button>
-            <button class="button button--next button--moema">{{ section.settings.action-3 }}</button>
+            <button tabindex="-1" class="button button--prev button--moema">Previous Step</button>
+            <button tabindex="-1" class="button button--next button--moema">{{ section.settings.action-3 }}</button>
           </nav>
         </div>
       </div>
@@ -134,6 +134,17 @@
         <div class="final-artwork">
           <div class="frame final-artwork__size" data-frame-size="{{ section.settings.default_frame_size }}">
             <figure id="final-artwork" class="frame__wrapper">
+              <div class="frame__background">
+                <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
+                <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
+                <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
+                <div class="frame__image--mat" style="background-color: {{ section.settings.mat_color }}"></div>
+              </div>
+              <div id="frame__image-container--step-4" class="frame__letter-wrapper">
+                {% for i in (0..8) %}
+                  <div class="frame__letter" data-letter-position="{{ i }}"></div>
+                {% endfor %}
+              </div>
             </figure>
           </div>
           <div class="final-artwork__info-wrapper">
@@ -167,14 +178,14 @@
               <table>
                 <tbody>
                 <tr class="final-artwork__input">
-                  <th><label for="final-artwork__giftwrap">Gift Wrap: </label></th>
-                  <td><input id="final-artwork__giftwrap" type="checkbox" class="final-artwork__giftwrap"></td>
+                  <th><label tabindex="-1" for="final-artwork__giftwrap">Gift Wrap: </label></th>
+                  <td><input tabindex="-1" id="final-artwork__giftwrap" type="checkbox" class="final-artwork__giftwrap"></td>
                 </tr>
                 <tr class="final-artwork__input">
-                  <th colspan="2"><label for="final-artwork__message">Gift Message: </label></th>
+                  <th colspan="2"><label tabindex="-1" for="final-artwork__message">Gift Message: </label></th>
                 </tr>
                 <tr>
-                  <td colspan="2"><textarea type="" id="final-artwork__message" class="final-artwork__message" rows="2"></textarea></td>
+                  <td colspan="2"><textarea tabindex="-1" type="" id="final-artwork__message" class="final-artwork__message" rows="2"></textarea></td>
                 </tr>
                 </tbody>
               </table>
@@ -183,8 +194,8 @@
               <table>
                 <tbody>
                 <tr>
-                  <th class="final-artwork__link">Unique URL:</th>
-                  <td id="final-artwork__link"></td>
+                  <th class="final-artwork__link-heading">Unique URL:</th>
+                  <td class="final-artwork__link-data"><a  tabindex="-1" id="final-artwork__link" href="" target="_blank"></a></td>
                 </tr>
                 </tbody>
               </table>
@@ -192,8 +203,7 @@
           
           </div>
           <div class="final-artwork__sharing">
-            
-            <a id="final-artwork__sharing--download" download="" target="_blank" href="" class="social-sharing__link" tabindex="-1">
+            <a id="final-artwork__sharing--download" download="" target="_blank" href="" class="visually-hidden social-sharing__link" tabindex="-1">
               {% include 'icon-download' %}
               <span class="icon__fallback-text" aria-hidden="true">Download your Artwork</span>
               <span class="visually-hidden">Download your Artwork</span>
@@ -208,7 +218,7 @@
             {% endif %}
             
             {% if settings.share_twitter %}
-              <a target="_blank" href="//twitter.com/share?text={{ share_title | default: page_description | url_param_escape }}&amp;url={{ shop.url | append: share_permalink }}" class="social-sharing__link" tabindex="-1">
+              <a target="_blank" href="//twitter.com/share?text={{ share_title | default: page_description | url_param_escape }}&amp;url={{ shop.url | append: share_permalink }}" class="social-sharing__link social-sharing__link--twitter" tabindex="-1">
                 {% include 'icon-twitter' %}
                 <span class="icon__fallback-text" aria-hidden="true">{{ 'general.social.share_on_twitter' | t }}</span>
                 <span class="visually-hidden">{{ 'general.social.alt_text.share_on_twitter' | t }}</span>
@@ -216,27 +226,17 @@
             {% endif %}
             
             {% if settings.share_pinterest %}
-              <a target="_blank" href="//pinterest.com/pin/create/button/?url={{ shop.url | append: share_permalink }}&amp;media={{ share_image | img_url: '1024x1024' }}&amp;description={{ share_title | default: page_description | url_param_escape }}" class="social-sharing__link" tabindex="-1">
+              <a target="_blank" href="//pinterest.com/pin/create/button/?url={{ shop.url | append: share_permalink }}&amp;media={{ share_image | img_url: '1024x1024' }}&amp;description={{ share_title | default: page_description | url_param_escape }}" class="social-sharing__link social-sharing__link--pinterest" tabindex="-1">
                 {% include 'icon-pinterest' %}
                 <span class="icon__fallback-text" aria-hidden="true">{{ 'general.social.share_on_pinterest' | t }}</span>
                 <span class="visually-hidden">{{ 'general.social.alt_text.share_on_pinterest' | t }}</span>
               </a>
             {% endif %}
-          
           </div>
         </div>
-        <form  id="add-to-cart__form" action="/cart/add" enctype="multipart/form-data" method="post" class="visually-hidden">
-          <input id="add-to-cart__frame" type="text" name="id[]" value="" disabled="disabled">
-          {% for i in (0..8) %}
-            <input id="add-to-cart__letter-{{ i }}" type="text" name="id[]" value="" data-letter-position="{{ i }}" disabled="disabled">
-          {% endfor %}
-          <input id="add-to-cart__properties" type="text" name="properties[id]" value="{{ 'now' | date: "%s" }}">
-          {% comment %}{#<input type="hidden" name="return_to" value="/"/>#}{% endcomment %}
-          <button id="submit--{{ block.id }}" type="submit" name="add">Submit</button>
-        </form>
         <nav class="create__button">
-          <button class="button button--prev button--moema">Previous Step</button>
-          <button class="button button--next button--moema btn--loader">{{ section.settings.action-4 }}<span class="btn--loader-balls"></span></button>
+          <button tabindex="-1" class="button button--prev button--moema">Previous Step</button>
+          <button tabindex="-1" class="button button--next button--moema btn--loader">{{ section.settings.action-4 }}<span class="btn--loader-balls"></span></button>
         </nav>
       </div>
     </div>
@@ -248,14 +248,14 @@
     <div class="frame frame--position frame--size" data-frame-size="{{ section.settings.default_frame_size }}">
       <figure id="frame_to_image" class="frame__wrapper">
         <div class="frame__background">
-          <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left" crossorigin="anonymous">
-          <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center" crossorigin="anonymous">
-          <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right" crossorigin="anonymous">
+          <img src="{{ frame_left | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--left">
+          <img src="{{ frame_center | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--center">
+          <img src="{{ frame_right | product_img_url: '2000x' }}" alt="" class="frame__image frame__image--right">
           <div class="frame__image--mat" style="background-color: {{ section.settings.mat_color }}"></div>
         </div>
         <div id="frame__image-container--frame-to-image" class="frame__letter-wrapper">
           {% for i in (0..8) %}
-            <button class="frame__letter" data-letter-position="{{ i }}"></button>
+            <div class="frame__letter" data-letter-position="{{ i }}"></div>
           {% endfor %}
         </div>
       </figure>
@@ -269,30 +269,29 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Select your Photo</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button tabindex="-1" type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal__body">
-          <img data-letter-id="whitespace" id="whitespace" class="preload-image visually-hidden" crossorigin="anonymous">
+          <img data-letter-id="whitespace" id="whitespace" class="preload-image visually-hidden">
         </div>
         <div class="modal-footer">
-          <iframe frameborder="0" scrolling="no" id="create__product-data__custom-image" class="modal__image-upload" src="/pages/image-upload/">
+          <iframe tabindex="-1" frameborder="0" scrolling="no" id="create__product-data__custom-image" class="modal__image-upload" src="/pages/image-upload/">
           </iframe>
           <div class="modal__theme-selection">
             {% for block in section.blocks %}
               <div class="modal__theme-input">
-                <input id="modal__theme-input--{{ block.settings.theme }}" type="checkbox" data-theme-id="{{ block.settings.theme }}">
-                <label for="modal__theme-input--{{ block.settings.theme }}">{{ block.settings.theme | capitalize }}</label>
+                <input tabindex="-1" id="modal__theme-input--{{ block.settings.theme }}" type="checkbox" data-theme-id="{{ block.settings.theme }}">
+                <label tabindex="-1" for="modal__theme-input--{{ block.settings.theme }}">{{ block.settings.theme | capitalize }}</label>
               </div>
             {% endfor %}
             <div class="modal__theme-input">
-              <input id="modal__theme-input--all" type="checkbox" class="modal__theme-input" data-theme-id="all">
-              <label for="modal__theme-input--all">All</label>
+              <input tabindex="-1" id="modal__theme-input--all" type="checkbox" class="modal__theme-input" data-theme-id="all">
+              <label tabindex="-1" for="modal__theme-input--all">All</label>
             </div>
           </div>
         </div>
-      
       </div>
     </div>
   </div>
