@@ -16,12 +16,6 @@
 
 // =require vendor/dom-to-image.min.js
 
-/*!
- * html2canvas.min.js
- */
-
-// =require vendor/html2canvas.min.js
-
 
 /*!
  * jquery.cookie.js
