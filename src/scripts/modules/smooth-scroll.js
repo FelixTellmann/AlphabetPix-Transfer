@@ -84,7 +84,9 @@ $(document).ready(function () {
               }
             });
             /* RELOAD ANIMATIONS */
-            new WOW().init();
+            new WOW().init({
+              mobile: false      // trigger animations on mobile devices (default is true)
+            });
           }
         }
 

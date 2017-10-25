@@ -63,6 +63,16 @@
   -webkit-box-flex: 0;
   -ms-flex: 0 0 30%;
   flex: 0 0 30%;
+  @include max-size(md) {
+    max-width: 20%;
+    flex: 0 0 20%;
+    transform: scale(0.7);
+  }
+  @include max-size(sm) {
+    max-width: 70%;
+    flex: 0 0 70%;
+    transform: scale(0.7);
+  }
 }
 
 .custom-image__wrapper {
@@ -172,7 +182,14 @@
   position: relative;
   overflow: hidden;
   height: calc(100vh - 35px);
-  min-height: 500px;
+  min-height: 850px;
+  
+  @include max-size(md) {
+    min-height: 740px;
+  }
+  @include max-size(sm) {
+    min-height: 580px;
+  }
   
   .create__slider {
     position: relative;
@@ -346,60 +363,66 @@ input[type='text'].frame__input {
     font-size: 141px;
   }
   &::-webkit-input-placeholder {
-    padding-right: 0.5em;
     font-family: "Caviar Dreams", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: $color__primary;
     opacity: 1;
     text-transform: uppercase;
     text-align: center;
+    vertical-align: middle;
     letter-spacing: initial;
     font-weight: 400;
     text-indent: -0.15em;
     font-size: 6vw;
-    position: relative;
     line-height: 6vw;
     margin: 0;
-    bottom: 15px;
+    padding: 3vw 0.5em 6vw 0;
+    position: relative;
+    bottom: 1vw;
+    
     @include min-size(1200px) {
       font-size: 72px;
       line-height: 72px;
     }
   }
   &:-ms-input-placeholder {
-    padding-right: 0.5em;
     font-family: "Caviar Dreams", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: $color__primary;
     opacity: 1;
     text-transform: uppercase;
     text-align: center;
+    vertical-align: middle;
     letter-spacing: initial;
     font-weight: 400;
     text-indent: -0.15em;
     font-size: 6vw;
-    position: relative;
     line-height: 6vw;
     margin: 0;
-    bottom: 15px;
+    padding: 3vw 0.5em 6vw 0;
+    position: relative;
+    bottom: 1vw;
+    
     @include min-size(1200px) {
       font-size: 72px;
       line-height: 72px;
     }
   }
   &::placeholder {
-    padding-right: 0.5em;
     font-family: "Caviar Dreams", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: $color__primary;
     opacity: 1;
     text-transform: uppercase;
     text-align: center;
+    vertical-align: middle;
     letter-spacing: initial;
     font-weight: 400;
     text-indent: -0.15em;
     font-size: 6vw;
-    position: relative;
     line-height: 6vw;
     margin: 0;
-    bottom: 15px;
+    padding: 3vw 0.5em 6vw 0;
+    position: relative;
+    bottom: 1vw;
+    
     @include min-size(1200px) {
       font-size: 72px;
       line-height: 72px;
@@ -444,7 +467,7 @@ input[type='text'].frame__input {
   
   @include focus-active {
     -webkit-transform: scale(1.1);
-            transform: scale(1.1);
+    transform: scale(1.1);
     border: 1px solid #fff;
     outline: none;
   }
@@ -464,8 +487,8 @@ input[type='text'].frame__input {
   }
   
   [data-frame-size="#{$i}"].final-artwork__size {
-    width: calc(7.125vw * #{$i} + 7.125vw);
-    height: 18.75vw;
+    width: calc(9.5vw * #{$i} + 9.5vw);
+    height: 25vw;
     
     @include min-size(1200px) {
       width: calc(85.5px * #{$i} + 85.5px);
@@ -539,12 +562,15 @@ input[type='text'].frame__input {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
+  @include max-size(sm) {
+    margin-top: 15px;
+  }
 }
 
 .process {
   position: absolute;
   left: 0;
-  top: 15%;
+  top: 14%;
   right: 0;
   padding: 0 100px;
   display: -webkit-box;
@@ -575,10 +601,10 @@ input[type='text'].frame__input {
     letter-spacing: 0.1px;
     -webkit-transition: 0.2s all;
     transition: 0.2s all;
-    @include max-size(sm) {
+    @include max-size(md) {
       padding: 50px 5px 0;
       font-size: 11px;
-      color: rgba(0,0,0,0.8);
+      color: rgba(0, 0, 0, 0.8);
       letter-spacing: 0;
     }
     
@@ -668,17 +694,18 @@ input[type='text'].frame__input {
 }
 
 .theme--position {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
+  position: relative;
+  margin: 220px auto;
+  @include max-size(sm) {
+    margin: 180px auto;
+  }
 }
 
 .theme--size {
-  width: 1200px;
+  width: 960px;
   max-width: 100%;
   padding: 0 15px;
+  
 }
 
 .theme__wrapper {
@@ -695,14 +722,14 @@ input[type='text'].frame__input {
   justify-content: center;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-  -ms-flex-flow: row;
-  flex-flow: row;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
   margin-top: 150px;
   
 }
 
 .theme__item {
-  padding: 0 35px;
+  padding: 0 20px;
   text-align: center;
   -webkit-box-flex: 0;
   -ms-flex: 0 0 25%;
@@ -710,9 +737,13 @@ input[type='text'].frame__input {
   background: none;
   border: none;
   -webkit-appearance: none;
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-start;
+  align-items: center;
   
   .theme__image {
-    padding: 15px;
+    padding: 5px;
     background: #fff;
     width: 100%;
     height: auto;
@@ -722,7 +753,7 @@ input[type='text'].frame__input {
   }
   
   .theme__content {
-    padding: 15px 10px;
+    padding: 15px 5px;
     background: transparent;
     border-radius: 15px;
     margin-top: 15px;
@@ -740,10 +771,41 @@ input[type='text'].frame__input {
   }
   
   .theme__description p {
-    margin: 0 0 5px;
+    margin: 0 0 3px;
     font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 300;
-    font-size: 14px;
+    font-size: 13px;
+  }
+  
+  @include max-size(md) {
+    .theme__heading {
+      margin: 0;
+      font-size: 1.4rem;
+      padding: 0 15px;
+    }
+    
+    .theme__description {
+      display: none;
+    }
+  }
+  
+  @include max-size(sm) {
+    
+    flex: 0 0 50%;
+    padding: 0 10px 15px;
+    
+    .theme__image {
+      width: 55%;
+      box-shadow: 3px 4px 15px 5px rgba(0, 0, 0, 0.3);
+    }
+    .theme__content {
+      padding: 5px 5px;
+    }
+    .theme__heading {
+      margin: 0;
+      font-size: 1.2rem;
+      padding: 0 15px;
+    }
   }
 }
 
@@ -757,6 +819,13 @@ input[type='text'].frame__input {
       
     }
   }
+  @include max-size(sm) {
+    @include hover-focus-active {
+      .theme__content {
+        box-shadow: 3px 4px 15px 8px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
 }
 
 .theme__item.theme__selected, .theme__item:hover.theme__selected {
@@ -764,6 +833,9 @@ input[type='text'].frame__input {
     background: #fff;
     -webkit-box-shadow: 3px 4px 15px 8px rgba(0, 0, 0, 0.3);
     box-shadow: 3px 4px 15px 8px rgba(0, 0, 0, 0.3);
+    @include max-size(sm) {
+      box-shadow: 1px 2px 12px 5px rgba(0,0,0,0.2);
+    }
   }
 }
 
@@ -775,6 +847,12 @@ input[type='text'].frame__input {
   background-color: #bdbdbd;
   display: block;
   cursor: pointer;
+  @include max-size(md) {
+    width: calc(100% / 6);
+  }
+  @include max-size(sm) {
+    width: calc(100% / 4);
+  }
 }
 
 .preload-image[data-selection-type="preload"] {
@@ -795,6 +873,11 @@ input[type='text'].frame__input {
   -webkit-box-flex: 0;
   -ms-flex: 0 0 70%;
   flex: 0 0 70%;
+  @include max-size(sm) {
+    flex-flow: column;
+    align-items: flex-start;
+    flex: 0 0 30%;
+  }
 }
 
 .modal__theme-input {
@@ -815,6 +898,10 @@ input[type='text'].frame__input {
   input[type="checkbox"] {
     width: 18px;
     height: 18px;
+    @include max-size(md) {
+      width: 14px;
+      height: 14px;
+    }
   }
   
   label {
@@ -826,6 +913,13 @@ input[type='text'].frame__input {
     font-weight: 700;
     letter-spacing: 1px;
     opacity: 0.6;
+    @include max-size(md) {
+      padding: 5px 5px;
+      font-size: 10px;
+    }
+    @include max-size(sm) {
+      padding: 3px 5px;
+    }
   }
   
   input[type="checkbox"] {
@@ -853,12 +947,12 @@ input[type='text'].frame__input {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  max-width: 700px;
+  max-width: 600px;
   margin: auto;
   
   .theme-change__item {
-    max-width: 100px;
-    margin: 60px auto 0;
+    max-width: 80px;
+    margin: 40px auto 0;
     background: 0;
     border: 1px solid #888;
     padding: 0;
@@ -872,6 +966,19 @@ input[type='text'].frame__input {
       -webkit-box-shadow: 1px 2px 18px 4px rgba(0, 0, 0, 0.9);
       box-shadow: 1px 2px 18px 4px rgba(0, 0, 0, 0.9);
     }
+    
+    @include max-size(md) {
+      max-width: 60px;
+    }
+    @include max-size(sm) {
+      max-width: 40px;
+      margin: 40px auto 15px;
+      box-shadow: 1px 2px 18px 4px rgba(0, 0, 0, 0.2);
+      &.theme-change__item--active, &:hover {
+        -webkit-box-shadow: 1px 2px 18px 4px rgba(0, 0, 0, 0.5);
+        box-shadow: 1px 2px 18px 4px rgba(0, 0, 0, 0.5);
+      }
+    }
   }
   
   .theme-change__image {
@@ -883,7 +990,7 @@ input[type='text'].frame__input {
 .create__artwork-to-image {
   .frame--position {
     position: fixed;
-    left: -300%;
+    left: -5000%;
   }
   * {
     -webkit-transition: none !important;
@@ -897,10 +1004,8 @@ input[type='text'].frame__input {
 
 .final-artwork {
   position: relative;
-  margin: 0 auto;
   max-width: 1200px;
-  width: calc(85.5px * 9 + 85.5px);
-  margin-top: 15%;
+  margin: 220px auto 0;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -914,12 +1019,17 @@ input[type='text'].frame__input {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+
+  
+  @include max-size(sm) {
+    margin: 180px 15px 0;
+  }
   
   .final-artwork__info-wrapper {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    width: 80%;
+    width: 65%;
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center;
@@ -930,6 +1040,11 @@ input[type='text'].frame__input {
     -webkit-box-direction: normal;
     -ms-flex-flow: row wrap;
     flex-flow: row wrap;
+    @include max-size(sm) {
+      width: 100%;
+      margin: 15px;
+      
+    }
   }
   
   .final-artwork__info {
@@ -940,14 +1055,23 @@ input[type='text'].frame__input {
     width: 100%;
     height: 100%;
     display: block;
-    padding: 15px;
+    padding: 10px;
+    line-height: 1.4;
+    font-size: 13px;
+    letter-spacing: 1.8px;
+    white-space: nowrap;
+    @include max-size(sm) {
+      font-size: 12px;
+      letter-spacing: 0;
+    }
+    
     &.final-artwork__info--full-width {
       -webkit-box-flex: 0;
       -ms-flex: 0 0 100%;
       flex: 0 0 100%;
       padding-top: 0;
       .final-artwork__link-heading {
-        width: 20%;
+        width: 25%;
       }
       .final-artwork__link-data {
         max-width: 80%;
@@ -961,6 +1085,9 @@ input[type='text'].frame__input {
     }
     th {
       width: 35%;
+      @include max-size(sm) {
+        width:45%;
+      }
     }
     p {
       display: block;
@@ -983,6 +1110,10 @@ input[type='text'].frame__input {
       font-size: 13px;
       font-weight: 600;
       letter-spacing: 1.8px;
+      @include max-size(sm) {
+        font-size: 12px;
+        letter-spacing: 0px;
+      }
     }
     
     input[type=checkbox] {
@@ -1012,6 +1143,10 @@ input[type='text'].frame__input {
       border-color: rgba(0, 0, 0, 0.5);
       border-radius: 2.2px;
       letter-spacing: 1px;
+      @include max-size(md) {
+        min-height: 60px;
+        font-size:12px;
+      }
     }
   }
 }

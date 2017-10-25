@@ -45,12 +45,16 @@
   -moz-osx-font-smoothing: grayscale;
   white-space: nowrap;
   font-size: 13px;
-  @include max-size(md) {
-    font-size: 10px;
-  }
   @include max-size(lg) {
     font-size: 13px;
   }
+  @include max-size(md) {
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 1em 1.9em;
+    
+  }
+  
   letter-spacing: 2px;
   text-transform: uppercase;
   font-weight: 600;
@@ -614,9 +618,9 @@
   content: '';
   position: absolute;
   top: -20px;
-  left: -20px;
+  left: -10px;
   bottom: -20px;
-  right: -20px;
+  right: -10px;
   background: inherit;
   border-radius: 50px;
   z-index: -1;

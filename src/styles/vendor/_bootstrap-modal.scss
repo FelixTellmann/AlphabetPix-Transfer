@@ -112,6 +112,10 @@
               justify-content: space-around;
   padding: 15px;
   border-top: 1px solid #e9ecef;
+  overflow: hidden;
+  @include max-size(md) {
+    justify-content:center;
+  }
 }
 
 .modal-footer > :not(:first-child) {
@@ -132,8 +136,8 @@
 
 @media (min-width: 576px) {
   .modal-dialog {
-    max-width: 500px;
-    margin: 50px auto
+    max-width: 600px;
+    margin: 50px auto;
   }
   .modal-sm {
     max-width: 300px;

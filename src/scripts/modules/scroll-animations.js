@@ -517,4 +517,6 @@
 
 }).call(this);
 
-new WOW().init();
+new WOW().init({
+  mobile: false      // trigger animations on mobile devices (default is true)
+});
