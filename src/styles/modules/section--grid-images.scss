@@ -133,6 +133,12 @@
   width: 100%;
 }
 
+.grid-section__custom-overlay {
+  @include max-size(md) {
+    font-size: 1.4rem
+  }
+}
+
 /* Sweep To Bottom */
 .sweepToBottom {
   vertical-align: middle;
@@ -186,3 +192,4 @@
   -webkit-transform: rotateY(360deg);
           transform: rotateY(360deg);
 }
+

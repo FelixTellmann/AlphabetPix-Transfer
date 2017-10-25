@@ -3896,7 +3896,7 @@ html {
     position: fixed;
     bottom: 0;
     left: 0;
-    right: 0;
+    width:100%;
     z-index: -1;
   }
 
@@ -9359,6 +9359,9 @@ input[type='text'].frame__input {
   -ms-flex-pack: center;;
   justify-content: center;
   z-index: 1;
+  @include max-size(sm) {
+    padding: 0 5px;
+  }
   
   .process__item {
     display: block;
@@ -9373,6 +9376,12 @@ input[type='text'].frame__input {
     letter-spacing: 0.1px;
     -webkit-transition: 0.2s all;
     transition: 0.2s all;
+    @include max-size(sm) {
+      padding: 50px 5px 0;
+      font-size: 11px;
+      color: rgba(0,0,0,0.8);
+      letter-spacing: 0;
+    }
     
     &:hover {
       color: lighten($color__footer, 15%);
@@ -12017,6 +12026,12 @@ input[type='text'].frame__input {
   width: 100%;
 }
 
+.grid-section__custom-overlay {
+  @include max-size(md) {
+    font-size: 1.4rem
+  }
+}
+
 /* Sweep To Bottom */
 .sweepToBottom {
   vertical-align: middle;
@@ -12070,6 +12085,8 @@ input[type='text'].frame__input {
   -webkit-transform: rotateY(360deg);
           transform: rotateY(360deg);
 }
+
+
 /*============================================================================
   #Section - Testimonials
     -
@@ -12916,6 +12933,9 @@ input.cart-item__qty-input {
 
 .site-header-sections {
   padding-top: 30px;
+  @include max-size(sm) {
+    padding-top: 15px;
+  }
 }
 
 .site-header--fixed .site-header-sections {
@@ -12933,6 +12953,9 @@ input.cart-item__qty-input {
   max-height: 60px;
   max-width: 100%;
   width: auto;
+  @include max-size(sm) {
+    max-height: 35px
+  }
 }
 
 .header__logo-text {
@@ -13028,12 +13051,13 @@ input.cart-item__qty-input {
   text-align: center;
   
   @include max-size(sm) {
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    line-height: 15px;
-    top: 9px;
-    right: 71px;
+    width: 15px;
+    height: 15px;
+    line-height: 15.5px;
+    top: -7px;
+    right: 14px;
+    font-size: 11px;
+    
   }
 }
 

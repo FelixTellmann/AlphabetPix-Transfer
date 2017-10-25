@@ -10,6 +10,9 @@
 
 .site-header-sections {
   padding-top: 30px;
+  @include max-size(sm) {
+    padding-top: 15px;
+  }
 }
 
 .site-header--fixed .site-header-sections {
@@ -27,6 +30,9 @@
   max-height: 60px;
   max-width: 100%;
   width: auto;
+  @include max-size(sm) {
+    max-height: 35px
+  }
 }
 
 .header__logo-text {
@@ -122,12 +128,13 @@
   text-align: center;
   
   @include max-size(sm) {
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    line-height: 15px;
-    top: 9px;
-    right: 71px;
+    width: 15px;
+    height: 15px;
+    line-height: 15.5px;
+    top: -7px;
+    right: 14px;
+    font-size: 11px;
+    
   }
 }
 

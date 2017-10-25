@@ -443,7 +443,8 @@ input[type='text'].frame__input {
   }
   
   @include focus-active {
-    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+            transform: scale(1.1);
     border: 1px solid #fff;
     outline: none;
   }
@@ -557,6 +558,9 @@ input[type='text'].frame__input {
   -ms-flex-pack: center;;
   justify-content: center;
   z-index: 1;
+  @include max-size(sm) {
+    padding: 0 5px;
+  }
   
   .process__item {
     display: block;
@@ -571,6 +575,12 @@ input[type='text'].frame__input {
     letter-spacing: 0.1px;
     -webkit-transition: 0.2s all;
     transition: 0.2s all;
+    @include max-size(sm) {
+      padding: 50px 5px 0;
+      font-size: 11px;
+      color: rgba(0,0,0,0.8);
+      letter-spacing: 0;
+    }
     
     &:hover {
       color: lighten($color__footer, 15%);

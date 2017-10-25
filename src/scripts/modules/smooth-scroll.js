@@ -128,6 +128,7 @@ $(document).ready(function () {
       .not('[href="/#0"]')
       .each(function (event) {
         // On-page links
+
         if (
           location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
           &&
@@ -135,13 +136,14 @@ $(document).ready(function () {
         ) {
           // Figure out element to scroll to
           var target = $(this.hash);
-          var link = $(this);
-
-          if (target.offset().top - 200 <= scrollPos && target.offset().top + target.height() + 200 > scrollPos) {
-            link.addClass("active");
-          }
-          else {
-            link.removeClass("active");
+          if (target[0]) {
+            var link = $(this);
+            if (target.offset().top - 200 <= scrollPos && target.offset().top + target.height() + 200 > scrollPos) {
+              link.addClass("active");
+            }
+            else {
+              link.removeClass("active");
+            }
           }
         }
       });
