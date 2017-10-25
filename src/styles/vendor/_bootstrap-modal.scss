@@ -114,7 +114,9 @@
   border-top: 1px solid #e9ecef;
   overflow: hidden;
   @include max-size(md) {
-    justify-content:center;
+    -webkit-box-pack:center;
+        -ms-flex-pack:center;
+            justify-content:center;
   }
 }
 

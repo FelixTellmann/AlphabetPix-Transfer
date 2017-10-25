@@ -195,7 +195,7 @@
                 <tbody>
                 <tr>
                   <th class="final-artwork__link-heading">Unique URL:</th>
-                  <td class="final-artwork__link-data"><a  tabindex="-1" id="final-artwork__link" href="" target="_blank"></a></td>
+                  <td class="final-artwork__link-data"><a tabindex="-1" id="final-artwork__link" href="" target="_blank"></a></td>
                 </tr>
                 </tbody>
               </table>
@@ -277,8 +277,9 @@
           <img data-letter-id="whitespace" id="whitespace" class="preload-image visually-hidden">
         </div>
         <div class="modal-footer">
-          <iframe tabindex="-1" frameborder="0" scrolling="no" id="create__product-data__custom-image" class="modal__image-upload" src="/pages/image-upload/">
-          </iframe>
+          <div class="modal__image-upload">
+            <iframe tabindex="-1" frameborder="0" scrolling="no" id="create__product-data__custom-image" src="/pages/image-upload/" style="max-width: 100%; max-height: 100%;"></iframe>
+          </div>
           <div class="modal__theme-selection">
             {% for block in section.blocks %}
               <div class="modal__theme-input">
