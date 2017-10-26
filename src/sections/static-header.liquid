@@ -41,7 +41,7 @@
           }
         </style>
         <a href="{{ section.settings.announcement_link }}" class="announcement-bar announcement-bar--link">
-          <div class="page-width announcement-bar__wrapper grid__row align--center">
+          <div class="page-width grid__container announcement-bar__wrapper grid__row align--center">
             <p class="announcement-bar__message grid__item--2 grid__content">
               {{ section.settings.announcement_text | escape }}
             </p>
@@ -118,7 +118,7 @@
   </header>
   
   <nav class="navigation supports-no-js critical-hide" data-section-id="{{ section.id }}" data-section-type="navigation" role="navigation" aria-hidden=true>
-    <div class="navigation__container page-width">
+    <div class="navigation__container page-width grid__container">
       <ul class="navigation__links">
         {% for link in linklists[section.settings.primary_navigation].links %}
           <li class="navigation__link navigation__entrance-animation{% if link.active %} navigation__link--active{% endif %}">

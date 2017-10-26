@@ -22,9 +22,9 @@ or template.name == 'blog' %}
 {%- endfor -%}
 
 <footer class="site-footer footer" role="contentinfo" data-section-type="footer" data-section-id="{{ section.id }}" {% if section.settings.enable_parallax %}data-footer-parallax{% endif %} data-section-id="{{ section.id }}" data-section-type="footer">
-  <div class="page-width footer__wrapper grid__col justify--fe">
-    {% comment %}{#{% if menu_enabled or section.settings.show_newsletter %}
-      <div class="flex-footer{% unless section.settings.show_newsletter %} flex-footer--full text-center{% endunless %}">
+  <div class="page-width grid__container footer__wrapper grid__col justify--fe">
+    {% if menu_enabled or section.settings.show_newsletter %}
+      <div class="flex-footer">
         {% for block in section.blocks %}
           <div class="flex-footer__item flex-footer__item--{{ block.type }}" {{ block.shopify_attributes }}>
             {% case block.type %}
@@ -66,11 +66,11 @@ or template.name == 'blog' %}
        
         
       </div>
-    {% endif %}#}{% endcomment %}
+    {% endif %}
     <div class="grid__row justify--sb">
       <div class="footer__contact">
-        <p>Contact:</p>
-        <p><a href="mailto:hapinessteam@alphabetpix.com">hapinessteam@alphabetpix.com</a></p>
+        <p class="h6">Contact:</p>
+        <p class="h6"><a href="mailto:hapinessteam@alphabetpix.com">hapinessteam@alphabetpix.com</a></p>
       </div>
       
       <a href="/" itemprop="url" class="footer__logo">
@@ -130,6 +130,14 @@ or template.name == 'blog' %}
     <div class="site-footer__drawer-cover"></div>
   {% endif %}
 </footer>
+<p class="footer__credits">
+  &copy; {{ "now" | date: "%Y" }} {{ shop.name | link_to: '/' }}.
+  {{ section.settings.copyright_text | escape }} All rights reserved.
+
+  <br>
+  Designed by <a href="http://www.liquix.io/" target="_blank" title="Custom Theme Developed by Liquix.io">Liquix.io</a>
+  {{ powered_by_link | split: '" ' | join: '?ref=liquix" ' | split: '">' | join: '?ref=liquix">' }}
+</p>
 
 {% comment %}{#<!--@formatter:off-->#}{% endcomment %}
 {% schema %}

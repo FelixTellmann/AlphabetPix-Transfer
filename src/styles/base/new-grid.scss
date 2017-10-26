@@ -9,7 +9,7 @@
 //\*-------------------------------------*/
 $columns: 12 !default;
 $gutter: 30px !default;
-$container: 1200px !default;
+$container: 960px !default;
 
 $responsive-containers: (sm, md, lg);
 $responsive-container-sm: 720px;
@@ -48,8 +48,8 @@ html {
 .grid__container {
   margin-left: auto;
   margin-right: auto;
-  width: $container;
-  max-width: 100%;
+  width: 100%;
+  max-width: $container;
   position: relative;
 }
 

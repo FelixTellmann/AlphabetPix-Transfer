@@ -8,9 +8,9 @@ Template note:
 
 {% assign addressesCount = customer.addresses | size %}
 
-<div class="page-width new-address{% if addressesCount != 0 %} new-address--hidden{% endif %}">
+<div class="page-width grid__container new-address{% if addressesCount != 0 %} new-address--hidden{% endif %}">
   <div class="grid grid__row">
-    <div class="grid__item medium-up--four-fifths medium-up--push-one-tenth">
+    <div class="grid__item medium-up--four-fifths ">
       <header class="section-header section-header--small text-center">
         <h1 class="section-header__title h2">{{ 'customer.account.title' | t }}</h1>
         <div class="section-header__btn">
@@ -93,9 +93,9 @@ Template note:
 </div>
 
 {% if addressesCount > 0 %}
-  <div class="page-width current-addresses">
+  <div class="page-width grid__container current-addresses">
     <div class="grid grid__row">
-      <div class="grid__item medium-up--four-fifths medium-up--push-one-tenth">
+      <div class="grid__item medium-up--four-fifths ">
         <h2 class="h4">{{ 'customer.addresses.title' | t }}</h2>
 
         {% comment %}

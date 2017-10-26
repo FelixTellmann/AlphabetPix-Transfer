@@ -28,11 +28,11 @@
 
 .slider__image-wrapper {
   overflow: hidden;
-  margin: 0;
-  /*width: 100%;*/
+  margin: 0 auto;
   height: 100%;
-  display: inline-block;
+  display: block;
   position: relative;
+  max-width: 960px;
 }
 
 .slider__image {

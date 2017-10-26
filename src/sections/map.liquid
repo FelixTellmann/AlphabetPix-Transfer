@@ -12,7 +12,7 @@
 
 <div id="MapSection--{{ section.id }}" class="map-section lazyload" data-section-id="{{ section.id }}" data-section-type="map" data-bgset="{% include 'bgset', image: section.settings.background_image %}">
   {% if section.settings.title != blank or section.settings.address != blank %}
-    <div class="page-width">
+    <div class="page-width grid__container">
       <div class="map-section__content-wrapper">
         <div class="map-section__content">
           {% if section.settings.map_title != blank %}

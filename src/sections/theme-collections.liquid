@@ -1,5 +1,5 @@
 <div data-section-id="{{ section.id }}" data-section-type="theme-collection-section">
-  <div class="page-width grid__container">
+  <div class="page-width grid__container grid__container">
     {% for block in section.blocks %}
       <div class="theme-collection section--{{ section.settings.section_size }}" data-block-id="{{ block.id }}" {{ block.shopify_attributes }}>
         <div class="grid__row--md">
@@ -55,7 +55,7 @@
             </div>
             {% if block.settings.button_text != blank %}
               <div class="theme-collection__button">
-                <a href="{{ block.settings.button_url }}" class="button">{{ block.settings.button_text }}</a>
+                <a href="{{ block.settings.button_url }}" class="button button--moema">{{ block.settings.button_text }}</a>
               </div>
             {% endif %}
           </div>

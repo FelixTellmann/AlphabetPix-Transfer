@@ -520,3 +520,10 @@
 new WOW().init({
   mobile: false      // trigger animations on mobile devices (default is true)
 });
+
+$(function() {
+  if (window.innerWidth < 640) {
+    $('.scroll').removeClass('scroll');
+    console.log('test');
+  }
+});

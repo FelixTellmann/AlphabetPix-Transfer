@@ -12,48 +12,42 @@
     </style>
     {% if section.blocks.size > 0 %}
       <div class="testimonial__wrapper testimonial__wrapper--active" data-section-id="{{ section.id }}">
-        <div class="slider " id="Slider-{{ section.id }}" data-autoplay="{{ section.settings.autoplay }}" data-speed="{{ section.settings.autoplay_speed }}" data-section-id="{{ section.id }}">
-          {% for block in section.blocks %}
-            <div class="slider__slide-wrapper slide__overlay" data-block-id="{{ block.id }}" {{ block.shopify_attributes }}  {% unless forloop.first %} style="display: none;" {% endunless %}>
-              <div class="overlay__item" data-section-id="{{ section.id }}"></div>
-              <div class="testimonial__slide">
-                <div class="testimonial__content text-center">
-                  {% if block.settings.icon != 'none' %}
-                    <div class="testimonial__icon">
-                      {% include block.settings.icon %}
-                    </div>
-                  {% endif %}
-                  <h3 class="testimonial__heading">
-                    {{ block.settings.title }}
-                  </h3>
-                  <blockquote class="testimonial__quote">
-                    <p class="testimonial__body">
-                    {{ block.settings.body }}
-                    </p>
-                  </blockquote>
-                  <cite class="testimonial__author">
-                    - {{ block.settings.author }}
-                  </cite>
+        <div class="grid__container">
+          <div class="slider " id="Slider-{{ section.id }}" data-autoplay="{{ section.settings.autoplay }}" data-speed="{{ section.settings.autoplay_speed }}" data-section-id="{{ section.id }}">
+            {% for block in section.blocks %}
+              <div class="slider__slide-wrapper slide__overlay" data-block-id="{{ block.id }}" {{ block.shopify_attributes }}  {% unless forloop.first %} style="display: none;" {% endunless %}>
+                <div class="overlay__item" data-section-id="{{ section.id }}"></div>
+                <div class="testimonial__slide">
+                  <div class="testimonial__content text-center">
+                    {% if block.settings.icon != 'none' %}
+                      <div class="testimonial__icon">
+                        {% include block.settings.icon %}
+                      </div>
+                    {% endif %}
+                    <h3 class="testimonial__heading">
+                      {{ block.settings.title }}
+                    </h3>
+                    <blockquote class="testimonial__quote">
+                      <p class="testimonial__body">
+                        {{ block.settings.body }}
+                      </p>
+                    </blockquote>
+                    <cite class="testimonial__author">
+                      - {{ block.settings.author }}
+                    </cite>
+                  </div>
+                  <figure class="slider__image-wrapper testimonial__image-wrapper">
+                    <img class="testimonial__image" src="{{ block.settings.image | img_url: '150x' }}" alt="{{ block.settings.image.alt | escape }}">
+                  </figure>
                 </div>
-                <figure class="slider__image-wrapper" {% comment %}{#style="height: {{ section.settings.slideshow_height }}"#}{% endcomment %}>
-                  <img class="testimonial__image lazyload"
-                          {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-                       src="{{ block.settings.image | img_url: '1000x' }}"
-                       data-src="{{ img_url }}"
-                       data-widths="[540, 900, 1512, 2048]"
-                       data-aspectratio="{{ block.settings.image.aspect_ratio }}"
-                       data-sizes="auto"
-                       data-parent-fit="cover"
-                       alt="{{ block.settings.image.alt | escape }}">
-                </figure>
               </div>
-            </div>
-          {% endfor %}
+            {% endfor %}
+          </div>
         </div>
         <button class="slider__button slider__prevArrow" data-section-id="{{ section.id }}">
           {% include 'icon-arrow-left' %}
         </button>
-        <button class="slider__button slider__nextArrow"  data-section-id="{{ section.id }}">
+        <button class="slider__button slider__nextArrow" data-section-id="{{ section.id }}">
           {% include 'icon-arrow-right' %}
         </button>
       </div>
@@ -67,7 +61,6 @@
   {
     "name": "Testimonials",
     "class": "index-section index-section--testimonial-slider",
-    "max_blocks": 12,
     "settings": [
       {
         "type": "checkbox",

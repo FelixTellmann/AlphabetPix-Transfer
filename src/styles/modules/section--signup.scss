@@ -54,6 +54,10 @@
       -ms-flex-pack: center;
           justify-content: center;
   border-radius: 100%;
+  @include max-size(md) {
+    width: 120px;
+    height: 120px;
+  }
 }
 
 .signup__figure, .signup-item__figure, .signup-item__heading {
@@ -65,6 +69,9 @@
     text-transform: uppercase;
     margin: 0;
     line-height: 1.1;
+    @include max-size(md) {
+      font-size: 2.5rem;
+    }
   }
   > p > em {
     font-family: "Great Vibes", serif;
@@ -74,13 +81,22 @@
     text-transform: capitalize;
     letter-spacing: 3px;
     font-style: normal;
+    @include max-size(md) {
+      font-size:4rem;
+    }
     > strong {
       font-size: 6.5rem;
       font-weight: 300;
+      @include max-size(md) {
+        font-size:4rem;
+      }
     }
   }
   > p > strong {
     font-size: 6.5rem;
+    @include max-size(md) {
+      font-size: 4rem;
+    }
   }
 }
 
@@ -228,4 +244,11 @@
 .signup-item__icon-img {
   height: auto;
   width: 100%;
+}
+
+
+.signup__item--1505032076583, .signup__item--1505032083504 {
+  @include max-size(sm) {
+    display: none;
+  }
 }

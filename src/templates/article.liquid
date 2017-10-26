@@ -21,7 +21,7 @@
 
   {% if blog.comments_enabled? and number_of_comments > 0 %}
     <div class="comments-wrapper">
-      <div class="page-width">
+      <div class="page-width grid__container">
         <div class="grid grid__row">
           <div class="grid__item medium-up--push-one-twelfth">
             <h3 class="h4">{{ 'blogs.comments.with_count' | t: count: number_of_comments }}</h3>
@@ -70,7 +70,7 @@
 
   {% if blog.comments_enabled? %}
     <div class="comments-form-wrapper">
-      <div class="page-width">
+      <div class="page-width grid__container">
         <div class="grid grid__row">
           <div class="grid__item medium-up--push-one-twelfth">
             <h3 class="comments-form__title h4">{{ 'blogs.comments.title' | t }}</h3>

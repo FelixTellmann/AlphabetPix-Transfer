@@ -29,7 +29,7 @@
       height: 150px;
     }
     
-    @include min-size(1400) {
+    @include min-size(1400px) {
       width: calc(76px * #{$i} + 76px);
       height: 200px;
     }

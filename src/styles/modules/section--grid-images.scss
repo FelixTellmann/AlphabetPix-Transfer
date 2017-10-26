@@ -44,6 +44,9 @@
     line-height: 2;
     letter-spacing: 0.04em;
     font-weight: 700;
+    @include max-size(md) {
+      line-height: 1.8;
+    }
   }
   p > strong {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -51,6 +54,9 @@
     font-size: 3rem;
     line-height: 1.2;
     text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7);
+    @include max-size(md) {
+      font-size: 2.4rem;
+    }
   }
   p > em {
     display: inline-block;
@@ -62,6 +68,9 @@
     text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.6);
     margin-bottom: 10px;
     line-height: 1.2;
+    @include max-size(md) {
+      font-size: 3.6rem;
+    }
   }
   p > em > strong {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -78,7 +87,7 @@
     letter-spacing: 0.04em;
     font-size: 3.8rem;
     font-weight: 300;
-    @include max-size(sm) {
+    @include max-size(md) {
       font-size: 2rem;
     }
   }
@@ -193,3 +202,8 @@
           transform: rotateY(360deg);
 }
 
+.grid-images__text--1503742566917 {
+  @include max-size(sm) {
+    margin: 0 !important;
+  }
+}

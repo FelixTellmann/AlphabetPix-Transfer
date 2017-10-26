@@ -1,5 +1,5 @@
 <div data-section-id="{{ section.id }}" data-section-type="grid-images-section">
-  <div class="page-width">
+  <div class="page-width grid__container">
     <div class="grid__row--sm grid-images">
       <div class="grid__item--{{ section.settings.grid }} {% if section.settings.grid_responsive %}grid__row{% else %}grid__row--sm{% endif %}">
         {% for block in section.blocks %}
@@ -71,7 +71,7 @@
               
             </style>
   
-            <div class="grid-images__item--{{ block.id }} {% if block.settings.grid_responsive %}grid__item--{{ block.settings.grid_mobile }}{% endif %} grid__item--{{ block.settings.grid }}--md grid__item--{% if block.settings.grid == '6' or block.settings.grid == '12' or block.settings.grid == '9' or block.settings.grid == '8' %}12{% else %}{{ block.settings.grid | times: 2 }}{% endif %}--sm"
+            <div class="grid-images__item--{{ block.id }} {% if block.settings.grid_responsive %}grid__item--{{ block.settings.grid_mobile }}{% endif %} grid__item--{{ block.settings.grid }}--md grid__item--{% if block.settings.grid == '6' or block.settings.grid == '12' or block.settings.grid == '9' or block.settings.grid == '8' %}12{% comment %}{#{% else %}{{ block.settings.grid | times: 2 }}#}{% endcomment %}{% endif %}--sm"
                  data-block-id="{{ block.id }}" {{ block.shopify_attributes }}{% if block.settings.grid_height_full %}style="height: 100%" {% endif %}>
               <div class="grid-images__wrapper grid-images__background--{{ block.id }} grid__row {% if block.settings.scroll_animation != blank %}{{ block.settings.scroll_animation  }}{% endif %}">
                 {% unless block.settings.image_disabled %}

@@ -20,7 +20,7 @@
           <img class="slider__image" src="{{ block.settings.image | img_url: '2048x' }}" alt="{{ block.settings.image.alt }}">
           <div class="slider__text-wrap{% if block.settings.title != blank or block.settings.subheading != blank %} slider__overlay{% endif %}">
             <div class="slider__text-content">
-              <div class="page-width">
+              <div class="page-width grid__container">
                 {% unless block.settings.title == blank %}
                   <h2 class="h1 mega-title slider__title{% if settings.link != blank %} slider__title--has-link{% endif %}{% if section.settings.text_size == 'large' %} mega-title--large{% endif %}">
                     {{ block.settings.title | escape }}

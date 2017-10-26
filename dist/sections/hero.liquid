@@ -8,7 +8,7 @@
 
 <div class="hero hero--{{ section.id }} hero--{{ section.settings.hero_size }} lazyload" data-bgset="{% include 'bgset', image: section.settings.image %}" data-section-id="{{ section.id }}" data-section-type="hero">
   <div class="hero__inner">
-    <div class="page-width text-center">
+    <div class="page-width grid__container text-center">
       {% if section.settings.heading_top != blank %}
         <h2 class="h4 section__heading-top moveDown scroll" data-scroll-delay="0.3s" data-scroll-duration="0.5s">
           {{ section.settings.heading_top }}

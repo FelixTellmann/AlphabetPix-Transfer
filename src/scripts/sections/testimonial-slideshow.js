@@ -84,7 +84,7 @@ theme.TestimonialSlider = (function () {
       if (sliderContainer.sliderAutoplay == 'true') {
         sliderContainer.sliderContainer.slick({
           dots: false,
-          slidesToShow: 5,
+          slidesToShow: 3,
           centerMode: true,
           swipeToSlide: true,
           centerPadding: '0px',
@@ -95,27 +95,16 @@ theme.TestimonialSlider = (function () {
           infinite: true,
           nextArrow: $('.slider__button.slider__nextArrow[data-section-id="' + sliderContainer.id + '"]'),
           responsive: [{
-            breakpoint: 2048,
-            settings: {
-              slidesToShow: 5
-            }
-          }, {
-            breakpoint: 1441,
-            settings: {
-              slidesToShow: 3
-            }
-          }, {
             breakpoint: 800,
             settings: {
               slidesToShow: 1
             }
-          }
-          ]
+          }]
         });
       } else {
         sliderContainer.sliderContainer.slick({
           dots: false,
-          slidesToShow: 5,
+          slidesToShow: 3,
           centerMode: true,
           swipeToSlide: true,
           centerPadding: '0px',
@@ -125,22 +114,11 @@ theme.TestimonialSlider = (function () {
           infinite: true,
           nextArrow: $('.slider__button.slider__nextArrow[data-section-id="' + sliderContainer.id + '"]'),
           responsive: [{
-            breakpoint: 2048,
-            settings: {
-              slidesToShow: 5
-            }
-          }, {
-            breakpoint: 1441,
-            settings: {
-              slidesToShow: 3
-            }
-          }, {
-            breakpoint: 800,
+            breakpoint: 700,
             settings: {
               slidesToShow: 1
             }
-          }
-          ]
+          }]
         });
       }
     },
@@ -150,7 +128,7 @@ theme.TestimonialSlider = (function () {
       this.$container.off(this.namespace);
 
       var slideIndex = $('.slick-slide[data-block-id="' + evt.detail.blockId + '"]:not(.slick-cloned)').attr('data-slick-index');
-      $('.slider').attr('data-section-id', evt.detail.sectionId).slick('slickGoTo', slideIndex)
+      $('.slider').attr('data-section-id', evt.detail.sectionId).slick('slickGoTo', slideIndex);
 
     }
 

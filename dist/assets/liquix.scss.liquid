@@ -717,7 +717,7 @@ $font-line-height-base: 1.625;
 $link-hover-opacity: 0.5;
 
 /*================ Z-Index ================*/
-$z-index-header: 10;
+$z-index-header: 1000;
 $z-index-dropdown: 2;
 $z-index-skip-to-content: 10000; // really high to be safe of app markup
 $z-index-modal: 15;
@@ -1443,11 +1443,11 @@ fieldset {
 ==============================================================================*/
 
 .grid {
-  @include clearfix();
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  margin-left: -$grid-gutter;
+  zoom: initial;
+  list-style: initial;
+  margin: initial;
+  padding: initial;
+  margin-left: initial;
 }
 
 .grid--gutter-large {
@@ -3539,6 +3539,7 @@ $color-select-input: #fff;
     margin: ($gutter * 2) 0;
     text-align: center;
   }
+  padding: 30px 0;
 }
 
 .custom-content-wrapper--top-margin {
@@ -3927,8 +3928,8 @@ html {
 }
 
 .flex-footer__item {
+  padding: 0 !important;
   @include flex(1 1 100%);
-  padding: 0 0 $gutter;
 
   @include media-query($small) {
     .flex-footer--full & {
@@ -3942,7 +3943,7 @@ html {
 
   @include media-query($medium-up) {
     @include flex(1 1 25%);
-    padding: 0 10px;
+   
 
     .flex-footer--full & {
       @include flex(1 0 100%);
@@ -3982,20 +3983,21 @@ html {
 }
 
 .site-footer__linklist-item {
-  display: inline-block;
-  padding: 0 ($gutter / 2);
+  
   margin-bottom: $gutter / 2;
   font-size: rem(12);
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-
+  display: list-item;
+  padding: 0;
+  
   @include media-query($medium-up) {
-    display: block;
+    
     padding: 0 20px 0 0;
 
     .flex-footer--full & {
-      display: inline-block;
+      
       padding: 5px 10px;
     }
   }
@@ -4477,7 +4479,7 @@ $image-bar-placeholder-border-color: rgba($color-body-text, 0.25);
   }
 
   .hero--medium & {
-    padding: ($gutter * 4) 0;
+    padding: ($gutter * 3) 0;
   }
 
   .hero--large & {
@@ -4498,7 +4500,7 @@ $image-bar-placeholder-border-color: rgba($color-body-text, 0.25);
     }
 
     .hero--medium & {
-      padding: ($gutter * 7) 0;
+      padding: ($gutter * 6) 0;
     }
 
     .hero--large & {
@@ -8189,7 +8191,7 @@ $fast-drawer-transition: transform 0.55s cubic-bezier(0.645, 0.045, 0.355, 1);
 //\*-------------------------------------*/
 $columns: 12 !default;
 $gutter: 30px !default;
-$container: 1200px !default;
+$container: 960px !default;
 
 $responsive-containers: (sm, md, lg);
 $responsive-container-sm: 720px;
@@ -8228,8 +8230,8 @@ html {
 .grid__container {
   margin-left: auto;
   margin-right: auto;
-  width: $container;
-  max-width: 100%;
+  width: 100%;
+  max-width: $container;
   position: relative;
 }
 
@@ -8806,6 +8808,18 @@ html {
 
 .footer__wrapper {
   height: 100%;
+}
+
+.footer__credits {
+  padding: 15px;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.footer__contact {
+  h6 {
+    color: #fff;
+  }
 }
 /*============================================================================
   #Create Section
@@ -10022,6 +10036,7 @@ input[type='text'].frame__input {
 
 /* Common button styles */
 .button {
+  text-decoration: none;
   float: left;
   /*min-width: 150px;*/
   /*max-width: 250px;*/
@@ -11809,11 +11824,11 @@ input[type='text'].frame__input {
 
 .slider__image-wrapper {
   overflow: hidden;
-  margin: 0;
-  /*width: 100%;*/
+  margin: 0 auto;
   height: 100%;
-  display: inline-block;
+  display: block;
   position: relative;
+  max-width: 960px;
 }
 
 .slider__image {
@@ -12068,8 +12083,15 @@ input[type='text'].frame__input {
 }
 
 .theme-collection__button {
-  padding: 15px;
+  /*padding: 15px;*/
+  a {
+    float: right;
+    font-size: 11px;
+    padding: 1em 2em;
+  }
 }
+
+
 /*============================================================================
   #Section - Grid Images
     -
@@ -12116,6 +12138,9 @@ input[type='text'].frame__input {
     line-height: 2;
     letter-spacing: 0.04em;
     font-weight: 700;
+    @include max-size(md) {
+      line-height: 1.8;
+    }
   }
   p > strong {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -12123,6 +12148,9 @@ input[type='text'].frame__input {
     font-size: 3rem;
     line-height: 1.2;
     text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7);
+    @include max-size(md) {
+      font-size: 2.4rem;
+    }
   }
   p > em {
     display: inline-block;
@@ -12134,6 +12162,9 @@ input[type='text'].frame__input {
     text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.6);
     margin-bottom: 10px;
     line-height: 1.2;
+    @include max-size(md) {
+      font-size: 3.6rem;
+    }
   }
   p > em > strong {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -12150,7 +12181,7 @@ input[type='text'].frame__input {
     letter-spacing: 0.04em;
     font-size: 3.8rem;
     font-weight: 300;
-    @include max-size(sm) {
+    @include max-size(md) {
       font-size: 2rem;
     }
   }
@@ -12265,7 +12296,11 @@ input[type='text'].frame__input {
           transform: rotateY(360deg);
 }
 
-
+.grid-images__text--1503742566917 {
+  @include max-size(sm) {
+    margin: 0 !important;
+  }
+}
 /*============================================================================
   #Section - Testimonials
     -
@@ -12277,8 +12312,6 @@ input[type='text'].frame__input {
 }
 
 .testimonial__wrapper {
-  padding-left: calc((100% - 370px * 5) / 2);
-  padding-right: calc((100% - 370px * 5) / 2);
   background-color: #fff;
   position: relative;
   &.testimonial__wrapper--active:before {
@@ -12287,8 +12320,7 @@ input[type='text'].frame__input {
     left: 0;
     top: 0;
     height: 100%;
-    min-width: calc(100% / 5 * 2);
-    width: calc(((100% - 370px * 5) / 2) + ((100% - (100% - 370px * 5)) / 5 * 2));
+    width: calc(100% / 2 - 160px);
     background-color: $color__footer;
     opacity: 0.6;
     z-index: 1010;
@@ -12300,25 +12332,21 @@ input[type='text'].frame__input {
     right: 0;
     top: 0;
     height: 100%;
-    min-width: calc(100% / 5 * 2);
-    width: calc(((100% - 370px * 5) / 2) + ((100% - (100% - 370px * 5)) / 5 * 2));
+    width: calc(100% / 2 - 160px);
     background-color: $color__footer;
     opacity: 0.6;
     z-index: 1010;
     pointer-events: none;
   }
 }
-@include max-size(1440px) {
+@include max-size(960px) {
   .testimonial__wrapper {
-    padding-left: calc((100% - 370px * 3) / 2);
-    padding-right: calc((100% - 370px * 3) / 2);
+    
     &.testimonial__wrapper--active:before {
-      min-width: calc(100% / 3 * 1);
-      width: calc(((100% - 370px * 3) / 2) + ((100% - (100% - 370px * 3)) / 3 * 1));
+      width: calc(100% / 3 );
     }
     &.testimonial__wrapper--active:after {
-      min-width: calc(100% / 3 * 1);
-      width: calc(((100% - 370px * 3) / 2) + ((100% - (100% - 370px * 3)) / 3 * 1));
+      width: calc(100% / 3 );
     }
   }
   .testimonial__body {
@@ -12326,17 +12354,14 @@ input[type='text'].frame__input {
   }
 }
 
-@include max-size(800px) {
+@include max-size(700px) {
   .testimonial__wrapper {
-    padding-left: calc((100% - 370px * 1) / 2);
-    padding-right: calc((100% - 370px * 1) / 2);
+  
     &.testimonial__wrapper--active:before {
-      width: 0;
-      min-width: 0;
+      width: calc(100% / 2 - 185px);
     }
     &.testimonial__wrapper--active:after {
-      width: 0;
-      min-width: 0;
+      width: calc(100% / 2 - 185px);
     }
   }
 }
@@ -12356,6 +12381,8 @@ input[type='text'].frame__input {
   max-width: 370px;
   min-height: 600px;
   padding: 30px;
+  margin: 0 auto;
+  
   @include screen-size(lg) {
     height: 900px;
   }
@@ -12373,11 +12400,15 @@ input[type='text'].frame__input {
 
 .testimonial__heading {
   font-family: "Great Vibes", serif;
-  font-size: 4rem;
+  font-size: 3rem;
   font-weight: 300;
-  margin: 20px;
+  margin: 10px;
   text-transform: capitalize;
   letter-spacing: 3px;
+  white-space: nowrap;
+  line-height: 2;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .testimonial__quote {
@@ -12388,18 +12419,34 @@ input[type='text'].frame__input {
 .testimonial__body, .testimonial__author {
   font-family: "Playfair Display", serif;
   font-style: italic;
-  font-size: 1.6rem;
+  font-size: 2rem;
   line-height: 1.6;
   padding: 0 30px;
   color: #404041;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 270px;
+  @include max-size(md) {
+      padding: 0 5px;
+  }
+}
+.testimonial__image-wrapper {
+  height: 200px;
+  width: 200px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 100px auto;
+  @include max-size(md) {
+    height: 150px;
+    width: 150px;
+    margin: 20px auto;
+  }
 }
 
 .testimonial__image  {
   width: 100%;
-  display: block;
-  border-radius: 100%;
-  margin: 0 auto;
-  padding: 50px;
   height: auto;
 }
 
@@ -12430,11 +12477,11 @@ input[type='text'].frame__input {
 }
 
 .slider__prevArrow {
-  left: calc((100% - 370px * 5) / 2);
+  left: 2vw;
 }
 
 .slider__nextArrow {
-  right: calc((100% - 370px * 5) / 2);
+  right:  2vw;
 }
 /*============================================================================
   #Section - Testimonials
@@ -12492,6 +12539,10 @@ input[type='text'].frame__input {
       -ms-flex-pack: center;
           justify-content: center;
   border-radius: 100%;
+  @include max-size(md) {
+    width: 120px;
+    height: 120px;
+  }
 }
 
 .signup__figure, .signup-item__figure, .signup-item__heading {
@@ -12503,6 +12554,9 @@ input[type='text'].frame__input {
     text-transform: uppercase;
     margin: 0;
     line-height: 1.1;
+    @include max-size(md) {
+      font-size: 2.5rem;
+    }
   }
   > p > em {
     font-family: "Great Vibes", serif;
@@ -12512,13 +12566,22 @@ input[type='text'].frame__input {
     text-transform: capitalize;
     letter-spacing: 3px;
     font-style: normal;
+    @include max-size(md) {
+      font-size:4rem;
+    }
     > strong {
       font-size: 6.5rem;
       font-weight: 300;
+      @include max-size(md) {
+        font-size:4rem;
+      }
     }
   }
   > p > strong {
     font-size: 6.5rem;
+    @include max-size(md) {
+      font-size: 4rem;
+    }
   }
 }
 
@@ -12667,6 +12730,13 @@ input[type='text'].frame__input {
   height: auto;
   width: 100%;
 }
+
+
+.signup__item--1505032076583, .signup__item--1505032083504 {
+  @include max-size(sm) {
+    display: none;
+  }
+}
 /*============================================================================
   #Create Section
     - frame
@@ -12698,7 +12768,7 @@ input[type='text'].frame__input {
       height: 150px;
     }
     
-    @include min-size(1400) {
+    @include min-size(1400px) {
       width: calc(76px * #{$i} + 76px);
       height: 200px;
     }
@@ -13151,7 +13221,7 @@ input.cart-item__qty-input {
   max-height: 60px;
   max-width: 100%;
   width: auto;
-  @include max-size(sm) {
+  @include max-size(md) {
     max-height: 35px
   }
 }

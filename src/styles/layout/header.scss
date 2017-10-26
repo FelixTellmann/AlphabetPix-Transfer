@@ -30,7 +30,7 @@
   max-height: 60px;
   max-width: 100%;
   width: auto;
-  @include max-size(sm) {
+  @include max-size(md) {
     max-height: 35px
   }
 }

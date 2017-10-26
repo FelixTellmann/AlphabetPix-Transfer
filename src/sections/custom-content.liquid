@@ -11,7 +11,7 @@
 </style>
 
 <div class="custom-content-wrapper custom-content-wrapper--{{ section.id }} {% if section.settings.top_margin %}custom-content-wrapper--top-margin{% endif %} {% if section.settings.bottom_margin %}custom-content-wrapper--bottom-margin{% endif %} one-whole" data-section-id="{{ section.id }}" data-section-type="custom-content">
-  <div class="page-width">
+  <div class="page-width grid__container">
     {% if section.settings.heading_text != blank %}
       <h2 class="custom-content__section-header text-center">{{ section.settings.heading_text | escape }}</h2>
     {% endif %}

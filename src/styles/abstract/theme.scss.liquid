@@ -474,7 +474,7 @@ $font-line-height-base: 1.625;
 $link-hover-opacity: 0.5;
 
 /*================ Z-Index ================*/
-$z-index-header: 10;
+$z-index-header: 1000;
 $z-index-dropdown: 2;
 $z-index-skip-to-content: 10000; // really high to be safe of app markup
 $z-index-modal: 15;
@@ -1200,11 +1200,11 @@ fieldset {
 ==============================================================================*/
 
 .grid {
-  @include clearfix();
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  margin-left: -$grid-gutter;
+  zoom: initial;
+  list-style: initial;
+  margin: initial;
+  padding: initial;
+  margin-left: initial;
 }
 
 .grid--gutter-large {
@@ -3296,6 +3296,7 @@ $color-select-input: #fff;
     margin: ($gutter * 2) 0;
     text-align: center;
   }
+  padding: 30px 0;
 }
 
 .custom-content-wrapper--top-margin {
@@ -3684,8 +3685,8 @@ html {
 }
 
 .flex-footer__item {
+  padding: 0 !important;
   @include flex(1 1 100%);
-  padding: 0 0 $gutter;
 
   @include media-query($small) {
     .flex-footer--full & {
@@ -3699,7 +3700,7 @@ html {
 
   @include media-query($medium-up) {
     @include flex(1 1 25%);
-    padding: 0 10px;
+   
 
     .flex-footer--full & {
       @include flex(1 0 100%);
@@ -3739,20 +3740,21 @@ html {
 }
 
 .site-footer__linklist-item {
-  display: inline-block;
-  padding: 0 ($gutter / 2);
+  
   margin-bottom: $gutter / 2;
   font-size: rem(12);
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-
+  display: list-item;
+  padding: 0;
+  
   @include media-query($medium-up) {
-    display: block;
+    
     padding: 0 20px 0 0;
 
     .flex-footer--full & {
-      display: inline-block;
+      
       padding: 5px 10px;
     }
   }
@@ -4234,7 +4236,7 @@ $image-bar-placeholder-border-color: rgba($color-body-text, 0.25);
   }
 
   .hero--medium & {
-    padding: ($gutter * 4) 0;
+    padding: ($gutter * 3) 0;
   }
 
   .hero--large & {
@@ -4255,7 +4257,7 @@ $image-bar-placeholder-border-color: rgba($color-body-text, 0.25);
     }
 
     .hero--medium & {
-      padding: ($gutter * 7) 0;
+      padding: ($gutter * 6) 0;
     }
 
     .hero--large & {
