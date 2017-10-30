@@ -1,0 +1,250 @@
+{% capture email_title %}{% if customer.name %}{{ customer.name }} - {{ customer.email }} - {{ address.phone }} - {% else %}Someone{% endif %} placed a new order with your store, {{ date | date: "%b %d %I:%M%p" }}:{% endcapture %}
+{% capture email_body %}
+  {% if fulfillment_aborted %}
+    <p>The above order was not automatically fulfilled because it was flagged as suspicious.</p>
+  {% endif %}
+  <p></p><br>
+  {% if has_high_risks? %}
+    <p><b>Security check:</b></p>
+    <p>This order has a risk of being fraudulent. Review the order in your store's admin and contact the customer to verify their information.</p>
+    <p></p>
+  {% endif %}
+{% endcapture %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{ email_title }}</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" type="text/css" href="/assets/notifications/styles.css">
+  <style>
+    .button__cell { background: {{ shop.email_accent_color }}; }
+    a, a:hover, a:active, a:visited { color: {{ shop.email_accent_color }}; }
+  </style>
+</head>
+
+<body>
+  <table class="body">
+    <tr>
+      <td>
+        <table class="header row">
+          <tr>
+            <td class="header__cell">
+              <center>
+                
+                <table class="container">
+                  <tr>
+                    <td>
+                      
+                      <table class="row">
+                        <tr>
+                          <td class="shop-name__cell">
+                            {%- if shop.email_logo_url %}
+                              <img src="{{shop.email_logo_url}}" alt="{{ shop.name }}" width="{{ shop.email_logo_width }}">
+                            {%- else %}
+                              <h1 class="shop-name__text">
+                                <a href="{{shop.url}}">{{ shop.name }}</a>
+                              </h1>
+                            {%- endif %}
+                          </td>
+                          
+                          <td class="order-number__cell">
+                            <span class="order-number__text">
+                              Order {{ order_name }}
+                            </span>
+                          </td>
+                        </tr>
+                      </table>
+                    
+                    </td>
+                  </tr>
+                </table>
+              
+              </center>
+            </td>
+          </tr>
+        </table>
+        
+        <table class="row content">
+          <tr>
+            <td class="content__cell">
+              <center>
+                <table class="container">
+                  <tr>
+                    <td>
+                      
+                      <h2>{{ email_title }}</h2>
+                      <p>{{ email_body }}</p>
+  
+                      {% if shop.url %}
+                        <table class="row actions">
+                          <tr>
+                            <td class="actions__cell">
+                              <table class="button main-action-cell">
+                                <tr>
+                                  <td class="button__cell"><a href="{{ shop.url }}" class="button__text">Visit our store</a></td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                      {% endif %}
+                    </td>
+                  </tr>
+                </table>
+              </center>
+            </td>
+          </tr>
+        </table>
+        
+        <table class="row section">
+          <tr>
+            <td class="section__cell">
+              <center>
+                <table class="container">
+                  <tr>
+                    <td>
+                      <h3>Order summary</h3>
+                    </td>
+                  </tr>
+                </table>
+                <table class="container">
+                  <tr>
+                    <td>
+                      
+                      
+                      <table class="row">
+                        {% for line in line_items %}
+                          <tr class="order-list__item">
+                          <td class="order-list__item__cell">
+                            <table>
+                              <td>
+                                {% if line.image %}
+                                  <img src="{{ line | img_url: 'compact_cropped' }}" align="left" width="60" height="60" class="order-list__product-image"/>
+                                {% endif %}
+                                {% for p in line.properties %}
+                                  {% if p[0] =='custom_image' and p[1] contains 'http' %}
+                                    <img src="{{ p[1] }}" align="left" width="60" height="60" class="order-list__product-image"/>
+                                  {% endif %}
+                                {% endfor %}
+                              </td>
+                              <td class="order-list__product-description-cell">
+                                {% if line.product.title %}
+                                  {% assign line_title = line.product.title %}
+                                {% else %}
+                                  {% assign line_title = line.title %}
+                                {% endif %}
+                                
+                                {% if line.quantity < line.quantity %}
+                                  {% capture line_display %} {{ line.quantity }} of {{ line.quantity }} {% endcapture %}
+                                {% else %}
+                                  {% assign line_display = line.quantity  %}
+                                {% endif %}
+                                
+                                <span class="order-list__item-title">{{ line_title }} × {{ line_display }}</span><br/>
+                                
+                                {% if line.variant.title != 'Default Title' %}
+                                  <span class="order-list__item-variant">{{ line.variant.title }}</span>
+                                {% endif %}
+                                
+                                {% for p in line.properties %}
+                                  {% if p[0] =='position' %}
+                                    <span class="order-list__item-variant">{{ p[0] }}: {{ p[1] }}</span>
+                                  {% endif %}
+                                  {% if p[0] == 'word' %}
+                                    <span class="order-list__item-variant">{{ p[0] }}: {{ p[1] }}</span>
+                                  {% endif %}
+                                  {% if p[0] == 'images' %}
+                                    <span class="order-list__item-variant">{{ p[0] }}: {{ p[1] }}</span>
+                                  {% endif %}
+                                {% endfor %}
+                              
+                              </td>
+                            </table>
+                          </td>
+                          </tr>{% endfor %}
+                      </table>
+                    
+                    </td>
+                  </tr>
+                </table>
+              </center>
+            </td>
+          </tr>
+        </table>
+        
+        <table class="row section">
+          <tr>
+            <td class="section__cell">
+              <center>
+                <table class="container">
+                  <tr>
+                    <td>
+                      <h3>Customer information</h3>
+                    </td>
+                  </tr>
+                </table>
+                <table class="container">
+                  <tr>
+                    <td>
+                      
+                      <table class="row">
+                        <tr>
+                          {% if requires_shipping and shipping_address %}
+                            <td class="customer-info__item">
+                              <h4>Shipping address</h4>
+                              {{ shipping_address | format_address }}
+                            </td>
+                          {% endif %}
+                          {% if billing_address %}
+                            <td class="customer-info__item">
+                              <h4>Billing address</h4>
+                              {{ billing_address | format_address }}
+                            </td>
+                          {% endif %}
+                        </tr>
+                      </table>
+                      <table class="row">
+                        <tr>
+                          {% if requires_shipping and shipping_address %}
+                            <td class="customer-info__item">
+                              <h4>Shipping method</h4>
+                              <p>{{ shipping_method.title }}</p>
+                            </td>
+                          {% endif %}
+                        </tr>
+                      </table>
+                    
+                    </td>
+                  </tr>
+                </table>
+              </center>
+            </td>
+          </tr>
+        </table>
+        
+        <table class="row footer">
+          <tr>
+            <td class="footer__cell">
+              <center>
+                <table class="container">
+                  <tr>
+                    <td>
+                      <p class="disclaimer__subtext">If you have any questions, reply to this email or contact us at <a href="mailto:{{ shop.email }}">{{ shop.email }}</a></p>
+                    </td>
+                  </tr>
+                </table>
+              </center>
+            </td>
+          </tr>
+        </table>
+        
+        <img src="{{ 'notifications/spacer.png' | shopify_asset_url }}" class="spacer" height="1" />
+      
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
