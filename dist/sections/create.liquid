@@ -22,11 +22,11 @@
         {% assign product = all_products[block.settings.frame] %}
         {% for image in product.images %}
           {% if image.src contains 'left' %}
-            {% assign frame_left = image.src  %}
+            {% assign frame_left = image.src %}
           {% elsif image.src contains 'center' %}
-            {% assign frame_center = image.src  %}
+            {% assign frame_center = image.src %}
           {% elsif image.src contains 'right' %}
-            {% assign frame_right = image.src  %}
+            {% assign frame_right = image.src %}
           {% endif %}
         {% endfor %}
         
@@ -40,17 +40,14 @@
             }
             
             .frame__img--{{ block.id }} {
-              background:
-                  url('{{ frame_left | product_img_url: '2000x' }}') left/auto 100% no-repeat, /* On top, like z-index: 4; */
-                  url('{{ frame_right | product_img_url: '2000x' }}') right/auto 100% no-repeat, /* like z-index: 3; */
-                  url('{{ frame_center | product_img_url: '2000x' }}') center/100% 100% no-repeat;
+              background: url('{{ frame_left | product_img_url: '2000x' }}') left/auto 100% no-repeat, /* On top, like z-index: 4; */ url('{{ frame_right | product_img_url: '2000x' }}') right/auto 100% no-repeat, /* like z-index: 3; */ url('{{ frame_center | product_img_url: '2000x' }}') center/100% 100% no-repeat;
               
             }
           </style>
           {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
           <img class="slideshow__image slideshow__image--{{ block.id }}" src="{{ block.settings.image | img_url: '2000x' }}" alt="{{ block.settings.image.alt | escape }}">
-  
-  
+          
+          
           <label for="create__input--{{ block.id }}" class="create__label text-center">{{ block.settings.label }}</label>
           <figure class="frame" data-block-id="{{ block.id }}">
             <div class="frame__wrapper frame__img--{{ block.id }} tada scroll" data-scroll-delay="4s">
@@ -183,7 +180,7 @@
 
 <div id="create__image-preloader--{{ section.id }}" class="create__image-preloader visually-hidden">
   <img id="whitespace" class="visually-hidden">
-  
+
 </div>
 
 {% comment %}{#<!--@formatter:off-->#}{% endcomment %}
