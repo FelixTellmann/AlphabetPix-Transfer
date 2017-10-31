@@ -55,13 +55,14 @@
                 .signup__item--{{ block.id }} {
                   height: {{ block.settings.grid_height }}px;
                 }
-
+                
                 {% if block.settings.grid_responsive and block.settings.grid_responsive_height %}
                 @media (max-width: 640px) {
                   .signup__item--{{ block.id }} {
                     height: calc({{ block.settings.grid_height }}px / 2);
                   }
                 }
+                
                 {% endif %}
                 
                 {% if block.settings.background != blank %}
@@ -91,11 +92,11 @@
                 .signup-item__image--{{ block.id }} {
                 {{ block.settings.image_css }}
                 }
-                
+              
               
               </style>
               <div class="signup__item--{{ block.id }} {% if block.settings.grid_responsive %}grid__item--12--sm grid__item--{{ block.settings.grid_mobile }}{% else %}grid__item--12{% endif %}" {{ block.shopify_attributes }}>
-                <div class="signup-item__wrapper signup-item__background--{{ block.id }} grid__row {% if block.settings.scroll_animation != blank %}{{ block.settings.scroll_animation  }}{% endif %}">
+                <div class="signup-item__wrapper signup-item__background--{{ block.id }} grid__row {% if block.settings.scroll_animation != blank %}{{ block.settings.scroll_animation }}{% endif %}">
                   
                   {% if block.settings.highlight != blank %}
                     <figure class="signup-item__figure signup-item__highlight--{{ block.id }} {% if block.settings.highlight_scroll_animation != blank %}{{ block.settings.highlight_scroll_animation }}{% endif %}">
@@ -105,14 +106,8 @@
                   
                   {% if block.settings.image != blank %}
                     <figure class="signup-item__figure signup-item__image--{{ block.id }}">
-                      <img class="signup-item__image lazyload"
-                              {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+                      <img class="signup-item__image"
                            src="{{ block.settings.image | img_url: '1000x' }}"
-                           data-src="{{ img_url }}"
-                           data-widths="[540, 900, 1512, 2048]"
-                           data-aspectratio="{{ block.settings.image.aspect_ratio }}"
-                           data-sizes="auto"
-                           data-parent-fit="cover"
                            alt="{{ block.settings.image.alt | escape }}">
                     </figure>
                   {% endif %}
@@ -152,7 +147,7 @@
               
               </style>
               <div class="signup__item--{{ block.id }}" {{ block.shopify_attributes }}>
-                <div class="signup-item__wrapper signup-item__background--{{ block.id }} grid__row {% if block.settings.scroll_animation != blank %}{{ block.settings.scroll_animation  }}{% endif %}">
+                <div class="signup-item__wrapper signup-item__background--{{ block.id }} grid__row {% if block.settings.scroll_animation != blank %}{{ block.settings.scroll_animation }}{% endif %}">
                   
                   <div class="signup-item__content signup-item__content--{{ block.id }} {% if block.settings.highlight_scroll_animation != blank %}{{ block.settings.highlight_scroll_animation }}{% endif %}">
                     <h2 class="signup-item__heading">
@@ -174,7 +169,11 @@
                           </div>
                           <input type="hidden" name="contact[tags]" value="{{ block.settings.signup }}"/>
                           <input type="hidden" name="challenge" value="false"/>
-                          <input type="email" class="signup-item__input" name="contact[email]" required placeholder="{{ 'general.newsletter_form.placeholder' | t }}"/>
+                          <input type="email"
+                                 class="signup-item__input"
+                                 name="contact[email]"
+                                 required
+                                 placeholder="{{ 'general.newsletter_form.placeholder' | t }}"/>
                           <input type='submit' class="action_button sign_up visually-hidden" value="{{ 'general.newsletter_form.submit' | t }}"/>
                           <div class="signup-item__promo">
                             {{ block.settings.promo }}

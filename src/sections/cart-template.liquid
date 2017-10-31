@@ -200,6 +200,7 @@
           <tr class="cart-item" data-item-id="{{ item_id }}">
             <td colspan="3">
               <div class="cart-item__info-block">
+                <p><strong>CUSTOM WORD: </strong> {{ item.properties['word'] | upcase }}</p>
                 <h5>{{ item.product.handle | capitalize }} Collection ({{ item.variant.title }}-Window Frame)</h5>
                 
                 {% for c in collections %}
@@ -214,7 +215,7 @@
                 {% if item.properties['gift_message'] != blank %}
                   <p><strong>GIFT MESSAGE: </strong> {{ item.properties['gift_message'] }}</p>
                 {% endif %}
-                <p><strong>CUSTOM WORD: </strong> {{ item.properties['word'] | upcase }}</p>
+                
               </div>
             </td>
           </tr>

@@ -81,12 +81,12 @@
   margin: 0 auto;
   
   @include screen-size(lg) {
-    height: 900px;
+    height: 770px;
   }
 }
 
 .testimonial__content {
-  height: 450px;
+  height:290px;
 }
 
 .testimonial__icon {
@@ -97,15 +97,13 @@
 
 .testimonial__heading {
   font-family: "Great Vibes", serif;
-  font-size: 3rem;
+  font-size: 26px;
   font-weight: 300;
-  margin: 10px;
+  margin: 10px 0;
   text-transform: capitalize;
   letter-spacing: 3px;
-  white-space: nowrap;
-  line-height: 2;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  font-weight: 300;
+  line-height: 1.2;
 }
 
 .testimonial__quote {
@@ -116,13 +114,13 @@
 .testimonial__body, .testimonial__author {
   font-family: "Playfair Display", serif;
   font-style: italic;
-  font-size: 2rem;
+  font-size: 13px;
   line-height: 1.6;
   padding: 0 30px;
   color: #404041;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 270px;
+  max-height: 200px;
   @include max-size(md) {
       padding: 0 5px;
   }

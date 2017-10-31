@@ -318,7 +318,7 @@
 .frame__label {
   position: absolute;
   left: 50%;
-  top: 67%;
+  top: 27%;
   -webkit-transform: translate(-50%, 0);
   transform: translate(-50%, 0);
   margin: 0;
@@ -790,6 +790,9 @@ input[type='text'].frame__input {
     font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 300;
     font-size: 13px;
+    strong {
+      display: none;
+    }
   }
   
   @include max-size(md) {

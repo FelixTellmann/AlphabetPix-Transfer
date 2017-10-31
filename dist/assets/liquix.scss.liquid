@@ -4479,7 +4479,7 @@ $image-bar-placeholder-border-color: rgba($color-body-text, 0.25);
   }
 
   .hero--medium & {
-    padding: ($gutter * 3) 0;
+    padding: ($gutter * 3) 0 ($gutter * 1);
   }
 
   .hero--large & {
@@ -9141,7 +9141,7 @@ html {
 .frame__label {
   position: absolute;
   left: 50%;
-  top: 67%;
+  top: 27%;
   -webkit-transform: translate(-50%, 0);
   transform: translate(-50%, 0);
   margin: 0;
@@ -9613,6 +9613,9 @@ input[type='text'].frame__input {
     font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 300;
     font-size: 13px;
+    strong {
+      display: none;
+    }
   }
   
   @include max-size(md) {
@@ -11879,8 +11882,8 @@ input[type='text'].frame__input {
 }
 
 .slick-dots {
-  position: absolute;
-  bottom: -45px;
+  position: relative;
+  bottom: 0;
   display: block;
   width: 100%;
   padding: 0;
@@ -12384,12 +12387,12 @@ input[type='text'].frame__input {
   margin: 0 auto;
   
   @include screen-size(lg) {
-    height: 900px;
+    height: 770px;
   }
 }
 
 .testimonial__content {
-  height: 450px;
+  height:290px;
 }
 
 .testimonial__icon {
@@ -12400,15 +12403,13 @@ input[type='text'].frame__input {
 
 .testimonial__heading {
   font-family: "Great Vibes", serif;
-  font-size: 3rem;
+  font-size: 26px;
   font-weight: 300;
-  margin: 10px;
+  margin: 10px 0;
   text-transform: capitalize;
   letter-spacing: 3px;
-  white-space: nowrap;
-  line-height: 2;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  font-weight: 300;
+  line-height: 1.2;
 }
 
 .testimonial__quote {
@@ -12419,13 +12420,13 @@ input[type='text'].frame__input {
 .testimonial__body, .testimonial__author {
   font-family: "Playfair Display", serif;
   font-style: italic;
-  font-size: 2rem;
+  font-size: 13px;
   line-height: 1.6;
   padding: 0 30px;
   color: #404041;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 270px;
+  max-height: 200px;
   @include max-size(md) {
       padding: 0 5px;
   }
@@ -12434,9 +12435,15 @@ input[type='text'].frame__input {
   height: 200px;
   width: 200px;
   border-radius: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   margin: 100px auto;
   @include max-size(md) {
     height: 150px;
@@ -12491,7 +12498,7 @@ input[type='text'].frame__input {
   padding: 80px 0;
 }
 
-.signup__image-wrapper, .signup__image  {
+.signup__image-wrapper, .signup__image {
   position: relative;
   display: block;
   width: 100%;
@@ -12533,11 +12540,11 @@ input[type='text'].frame__input {
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-      -ms-flex-flow: column;
-          flex-flow: column;
+  -ms-flex-flow: column;
+  flex-flow: column;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   border-radius: 100%;
   @include max-size(md) {
     width: 120px;
@@ -12567,13 +12574,13 @@ input[type='text'].frame__input {
     letter-spacing: 3px;
     font-style: normal;
     @include max-size(md) {
-      font-size:4rem;
+      font-size: 4rem;
     }
     > strong {
       font-size: 6.5rem;
       font-weight: 300;
       @include max-size(md) {
-        font-size:4rem;
+        font-size: 4rem;
       }
     }
   }
@@ -12607,11 +12614,11 @@ input[type='text'].frame__input {
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-      -ms-flex-flow: column;
-          flex-flow: column;
+  -ms-flex-flow: column;
+  flex-flow: column;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
 }
 
 .signup-item__form .signup-item__input {
@@ -12623,11 +12630,17 @@ input[type='text'].frame__input {
   line-height: 1;
   text-decoration: none;
   font-weight: 700;
+  font-size: 14px;
   white-space: nowrap;
   overflow: hidden;
-  -webkit-box-shadow: inset 3px 3px 12px rgba(0,0,0,0.8);
-          box-shadow: inset 3px 3px 12px rgba(0,0,0,0.8);
+  -webkit-box-shadow: inset 3px 3px 12px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 3px 3px 12px rgba(0, 0, 0, 0.8);
+  &::placeholder {
+    color: #000;
+    opacity: 1;
+  }
 }
+
 /*
 .signup-item__content {
   position: relative;
@@ -12730,7 +12743,6 @@ input[type='text'].frame__input {
   height: auto;
   width: 100%;
 }
-
 
 .signup__item--1505032076583, .signup__item--1505032083504 {
   @include max-size(sm) {
@@ -12963,6 +12975,13 @@ td.cart-item__meta {
   }
 }
 
+button.cart-item__remove-item {
+  transform: scale(0.8);
+  filter: grayscale(1);
+  background: transparent;
+  color: black;
+}
+
 .cart-item__message {
   opacity: 0;
   font-size: 14px;
@@ -13009,6 +13028,10 @@ input.cart-item__qty-input {
   width: 60px;
   padding: 10px 5px;
   margin-bottom: 0;
+  display: inline-block;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 1px;
   
   @include media-query($small) {
     width: 50px;
@@ -13157,7 +13180,7 @@ input.cart-item__qty-input {
   background: rgba(18, 49, 35, 0.13334);
   margin: 15px;
   padding: 15px;
-  border: 1px solid rgba(0, 0, 0, 0.4);
+ /* border: 1px solid rgba(0, 0, 0, 0.4);*/
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 300;
   font-size: 14px;
