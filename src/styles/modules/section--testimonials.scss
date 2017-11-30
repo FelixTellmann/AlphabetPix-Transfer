@@ -20,7 +20,7 @@
     width: calc(100% / 2 - 160px);
     background-color: $color__footer;
     opacity: 0.6;
-    z-index: 1010;
+    z-index: 50;
     pointer-events: none;
   }
   &.testimonial__wrapper--active:after {
@@ -32,7 +32,7 @@
     width: calc(100% / 2 - 160px);
     background-color: $color__footer;
     opacity: 0.6;
-    z-index: 1010;
+    z-index: 50;
     pointer-events: none;
   }
 }

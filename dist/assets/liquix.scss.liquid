@@ -6020,11 +6020,12 @@ $site-header-wrapper-color: rgba($color-header, 0);
 
 .site-header--transparent,
 .site-header--homepage {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   right: 0;
   z-index: $z-index-header;
+  margin-bottom: -92px;
 
   html.supports-no-js & {
     position: relative;
@@ -8798,6 +8799,47 @@ html {
   margin: 0 10px;
 }
 /*============================================================================
+  #Popup
+    - .popup__overlay
+==============================================================================*/
+
+.popup__overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1080;
+  display: none;
+  overflow: hidden;
+}
+
+.popup__noscroll {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+}
+
+.popup__wrapper {
+  position: relative;
+  margin: 100px auto;
+  padding: 15px;
+  
+}
+
+.popup__close {
+  margin-left: auto;
+  display: block;
+}
+/*============================================================================
   #Section Headings
     -
 ==============================================================================*/
@@ -9010,7 +9052,7 @@ html {
   width: 100%;
   position: relative;
   overflow: hidden;
-  height: calc(100vh - 35px);
+  height: calc(100vh);
   min-height: 850px;
   
   @include max-size(md) {
@@ -9018,6 +9060,7 @@ html {
   }
   @include max-size(sm) {
     min-height: 580px;
+    max-height: 100vh;
   }
   
   .create__slider {
@@ -9077,11 +9120,13 @@ html {
 }
 
 .frame--position {
-  position: absolute;
+  /*position: absolute;
   left: 50%;
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);*/
+  position: relative;
+  margin: 320px auto;
 }
 
 .frame__wrapper {
@@ -9524,7 +9569,7 @@ input[type='text'].frame__input {
 
 .theme--position {
   position: relative;
-  margin: 220px auto;
+  margin: 320px auto;
   @include max-size(sm) {
     margin: 180px auto;
   }
@@ -9864,7 +9909,7 @@ input[type='text'].frame__input {
 .final-artwork {
   position: relative;
   max-width: 1200px;
-  margin: 220px auto 0;
+  margin: 320px auto 0;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -12326,7 +12371,7 @@ input[type='text'].frame__input {
     width: calc(100% / 2 - 160px);
     background-color: $color__footer;
     opacity: 0.6;
-    z-index: 1010;
+    z-index: 50;
     pointer-events: none;
   }
   &.testimonial__wrapper--active:after {
@@ -12338,7 +12383,7 @@ input[type='text'].frame__input {
     width: calc(100% / 2 - 160px);
     background-color: $color__footer;
     opacity: 0.6;
-    z-index: 1010;
+    z-index: 50;
     pointer-events: none;
   }
 }
@@ -12635,6 +12680,14 @@ input[type='text'].frame__input {
   overflow: hidden;
   -webkit-box-shadow: inset 3px 3px 12px rgba(0, 0, 0, 0.8);
   box-shadow: inset 3px 3px 12px rgba(0, 0, 0, 0.8);
+  &::-webkit-input-placeholder {
+    color: #000;
+    opacity: 1;
+  }
+  &:-ms-input-placeholder {
+    color: #000;
+    opacity: 1;
+  }
   &::placeholder {
     color: #000;
     opacity: 1;
@@ -12976,8 +13029,10 @@ td.cart-item__meta {
 }
 
 button.cart-item__remove-item {
-  transform: scale(0.8);
-  filter: grayscale(1);
+  -webkit-transform: scale(0.8);
+          transform: scale(0.8);
+  -webkit-filter: grayscale(1);
+          filter: grayscale(1);
   background: transparent;
   color: black;
 }
@@ -13221,6 +13276,12 @@ input.cart-item__qty-input {
   padding-left: 0;
   padding-right: 0;
 }*/
+.shopify-section.header-section {
+  position: relative;
+  z-index: 1000;
+  -webkit-transition: 0.3s all;
+  transition: 0.3s all;
+}
 
 .site-header-sections {
   padding-top: 30px;
@@ -13277,8 +13338,8 @@ input.cart-item__qty-input {
   display: none;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-      -ms-flex-flow: row nowrap;
-          flex-flow: row nowrap;
+  -ms-flex-flow: row nowrap;
+  flex-flow: row nowrap;
   @include screen-size(md) {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -13359,6 +13420,9 @@ input.cart-item__qty-input {
   text-decoration: none;
   z-index: 10;
   height: 100px;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  overflow: hidden;
   
   @include max-size(sm) {
     height: 70px
@@ -13580,7 +13644,7 @@ input.cart-item__qty-input {
 
 .modal-open .modal {
   overflow-x: hidden;
-  overflow-y: auto;
+  /*overflow-y: auto;*/
 }
 
 .modal-dialog {
@@ -13688,7 +13752,7 @@ input.cart-item__qty-input {
 @media (min-width: 576px) {
   .modal-dialog {
     max-width: 600px;
-    margin: 50px auto;
+    margin: 100px auto 50px;
   }
   .modal-sm {
     max-width: 300px;

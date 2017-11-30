@@ -34,7 +34,7 @@
 {% endfor %}
 
 
-<div data-section-id="{{ section.id }}" data-section-type="create-section">
+<div id="shopify-section-create" data-section-id="{{ section.id }}" data-section-type="create-section">
   <div id="create-{{ section.id }}" class="create">
     
     <nav class="process">
@@ -190,7 +190,7 @@
                 </tbody>
               </table>
             </div>
-            <div class="final-artwork__info final-artwork__info--full-width">
+            {% comment %}{#<div class="final-artwork__info final-artwork__info--full-width">
               <table>
                 <tbody>
                 <tr>
@@ -199,10 +199,10 @@
                 </tr>
                 </tbody>
               </table>
-            </div>
+            </div>#}{% endcomment %}
           
           </div>
-          <div class="final-artwork__sharing">
+          {% comment %}{#<div class="final-artwork__sharing">
             <a id="final-artwork__sharing--download" download="" target="_blank" href="" class="visually-hidden social-sharing__link" tabindex="-1">
               {% include 'icon-download' %}
               <span class="icon__fallback-text" aria-hidden="true">Download your Artwork</span>
@@ -232,7 +232,7 @@
                 <span class="visually-hidden">{{ 'general.social.alt_text.share_on_pinterest' | t }}</span>
               </a>
             {% endif %}
-          </div>
+          </div>#}{% endcomment %}
         </div>
         <nav class="create__button">
           <button tabindex="-1" class="button button--prev button--moema">Back</button>
@@ -298,8 +298,10 @@
   </div>
 </div>
 
-{% comment %}{#<!--@formatter:off-->#}{% endcomment %}
+<!--@formatter:off-->
+{% comment %}<script type="application/json">{% endcomment %}
 {% schema %}
+/*--@formatter:on--*/
 {
   "name": "Create Your Photo",
   "class": "create-section",
@@ -468,5 +470,6 @@
     }
   ]
 }
-{% endschema %}
-{% comment %}{#<!--@formatter:on-->#}{% endcomment %}
+/*--@formatter:off--*/
+{% endschema %}{% comment %}</script>{% endcomment %}
+<!--@formatter:on-->

@@ -293,8 +293,10 @@
 </div>
 
 
-{% comment %}{#<!--@formatter:off-->#}{% endcomment %}
+<!--@formatter:off-->
+{% comment %}<script type="application/json">{% endcomment %}
 {% schema %}
+/*--@formatter:on--*/
 {
   "name": "Grid Images - Double Row",
   "class": "index-section index-section--theme-collection",
@@ -715,5 +717,6 @@
     }
   ]
 }
-{% endschema %}
-{% comment %}{#<!--@formatter:on-->#}{% endcomment %}
+/*--@formatter:off--*/
+{% endschema %}{% comment %}</script>{% endcomment %}
+<!--@formatter:on-->

@@ -102,8 +102,10 @@
   </div>
 </div>
 
-{% comment %}{#<!--@formatter:off-->#}{% endcomment %}
+<!--@formatter:off-->
+{% comment %}<script type="application/json">{% endcomment %}
 {% schema %}
+/*--@formatter:on--*/
 {
   "name": "Blog posts",
   "class": "index-section",
@@ -174,5 +176,6 @@
       }
     }
   ]
-}{% endschema %}
-{% comment %}{#<!--@formatter:on-->#}{% endcomment %}
+}/*--@formatter:off--*/
+{% endschema %}{% comment %}</script>{% endcomment %}
+<!--@formatter:on-->

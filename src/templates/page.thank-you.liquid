@@ -1,0 +1,43 @@
+<div class="page-width grid__container">
+  <header class="section-header text-center">
+    <h1 class="section-header__title h2">{{ page.title }}</h1>
+  </header>
+  <div class="grid grid__row">
+    <div class="grid__item">
+      <div class="rte">
+        {{ page.content }}
+      </div>
+      <div class="final-artwork__sharing">
+        <a id="final-artwork__sharing--download" download="" target="_blank" href="" class="visually-hidden social-sharing__link" tabindex="-1">
+          {% include 'icon-download' %}
+          <span class="icon__fallback-text" aria-hidden="true">Download your Artwork</span>
+          <span class="visually-hidden">Download your Artwork</span>
+        </a>
+    
+        {% if settings.share_facebook %}
+          <a target="_blank" href="//www.facebook.com/sharer.php?u={{ shop.url | append: share_permalink }}" class="social-sharing__link social-sharing__link--facebook" tabindex="-1">
+            {% include 'icon-facebook' %}
+            <span class="icon__fallback-text" aria-hidden="true">{{ 'general.social.share_on_facebook' | t }}</span>
+            <span class="visually-hidden">{{ 'general.social.alt_text.share_on_facebook' | t }}</span>
+          </a>
+        {% endif %}
+    
+        {% if settings.share_twitter %}
+          <a target="_blank" href="//twitter.com/share?text={{ share_title | default: page_description | url_param_escape }}&amp;url={{ shop.url | append: share_permalink }}" class="social-sharing__link social-sharing__link--twitter" tabindex="-1">
+            {% include 'icon-twitter' %}
+            <span class="icon__fallback-text" aria-hidden="true">{{ 'general.social.share_on_twitter' | t }}</span>
+            <span class="visually-hidden">{{ 'general.social.alt_text.share_on_twitter' | t }}</span>
+          </a>
+        {% endif %}
+    
+        {% if settings.share_pinterest %}
+          <a target="_blank" href="//pinterest.com/pin/create/button/?url={{ shop.url | append: share_permalink }}&amp;media={{ share_image | img_url: '1024x1024' }}&amp;description={{ share_title | default: page_description | url_param_escape }}" class="social-sharing__link social-sharing__link--pinterest" tabindex="-1">
+            {% include 'icon-pinterest' %}
+            <span class="icon__fallback-text" aria-hidden="true">{{ 'general.social.share_on_pinterest' | t }}</span>
+            <span class="visually-hidden">{{ 'general.social.alt_text.share_on_pinterest' | t }}</span>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

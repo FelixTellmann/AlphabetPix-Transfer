@@ -236,8 +236,10 @@
 </div>
 
 
-{% comment %}{#<!--@formatter:off-->#}{% endcomment %}
+<!--@formatter:off-->
+{% comment %}<script type="application/json">{% endcomment %}
 {% schema %}
+/*--@formatter:on--*/
   {
     "name": "Sign-Up Blocks",
     "class": "index-section index-section--sign-up",
@@ -533,5 +535,6 @@
       "category": "Section"
     }]
   }
-{% endschema %}
-{% comment %}{#<!--@formatter:on-->#}{% endcomment %}
+/*--@formatter:off--*/
+{% endschema %}{% comment %}</script>{% endcomment %}
+<!--@formatter:on-->

@@ -1,0 +1,227 @@
+{% for block in section.blocks %}
+  <div class="popup__overlay" data-block-id="{{ block.id }}">
+    <div class="popup__wrapper" data-block-id="{{ block.id }}" data-animation="{{ block.settings.animation }}">
+      <div class="popup" data-block-id="{{ block.id }}">
+        <button class="popup__close btn btn--clear" data-block-id="{{ block.id }}">{% include 'icon-close' %}</button>
+        {{ pages[block.settings.content].content }}
+      </div>
+    </div>
+  </div>
+  
+  <style>
+    .popup__wrapper[data-block-id="{{ block.id }}"] {
+      width: {{ block.settings.width }}px;
+      height: {{ block.settings.height }}px;
+      background-color: {{ block.settings.background }};
+    {{ block.settings.css }}
+    }
+  </style>
+{% endfor %}
+
+<style>
+  .popup__overlay {
+    background-color: rgba(0, 0, 0, calc({{ section.settings.modal_transparency  }} / 100));
+  {% if section.settings.development %} display: block;
+  {% endif %}
+  }
+
+</style>
+
+<script>
+    $(function () {
+        /*============================================================================
+        #Trigger Options & effects
+          -
+      ==============================================================================*/
+        window.popup = {};
+        window.popup_blocks = {};
+      {% for block in section.blocks %}
+        window.popup_blocks['{{ block.id }}'] = {{ block.settings |json }};
+      {% endfor %}
+        window.popup_section = {{ section.settings | json }};
+
+
+        $.each(popup_blocks, function (block_id, popup_item) {
+            popup_item.activated = false;
+            popup_item.overlay = $('.popup__overlay[data-block-id="' + block_id + '"]');
+            popup_item.wrapper = $('.popup__wrapper[data-block-id="' + block_id + '"]');
+            popup_item.animation = popup_item.animation + ' animated';
+            popup_item.open = function () {
+                this.overlay.attr('style', 'display: block');
+                this.wrapper.addClass(this.animation);
+            };
+            popup_item.close = function () {
+                this.overlay.attr('style', 'display: none;');
+            };
+            popup_item.events = [];
+            $.each(popup_item.trigger.split(','), function (i1, event_element) {
+                popup_item.events[i1] = [];
+                $.each(event_element.split(':'), function (i2, k) {
+                    popup_item.events[i1][i2] = k;
+                });
+            });
+
+            $.each(popup_item.events, function (i, v) {
+                console.log(v[1]);
+                console.log($(v[1]));
+                if (popup_item.timer === false) {
+                    $(v[1]).on(v[0], function (e) {
+                        if (!popup_item.activated) {
+                            popup_item.activated = true;
+                            popup_item.open();
+                        }
+                    });
+                } else {
+                    $(v[1]).on(v[0], function (e) {
+                        if (!popup_item.activated) {
+                            popup_item.activated = true;
+                            setTimeout(function (e) {
+                                popup_item.open();
+                            }, popup_item.timer_delay * 1000);
+                        }
+                    });
+                }
+            });
+        });
+
+
+        /*================ Default Simple Close Function ================*/
+        $('.popup__overlay, .popup__close').on('click', function () {
+            $('.popup__overlay').attr('style', 'display: none;');
+        });
+
+        /*================ Default stop Bubbling for Close Function ================*/
+        $('.popup__wrapper').on('click', function (e) {
+            e.stopPropagation();
+        });
+
+    });
+
+
+</script>
+
+
+<!--@formatter:off-->
+{% comment %}<script type="application/json">{% endcomment %}
+{% schema %}
+/*--@formatter:on--*/
+{
+  "name": "Popup",
+  "class": "popup-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "development",
+      "label": "Enable/Disable Development",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Pop-up Global Settings"
+    },
+    {
+      "type": "header",
+      "content": "Modal Background"
+    },
+    {
+      "type": "range",
+      "id": "modal_transparency",
+      "label": "Transparency",
+      "default": 70,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": " x"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "signup",
+      "name": "Pop-up",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Sign-up Popup"
+        },
+        {
+          "type": "page",
+          "id": "content",
+          "label": "Link to Content Page"
+        },
+        {
+          "type": "header",
+          "content": "Styling",
+          "info": "Change Pop-up layout/design"
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "label": "Width",
+          "default": 400,
+          "min": 100,
+          "max": 1000,
+          "step": 10,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "height",
+          "label": "Height",
+          "default": 400,
+          "min": 100,
+          "max": 1000,
+          "step": 10,
+          "unit": "px"
+        },
+        {
+          "type": "color",
+          "id": "background",
+          "label": "Background Color"
+        },
+        {
+          "type": "textarea",
+          "id": "css",
+          "label": "Custom CSS"
+        },
+        {
+          "type": "header",
+          "content": "Functionality & Triggers"
+        },
+        {
+          "type": "text",
+          "id": "animation",
+          "label": "Animation",
+          "info": "Based on [animate.css](https://daneden.github.io/animate.css/)"
+        },
+        {
+          "type": "checkbox",
+          "id": "timer",
+          "label": "Timer",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "timer_delay",
+          "label": "Trigger Delay",
+          "default": 10,
+          "info": "delay in seconds",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "s"
+        },
+        {
+          "type": "textarea",
+          "id": "trigger",
+          "label": "Event Trigger",
+          "info": "Use trigger based on [events](https://www.w3schools.com/jsref/dom_obj_event.asp). Use the placeholder format (event: object-id) & comma seperate multiple trigger",
+          "placeholder": "onmouseleave: #create-static-create, onmouse..."
+        }
+      ]
+    }
+  ]
+}
+
+/*--@formatter:off--*/
+{% endschema %}{% comment %}</script>{% endcomment %}
+<!--@formatter:on-->

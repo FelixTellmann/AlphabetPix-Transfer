@@ -31,7 +31,7 @@
 
 .modal-open .modal {
   overflow-x: hidden;
-  overflow-y: auto;
+  /*overflow-y: auto;*/
 }
 
 .modal-dialog {
@@ -139,7 +139,7 @@
 @media (min-width: 576px) {
   .modal-dialog {
     max-width: 600px;
-    margin: 50px auto;
+    margin: 100px auto 50px;
   }
   .modal-sm {
     max-width: 300px;

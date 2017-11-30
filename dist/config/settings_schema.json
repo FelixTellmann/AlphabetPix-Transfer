@@ -541,22 +541,6 @@
     ]
   },
   {
-    "name": "Cart drawer",
-    "settings": [
-      {
-        "type": "checkbox",
-        "id": "show_cart_drawer",
-        "label": "Show cart drawer",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "show_cart_note",
-        "label": "Show cart note"
-      }
-    ]
-  },
-  {
     "name": "Social",
     "settings": [
       {

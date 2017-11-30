@@ -241,8 +241,8 @@
         getCart();
       }, 'json');
     };
-
-
+    
+    /* What is this function doing?? --> Change Quantity on cart page */
     $(function () {
       $('input.cart-item__qty-input').on('change', function () {
         let quantity_this = $(this);
@@ -336,7 +336,9 @@
       }, function (response) {
       });
     };
-
+    
+    
+   
 
   </script>
 </head>
@@ -346,7 +348,7 @@
   <a class="in-page-link visually-hidden skip-link" href="#MainContent">{{ 'general.accessibility.skip_to_content' | t }}</a>
   
   {% section 'static-header' %}
-
+  {% section 'static-popup' %}
   <div class="main-content" data-drawer-push>
     <div class="main-content__wrapper">
 

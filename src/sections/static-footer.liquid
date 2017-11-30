@@ -139,8 +139,10 @@ or template.name == 'blog' %}
   {{ powered_by_link | split: '" ' | join: '?ref=liquix" ' | split: '">' | join: '?ref=liquix">' }}
 </p>
 
-{% comment %}{#<!--@formatter:off-->#}{% endcomment %}
+<!--@formatter:off-->
+{% comment %}<script type="application/json">{% endcomment %}
 {% schema %}
+/*--@formatter:on--*/
 {
   "name": "Footer",
   "settings": [
@@ -214,5 +216,6 @@ or template.name == 'blog' %}
     }
   ]
 }
-{% endschema %}
-{% comment %}{#<!--@formatter:on-->#}{% endcomment %}
+/*--@formatter:off--*/
+{% endschema %}{% comment %}</script>{% endcomment %}
+<!--@formatter:on-->

@@ -68,8 +68,10 @@
   {% endif %}
 </div>
 
-{% comment %}{#<!--@formatter:off-->#}{% endcomment %}
+<!--@formatter:off-->
+{% comment %}<script type="application/json">{% endcomment %}
 {% schema %}
+/*--@formatter:on--*/
 {
   "name": "Image with text",
   "class": "index-section index-section--image-with-text",
@@ -253,5 +255,6 @@
     }
   ]
 }
-{% endschema %}
-{% comment %}{#<!--@formatter:on-->#}{% endcomment %}
+/*--@formatter:off--*/
+{% endschema %}{% comment %}</script>{% endcomment %}
+<!--@formatter:on-->

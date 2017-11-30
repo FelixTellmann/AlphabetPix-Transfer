@@ -56,8 +56,10 @@
 </div>
 
 
-{% comment %}{#<!--@formatter:off-->#}{% endcomment %}
+<!--@formatter:off-->
+{% comment %}<script type="application/json">{% endcomment %}
 {% schema %}
+/*--@formatter:on--*/
   {
     "name": "Testimonials",
     "class": "index-section index-section--testimonial-slider",
@@ -163,5 +165,6 @@
       ]
     }]
   }
-{% endschema %}
-{% comment %}{#<!--@formatter:on-->#}{% endcomment %}
+/*--@formatter:off--*/
+{% endschema %}{% comment %}</script>{% endcomment %}
+<!--@formatter:on-->

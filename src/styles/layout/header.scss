@@ -7,6 +7,12 @@
   padding-left: 0;
   padding-right: 0;
 }*/
+.shopify-section.header-section {
+  position: relative;
+  z-index: 1000;
+  -webkit-transition: 0.3s all;
+  transition: 0.3s all;
+}
 
 .site-header-sections {
   padding-top: 30px;
@@ -63,8 +69,8 @@
   display: none;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-      -ms-flex-flow: row nowrap;
-          flex-flow: row nowrap;
+  -ms-flex-flow: row nowrap;
+  flex-flow: row nowrap;
   @include screen-size(md) {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -145,6 +151,9 @@
   text-decoration: none;
   z-index: 10;
   height: 100px;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  overflow: hidden;
   
   @include max-size(sm) {
     height: 70px

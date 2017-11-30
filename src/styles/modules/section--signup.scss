@@ -143,6 +143,18 @@
   overflow: hidden;
   -webkit-box-shadow: inset 3px 3px 12px rgba(0, 0, 0, 0.8);
   box-shadow: inset 3px 3px 12px rgba(0, 0, 0, 0.8);
+  &::-webkit-input-placeholder {
+    color: #000;
+    opacity: 1;
+  }
+  &:-ms-input-placeholder {
+    color: #000;
+    opacity: 1;
+  }
+  &::-ms-input-placeholder {
+    color: #000;
+    opacity: 1;
+  }
   &::placeholder {
     color: #000;
     opacity: 1;

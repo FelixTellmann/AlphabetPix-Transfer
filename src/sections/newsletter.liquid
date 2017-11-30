@@ -1,3 +1,4 @@
+{% comment %}{#
 <style>
   .newsletter-wrapper--{{ section.id }} input[type='email']::-webkit-input-placeholder {
     color: {{ section.settings.text_color }};
@@ -70,8 +71,10 @@
   </div>
 </div>
 
-{% comment %}{#<!--@formatter:off-->#}{% endcomment %}
+<!--@formatter:off-->
+{% comment %}<script type="application/json">{% endcomment %}
 {% schema %}
+/*--@formatter:on--*/
 {
   "name": "Newsletter",
   "class": "index-section index-section--newsletter",
@@ -113,5 +116,7 @@
     }
   ]
 }
-{% endschema %}
-{% comment %}{#<!--@formatter:on-->#}{% endcomment %}
+/*--@formatter:off--*/
+{% endschema %}{% comment %}</script>{% endcomment %}
+<!--@formatter:on-->
+#}{% endcomment %}

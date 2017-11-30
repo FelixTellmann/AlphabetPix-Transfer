@@ -225,8 +225,10 @@ td.cart-item__meta {
 }
 
 button.cart-item__remove-item {
-  transform: scale(0.8);
-  filter: grayscale(1);
+  -webkit-transform: scale(0.8);
+          transform: scale(0.8);
+  -webkit-filter: grayscale(1);
+          filter: grayscale(1);
   background: transparent;
   color: black;
 }
